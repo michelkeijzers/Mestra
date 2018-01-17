@@ -1,0 +1,5 @@
+C:\Users\Michel\OneDrive\Arduino\Test\MestraTest\MestraGeneric\obj\Debug\MestraGeneric.csprojResolveAssemblyReference.cache
+C:\Users\Michel\OneDrive\Arduino\Test\MestraTest\MestraGeneric\bin\Debug\MestraGeneric.dll
+C:\Users\Michel\OneDrive\Arduino\Test\MestraTest\MestraGeneric\bin\Debug\MestraGeneric.pdb
+C:\Users\Michel\OneDrive\Arduino\Test\MestraTest\MestraGeneric\obj\Debug\MestraGeneric.dll
+C:\Users\Michel\OneDrive\Arduino\Test\MestraTest\MestraGeneric\obj\Debug\MestraGeneric.pdb
