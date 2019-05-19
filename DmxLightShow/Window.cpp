@@ -10,13 +10,14 @@
 #include "DmxLightShow.h"
 #include "TestLightSetup.h"
 #include "Irgbw.h"
-#include "ProgramExecuter.h"
+#include "TestProgramExecuter.h"
 #include "ClassNames.h"
 #include <string>
 #include "CommandBuffer.h"
 using namespace std;
 #include HEADER_FILE(ARDUINO_CLASS)
 #include HEADER_FILE(DMX_SIMPLE_CLASS)
+#include "MestraTypes.h"
 
 
 #define MAX_LOADSTRING 100
@@ -85,7 +86,25 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 						InjectCommands();
 
+						// Reset par increase states (debug only).
+						for (par_number_t par = 0; par < NR_OF_PARS; par++)
+						{
+							LightSetup.GetPar(par).ResetAtLeastOneStepIncreased();
+						}
+
+						// Run program executer.
 						_programExecuter.Run();
+
+						bool atLeasOneParIncreased = false;
+						for (par_number_t par = 0; par < NR_OF_PARS; par++)
+						{
+							atLeasOneParIncreased |= LightSetup.GetPar(par).GetAtLeastOneStepIncreased();
+						}
+
+						if (atLeasOneParIncreased)
+						{
+							LightSetup.Print();
+						}
 
 						InvalidateRect(msg.hwnd, NULL, FALSE);
         }
@@ -152,18 +171,15 @@ void InjectCommands()
 {
 	if (_refreshCounter == 100)
 	{
-		InjectString("d fl1 ir");
-		InjectString("a fl1 ig");
-		InjectString("p fl1 10");
-		//InjectString("d fa ir");
-		//InjectString("p fa 20");
+		InjectString("s a 50");
 
-		InjectString("t fa 5000");
-		//InjectString("t fa 500");
-		InjectString("d fa ir");
-		InjectString("a fa ib");
-		InjectString("p fa 51");
-		//InjectString("p fe 50");
+		
+		InjectString("t fa 10000");
+
+		InjectString("d fr irb");
+		InjectString("a fr ib");
+		InjectString("p fr 63");
+		
 		/*
 		InjectString("t d 1000");
 		InjectString("d d ib");
@@ -252,18 +268,24 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 					int xOffset = -40;
 					int yOffset = -70;
 
-					for (int parNumber = 0; parNumber < NR_OF_PARS; parNumber++)
+					for (par_number_t parNumber = 0; parNumber < NR_OF_PARS; parNumber++)
 					{
 						Par& par = (Par&) LightSetup.GetPar(parNumber);
-						uint16_t dmxStartChannel = par.GetDmxOffsetChannel();
-						uint8_t intensity = DmxSimple.read(dmxStartChannel + DMX_OFFSET_CHANNEL_INTENSITY);
+						dmx_channel_t dmxStartChannel = par.GetDmxOffsetChannel();
+						dmx_value_t intensity = DmxSimple.read(dmxStartChannel + DMX_OFFSET_CHANNEL_INTENSITY);
 
 						SelectObject(hdc, GetStockObject(DC_BRUSH));
 						
+						dmx_value_t white = DmxSimple.read(dmxStartChannel + DMX_OFFSET_CHANNEL_WHITE);
+
+						dmx_value_t red   = max(white, DmxSimple.read(dmxStartChannel + DMX_OFFSET_CHANNEL_RED  ));
+						dmx_value_t green = max(white, DmxSimple.read(dmxStartChannel + DMX_OFFSET_CHANNEL_GREEN));
+						dmx_value_t blue  = max(white, DmxSimple.read(dmxStartChannel + DMX_OFFSET_CHANNEL_BLUE ));
+
 						SetDCBrushColor(hdc, RGB(
-							DmxSimple.read(dmxStartChannel + DMX_OFFSET_CHANNEL_RED  ) * intensity / 255,
-							DmxSimple.read(dmxStartChannel + DMX_OFFSET_CHANNEL_GREEN) * intensity / 255,
-							DmxSimple.read(dmxStartChannel + DMX_OFFSET_CHANNEL_BLUE ) * intensity / 255));
+							red   * intensity / 255,
+							green * intensity / 255,
+							blue  * intensity / 255));
 
 						Ellipse(hdc, 
 							par.GetX() * PAR_DISTANCE_X + xOffset , 

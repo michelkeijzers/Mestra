@@ -6,27 +6,39 @@
 #include "ClassNames.h" 
 #include HEADER_FILE(PAR_CLASS)
 #include "Strobo.h"
+#include "MestraTypes.h"
 
 
-const uint8_t NR_OF_PARS = 14;
+const par_number_t NR_OF_PARS = 14;
 
 
 class LightSetupClass
 {
+protected:
+	PAR_CLASS _pars[NR_OF_PARS];
+
+
+  Strobo _strobo; 
+
+
 public:
 	LightSetupClass();
 
 	~LightSetupClass();
 
+
 	virtual void AddFixtures();
 
-	Par& GetPar(int parNumber);
 
-protected:
-	PAR_CLASS _pars[NR_OF_PARS];
+	Par& GetPar(par_number_t parNumber);
 
-	Strobo _strobo;
+
+	Strobo& GetStrobo()
+	{
+		return _strobo;
+	}
 };
+
 
 #ifndef _WINDOWS
 extern LightSetupClass LightSetup;

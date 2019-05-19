@@ -12,13 +12,14 @@ Irgbw::Irgbw()
 }
 
 
-Irgbw::Irgbw(uint8_t intensity, uint8_t red, uint8_t green, uint8_t blue)
+Irgbw::Irgbw(intensity_t intensity, intensity_t red, intensity_t green, intensity_t blue)
 : Irgbw(intensity, red, green, blue, 0)
 {
 }
 
 
-Irgbw::Irgbw(uint8_t intensity, uint8_t red, uint8_t green, uint8_t blue, uint8_t white)
+Irgbw::Irgbw(intensity_t intensity, intensity_t red, intensity_t green, intensity_t blue, 
+ intensity_t white)
 	: _intensity(intensity),
 	_red(red),
 	_green(green),
@@ -44,16 +45,15 @@ void Irgbw::SetIrgb(Irgbw& irgbw)
 void Irgbw::SetIrgbw(Irgbw& irgbw)
 {
 	SetIrgbw(irgbw.GetIntensity(), irgbw.GetRed(), irgbw.GetGreen(), irgbw.GetBlue(), 
-		irgbw.GetWhite());
+	 irgbw.GetWhite());
 }
 
 
-void Irgbw::SetIrgb(uint8_t intensity, uint8_t red, uint8_t green, uint8_t blue)
+void Irgbw::SetIrgb(intensity_t intensity, intensity_t red, intensity_t green, intensity_t blue)
 {
-	assert(intensity <= 255);
-	assert(red <= MAX_PAR_INTENSITY);
+	assert(red   <= MAX_PAR_INTENSITY);
 	assert(green <= MAX_PAR_INTENSITY);
-	assert(blue <= MAX_PAR_INTENSITY);
+	assert(blue  <= MAX_PAR_INTENSITY);
 
 	SetIntensity(intensity);
 	SetRed(red);
@@ -62,9 +62,10 @@ void Irgbw::SetIrgb(uint8_t intensity, uint8_t red, uint8_t green, uint8_t blue)
 }
 
 
-void Irgbw::SetIrgbw(uint8_t intensity, uint8_t red, uint8_t green, uint8_t blue, uint8_t white)
+void Irgbw::SetIrgbw(intensity_t intensity, intensity_t red, intensity_t green, intensity_t blue, 
+ intensity_t white)
 {
-	assert(white <= MAX_INTENSITY);
+	assert(white <= MAX_PAR_INTENSITY);
 
 	SetIrgb(intensity, red, green, blue);
 	SetWhite(white);

@@ -3,6 +3,7 @@
 
 #include "BitsUtils.h"
 
+
 /* static */ uint8_t BitsUtils::GetNrOfHighBits(uint32_t value)
 {
 	uint8_t nrOfHighBits = 0;

@@ -9,6 +9,7 @@
 #include "Irgbw.h"
 #include "Fixture.h"
 #include HEADER_FILE(FIXTURE_CLASS)
+#include "MestraTypes.h"
 
 
 #define MAX_PAR_INTENSITIES           49  // For red, green, blue, white
@@ -44,32 +45,34 @@ public:
 		Alternate
 	};
 
-	Irgbw& GetDefaultColor() { return _defaultColor; }
-
-	Irgbw& GetAlternateColor() { return _alternateColor; }
-
 	Irgbw& GetActualColor(Irgbw& actualColor);
 
-	//bool IsDefaultColorActive() { return _activeColor; }
-	//void SetActiveColor(Par::EActiveColor activeColor) { _activeColor = activeColor; }
 
 	void WriteIrgb(Irgbw& irgbw);
 
 	void WriteIrgbw(Irgbw& irgbw);
 
+
 	void IsAbstractClass() { }
+
+
+	Irgbw& GetDefaultColor() 
+	{
+		return _defaultColor; 
+	}
+
+	Irgbw& GetAlternateColor()
+	{
+		return _alternateColor; 
+	}
 
 private:
 
-	uint8_t GetRed2Dmx(uint8_t red);
+	virtual dmx_value_t GetRed2Dmx(intensity_t red);
 
-	uint8_t GetGreen2Dmx(uint8_t green);
+	dmx_value_t GetGreen2Dmx(intensity_t green);
 
-	uint8_t GetBlue2Dmx(uint8_t blue);
+	dmx_value_t GetBlue2Dmx(intensity_t blue);
 
-	uint8_t GetWhite2Dmx(uint8_t white);
-
-#ifdef _WINDOWS
-	uint8_t Value2WindowsIntensity(uint8_t x);
-#endif
+	dmx_value_t GetWhite2Dmx(intensity_t white);
 };

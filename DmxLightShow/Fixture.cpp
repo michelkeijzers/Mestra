@@ -17,7 +17,8 @@ Fixture::Fixture()
 	_stepTime(0),
 	_stepDuration(UINT16_MAX),  // Do not use 32 bit max here
 	_parameter1(0),
-	_parameter2(0)
+	_parameter2(0),
+	_parameter3(0)
 {
 }
 
@@ -27,8 +28,8 @@ Fixture::~Fixture()
 }
 
 
-void Fixture::InitializeProgram(uint16_t programNumber, uint16_t nrOfSteps, uint16_t startStep, 
-	uint16_t parameter1 /* = 0 */, uint16_t parameter2 /* = 0 */)
+void Fixture::InitializeProgram(program_t programNumber, step_t nrOfSteps, step_t startStep, 
+	parameter_t parameter1 /* = 0 */, parameter_t parameter2 /* = 0 */, parameter_t parameter3 /* = 0 */ )
 {
 	assert(startStep < nrOfSteps);
 
@@ -38,6 +39,7 @@ void Fixture::InitializeProgram(uint16_t programNumber, uint16_t nrOfSteps, uint
 	SetCurrentStep(startStep);
   SetParameter1(parameter1);
 	SetParameter2(parameter2);
+	SetParameter3(parameter3);
 }
 
 

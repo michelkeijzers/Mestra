@@ -19,13 +19,21 @@ public:
 	   
 	~DmxSimpleClass();
 
-	void maxChannel(int maxChannels) { (void) maxChannels; }
 
 	void usePin(uint8_t pin) { (void) pin; };
 	
+
 	uint8_t read(int address);
 
+
 	void write(int address, uint8_t value);
+
+
+	void maxChannel(int maxChannels)
+	{
+		(void)maxChannels;
+	}
+
 
 private:
 	uint8_t _buffer[MAX_DMX_CHANNELS];

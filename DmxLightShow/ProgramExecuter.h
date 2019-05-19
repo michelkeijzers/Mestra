@@ -25,10 +25,7 @@ public:
 
 	void FixedColorProgram(Par& par, bool initialize);
 
-	void SetFadeColor(Par& par, uint16_t step);
-
-	
-
+	void SetFadeColor(Par& par, step_t step);
 
 private:
 	void SetDefaultOrAlternate(Par& par, Par::EActiveColor color);

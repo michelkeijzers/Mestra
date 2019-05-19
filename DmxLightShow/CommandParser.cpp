@@ -13,8 +13,8 @@
 
 
 CommandParser::CommandParser()
-	: _currentIndex(0),
-	  _command('\0'),
+	: _command('\0'), 
+		_currentIndex(0),
 	  _parBits(0),
 	  _parseError(false)
 {
@@ -124,27 +124,27 @@ void CommandParser::ParseIrgbwAsNumbers(Irgbw& irgbw)
 	}
 	else
 	{
-		irgbw.SetIntensity((uint8_t) (strtoul(&(_command[_currentIndex]), NULL, 0)));
+		irgbw.SetIntensity((intensity_t) (strtoul(&(_command[_currentIndex]), NULL, 0)));
 		SkipUntilComma();
 	}
 	
 	// Read red.
-	irgbw.SetRed((uint8_t) (strtoul(&(_command[_currentIndex]), NULL, 0) * MAX_PAR_INTENSITY / 100));
+	irgbw.SetRed((intensity_t) (strtoul(&(_command[_currentIndex]), NULL, 0) * MAX_PAR_INTENSITY / 100));
 	SkipUntilComma();
 
 	// Read green.
-	irgbw.SetGreen((uint8_t) (strtoul(&(_command[_currentIndex]), NULL, 0) * MAX_PAR_INTENSITY / 100));
+	irgbw.SetGreen((intensity_t) (strtoul(&(_command[_currentIndex]), NULL, 0) * MAX_PAR_INTENSITY / 100));
 	SkipUntilComma();
 
 	// Read blue.
-	irgbw.SetBlue((uint8_t) (strtoul(&(_command[_currentIndex]), NULL, 0) * MAX_PAR_INTENSITY / 100));
+	irgbw.SetBlue((intensity_t) (strtoul(&(_command[_currentIndex]), NULL, 0) * MAX_PAR_INTENSITY / 100));
 	
 	// Read white (optionally).
 	if ((strcspn(&(_command[_currentIndex]), ",")) < strlen(&(_command[_currentIndex])))
 	{
 		// White is present
 		SkipUntilComma();
-		irgbw.SetWhite((uint8_t) (strtoul(&(_command[_currentIndex]), NULL, 0) * MAX_PAR_INTENSITY / 100));
+		irgbw.SetWhite((intensity_t) (strtoul(&(_command[_currentIndex]), NULL, 0) * MAX_PAR_INTENSITY / 100));
 	}
 	else
 	{
@@ -202,7 +202,7 @@ void CommandParser::ParsePresetCommand()
 			ParseWhitespace();
 			if (!_parseError)
 			{
-				uint16_t presetNumber = (uint16_t) (strtoul(&(_command[_currentIndex]), NULL, 0));
+				preset_t presetNumber = (preset_t) (strtoul(&(_command[_currentIndex]), NULL, 0));
 				if (presetNumber != 0)
 				{
 					PresetCommand command;
@@ -220,7 +220,23 @@ void CommandParser::ParsePresetCommand()
 
 void CommandParser::ParseStrobeCommand()
 {
-	//TODO
+	ParseWhitespace();
+	if (!_parseError)
+	{
+		ParseParBits();
+		if (!_parseError)
+		{
+			step_time_t duration = strtoul(&(_command[_currentIndex]), NULL, 0);
+			if (duration > 0)
+			{
+				LightSetup.GetStrobo().Start(_parBits, duration);
+			}
+			else
+			{
+				_parseError = true;
+			}
+		}
+	}
 }
 
 
@@ -235,7 +251,7 @@ void CommandParser::ParseDelayTimeCommand()
 			ParseWhitespace();
 			if (!_parseError)
 			{
-				uint32_t delay = strtoul(&(_command[_currentIndex]), NULL, 0);
+				step_time_t delay = strtoul(&(_command[_currentIndex]), NULL, 0);
 				if (delay > 0)
 				{
 					SetDelay(delay);
@@ -408,9 +424,9 @@ void CommandParser::ParseParBits()
 }
 
 
-void CommandParser::SetDelay(uint32_t delay)
+void CommandParser::SetDelay(step_time_t delay)
 {
-	for (uint8_t parNumber = 0; parNumber < NR_OF_PARS; parNumber++)
+	for (par_number_t parNumber = 0; parNumber < NR_OF_PARS; parNumber++)
 	{
 		if ((_parBits & (0x8000 >> parNumber)) > 0)
 		{
@@ -424,7 +440,7 @@ void CommandParser::SetDelay(uint32_t delay)
 
 void CommandParser::SetIrgbw(Par::EActiveColor color, Irgbw& irgbw)
 {
-	for (uint8_t parNumber = 0; parNumber < NR_OF_PARS; parNumber++)
+	for (par_number_t parNumber = 0; parNumber < NR_OF_PARS; parNumber++)
 	{
 		if ((_parBits & (0x8000 >> parNumber)) > 0)
 		{

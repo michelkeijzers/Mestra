@@ -13,13 +13,13 @@
 
 
 TestFixture::TestFixture()
+	: _x(0),
+	  _y(0),
+	  _atLeastOneStepIncreased(false)
 {
 	_name1[0] = '\0';
 	_name2[0] = '\0';
 	_abbr[0] = '\0';
-
-	_x = 0;
-	_y = 0;
 }
 
 
@@ -29,8 +29,7 @@ TestFixture::~TestFixture()
 
 
 void TestFixture::SetProperties(
-	const char* name1, const char* name2, const char* abbr,
-	uint8_t x, uint8_t y)
+	const char* name1, const char* name2, const char* abbr, int x, int y)
 {
 	strcpy_s(_name1, name1);
 	strcpy_s(_name2, name2);
@@ -38,6 +37,7 @@ void TestFixture::SetProperties(
 
 	_x = x;
 	_y = y;	
+	_atLeastOneStepIncreased = false;
 }
 
 
@@ -46,7 +46,7 @@ bool TestFixture::CheckIncreaseStep()
 	bool increased = Fixture::CheckIncreaseStep();
 	if (increased)
 	{
-		LightSetup.Print();
+		_atLeastOneStepIncreased = true;
 	}
 
 	return increased;

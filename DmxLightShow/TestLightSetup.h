@@ -15,9 +15,12 @@ public:
 
 	~TestLightSetupClass();
 
+
 	void AddFixtures();
 
+
 	void Print();
+
 
 private:
 	timeb _programStartTime;;

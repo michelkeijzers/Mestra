@@ -17,14 +17,17 @@ public:
 
 	~CommandBuffer();
 
+
 	// Add a character to the buffer if there is space.
 	void AddChar(char charToAdd);
+
 
 	// Process (parse) a command.
 	void Process();
 
 private:
 	char    _buffer[MAX_BUFFER_LENGTH];
+
 
 	// Length of buffer that is filled.
 	uint8_t _bufferLength = 0;

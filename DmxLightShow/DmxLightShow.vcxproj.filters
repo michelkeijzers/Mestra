@@ -49,6 +49,9 @@
     <Filter Include="Header Files\LightSetup">
       <UniqueIdentifier>{487ef4dc-d7db-4d83-9140-b470232c395b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Documentation">
+      <UniqueIdentifier>{61809f0a-7932-4e80-b6d0-ec42a088b264}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TestFixture.h">
@@ -122,6 +125,9 @@
     </ClInclude>
     <ClInclude Include="MathUtils.h">
       <Filter>Header Files\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="MestraTypes.h">
+      <Filter>Header Files\LightSetup</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -202,6 +208,15 @@
   <ItemGroup>
     <None Include="DmxLightShow.ino">
       <Filter>Source Files</Filter>
+    </None>
+    <None Include="..\Documentation\Mestra.eap">
+      <Filter>Documentation</Filter>
+    </None>
+    <None Include="..\Documentation\Mestra.xlsx">
+      <Filter>Documentation</Filter>
+    </None>
+    <None Include="..\Documentation.docx">
+      <Filter>Documentation</Filter>
     </None>
   </ItemGroup>
 </Project>

@@ -19,8 +19,11 @@ protected:
 	char _abbr[MAX_NAME_LENGTH];
 
 	// Coordinates on screen.
-	uint8_t _x;
-	uint8_t _y;
+	int _x;
+
+	int _y;
+
+	bool _atLeastOneStepIncreased;
 
 public:
 	TestFixture();
@@ -34,12 +37,18 @@ public:
 	const char* GetAbbr() { return _abbr; }
 
 
-	uint8_t GetX() { return _x; }
+	int GetX() { return _x; }
 
-	uint8_t GetY() { return _y; }
+	int GetY() { return _y; }
 
 	void SetProperties(const char* name1, const char* name2, const char* abbr,
-		uint8_t x, uint8_t y);
+		int x, int y);
 
 	/* override */ bool CheckIncreaseStep();
+
+	/* virtual */ void StroboChanged() { _atLeastOneStepIncreased = true; }
+
+	bool GetAtLeastOneStepIncreased() { return _atLeastOneStepIncreased; }
+	
+	void ResetAtLeastOneStepIncreased() { _atLeastOneStepIncreased = false; }
 };

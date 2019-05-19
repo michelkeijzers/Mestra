@@ -5,6 +5,7 @@
 
 
 #include <stdint.h>
+#include "MestraTypes.h"
 
 
 class Irgbw
@@ -13,45 +14,88 @@ public:
 
 	Irgbw();
 
-	Irgbw(uint8_t intensity, uint8_t red, uint8_t green, uint8_t blue, uint8_t white);
+	Irgbw(intensity_t intensity, intensity_t red, intensity_t green, intensity_t blue, 
+	 intensity_t white);
 
-	Irgbw(uint8_t intensity, uint8_t red, uint8_t green, uint8_t blue);
+	Irgbw(intensity_t intensity, intensity_t red, intensity_t green, intensity_t blue);
 
 	~Irgbw();
 
-	void SetIrgb(uint8_t intensity, uint8_t red, uint8_t green, uint8_t blue);
+	void SetIrgb(intensity_t intensity, intensity_t red, intensity_t green, intensity_t blue);
 
-	void SetIrgbw(uint8_t intensity, uint8_t red, uint8_t green, uint8_t blue, uint8_t white);
+	void SetIrgbw(intensity_t intensity, intensity_t red, intensity_t green, intensity_t blue, 
+	 intensity_t white);
 	
 	void SetIrgb(Irgbw& irgbw);
 
 	void SetIrgbw(Irgbw& irgbw);
 
-	uint8_t GetIntensity() { return _intensity; }
-	void SetIntensity(uint8_t intensity) { _intensity = intensity; }
-
-	uint8_t GetRed() { return _red; }
-	void SetRed(uint8_t red) { _red = red; }
-
-	uint8_t GetGreen() { return _green; }
-	void SetGreen(uint8_t green) { _green = green; }
-
-	uint8_t GetBlue() { return _blue; }
-	void SetBlue(uint8_t blue) { _blue = blue; }
-
-	uint8_t GetWhite() { return _white; }
-	void SetWhite(uint8_t white) { _white = white; }
 
 	void operator=(Irgbw& irgbw);
 
+
+	intensity_t GetIntensity() 
+	{
+		return _intensity; 
+	}
+		
+	void SetIntensity(intensity_t intensity) 
+	{
+		_intensity = intensity; 
+	}
+
+	
+	intensity_t GetRed() 
+	{
+		return _red; 
+	}
+	
+	void SetRed(intensity_t red) 
+	{
+		_red = red; 
+	}
+
+	
+	intensity_t GetGreen() 
+	{
+		return _green; 
+	}
+	
+	void SetGreen(intensity_t green) 
+	{
+		_green = green; 
+	}
+
+	
+	intensity_t GetBlue() 
+	{
+		return _blue; 
+	}
+	
+	void SetBlue(intensity_t blue) 
+	{
+		_blue = blue; 
+	}
+
+	
+	intensity_t GetWhite() 
+	{
+		return _white; 
+	}
+	
+	void SetWhite(intensity_t white) 
+	{
+		_white = white; 
+	}
+		
 private:
-  uint8_t _intensity;
+	intensity_t _intensity;
 
-  uint8_t _red;
+	intensity_t _red;
 
-  uint8_t _green;
+	intensity_t _green;
 
-  uint8_t _blue;
+	intensity_t _blue;
 
-  uint8_t _white;
+	intensity_t _white;
 };

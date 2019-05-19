@@ -162,6 +162,7 @@
     <ClInclude Include="ClassNames.h" />
     <ClInclude Include="CommandParser.h" />
     <ClInclude Include="DmxSimpleStub.h" />
+    <ClInclude Include="MestraTypes.h" />
     <ClInclude Include="Fixture.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="Irgbw.h" />
@@ -211,6 +212,9 @@
     <Image Include="DmxLightShow.ico" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\Documentation.docx" />
+    <None Include="..\Documentation\Mestra.eap" />
+    <None Include="..\Documentation\Mestra.xlsx" />
     <None Include="DmxLightShow.ino" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

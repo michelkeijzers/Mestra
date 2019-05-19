@@ -2,7 +2,7 @@
 
 // List of commands:
 //
-// Command   Left         Right     Description
+// Command   First       Second     Description
 //         Parameter    Parameter
 // ------- --------- -------------- -----------------------------------------
 //    a     parbits  0/color/IRGBW  Set alternate color, 0 = off
@@ -41,10 +41,13 @@
 //
 // Program List
 // 
-// Prg Par1 Par2 Description
-// --- ---- ---- ---------------------------------------------------------------
-//   0  -    -   Solid color
-//  10 Yes  Yes  Use default color if step = par1 or par2, else alternate color
+// Prg Name       Par1 Par2 Par3 Description
+// --- ---------- ---- ---- ---- ------------------------------------------------------------------------
+//   0 SolidColor	 -    -    - 
+//  10 DualColor  Yes  Yes   -   Use default color if step = par1 or par2, else alternate color
+//  20 FadeInOut  Yes  Yes   -   Fade in using default color for fade in, alt color for fade out
+//  21 FadeOut    Yes  Yes   -   Like FadeInOut, but only FadeOut
+//  30 FaceChase  Yes  Yes  Yes  Fade + chase combined (par 3 = Nr of pars in group)
 
 
 #pragma once
@@ -62,17 +65,23 @@ public:
 
 	~CommandParser();
 
+
 	void Parse(char* command);
 
 private:
 	// Current index within string
-	uint8_t _currentIndex;
 
 	char* _command;
 
+
+	uint8_t _currentIndex;
+
+
+	par_bits_t _parBits;
+
+
 	bool _parseError;
 
-	uint32_t _parBits;
 
 	void ParseColorCommand(Par::EActiveColor color);
 
@@ -96,7 +105,7 @@ private:
 
 	void SkipUntilComma();
 
-	void SetDelay(uint32_t delay);
+	void SetDelay(step_time_t delay);
 
 };
 

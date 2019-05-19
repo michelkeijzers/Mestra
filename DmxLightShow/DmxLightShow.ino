@@ -1,11 +1,10 @@
-#include <SPI.h>
-
 // DmxLightShow.ino
 //
-//            U N O        M E G A
-//          Flash SRAM   Flash SRAM
-// Maximum: 32256 2048  253952 8192
-// Current:  8178 1276    7792 1332
+//            U N O        M E G A   D U E
+//          Flash SRAM   Flash SRAM  Does
+// Maximum: 32256 2048  253952 8192  not
+// Current:  9620 1268    5736 1153  compile
+//       %:    29   61
 //
 // 
 
@@ -30,8 +29,6 @@ void setup()
   
   Serial.begin(115200);
   PRINTLN("DmxLightShow 0.1");
-
-  SPI.begin();
   
   DmxSimple.usePin(DMX_SEND_PIN);
   DmxSimple.maxChannel(DMX_MAX_CHANNELS);
@@ -41,8 +38,7 @@ void setup()
   _commandBuffer.Process();
 
   _programExecuter.Run();
-
-  
+  LightSetup.GetStrobo().Run();
 }
 
 

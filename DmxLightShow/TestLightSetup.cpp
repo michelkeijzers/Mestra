@@ -1,4 +1,4 @@
-// TestLightSetup.h
+﻿// TestLightSetup.h
 // Set of pars/LED bars.
 // Only for Windows.
 
@@ -62,7 +62,7 @@ void TestLightSetupClass::AddFixtures()
 
 void TestLightSetupClass::Print()
 {
-#define OUTPUT_LIGHT_SETUP
+#define OUTPUT_LIGHT_SETUP 1
 #ifdef OUTPUT_LIGHT_SETUP
 
   WCHAR message[128];
@@ -70,21 +70,23 @@ void TestLightSetupClass::Print()
 	swprintf_s(message, L"Time: %u\n", millis() - ((uint32_t)(_programStartTime.time * 1000 + _programStartTime.millitm)));
 	OutputDebugString(message);
 
-	OutputDebugString(L"Fix|Abbr|DMX|---Current Color---|---Default Color---+--Altarnate Color--+---------- Program ---------------\n");
-	OutputDebugString(L"   |    |Off|Int Red Gre Bl  Whi|Int Red Gre Bl  Whi|Int Red Gre Bl  Whi|Init Program|Curr /Nr of|  Step   \n");
-	OutputDebugString(L"   |    |Cha|end       en ue  te|      en ue  te ens|     en  ue  te    |     Number | Step/Steps| Duration\n");
-	OutputDebugString(L"---+----+---+--- --- --- --- ---+--- --- --- --- ---+--- --- --- --- ---+---- -------+----- -----+---------\n");
+	OutputDebugString(L"┌▬▬▬┬▬▬▬▬┬▬▬▬┬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬┬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬┬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬┬▬▬▬▬▬▬▬▬▬▬▬▬┬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬┬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬┐\n");
+	OutputDebugString(L"│Fix│Abbr│DMX│   Current Color   │   Default Color   │  Altarnate Color  │  Program   │Program Params   │       Steps        │\n");
+	OutputDebugString(L"│   │    │   ├▬▬▬┬▬▬▬┬▬▬▬┬▬▬▬┬▬▬▬┼▬▬▬┬▬▬▬┬▬▬▬┬▬▬▬┬▬▬▬┼▬▬▬┬▬▬▬┬▬▬▬┬▬▬▬┬▬▬▬┼▬▬▬▬┬▬▬▬▬▬▬▬┼▬▬▬▬▬┬▬▬▬▬▬┬▬▬▬▬▬┼▬▬▬▬▬┬▬▬▬▬▬┬▬▬▬▬▬▬▬▬┼\n");
+	OutputDebugString(L"│   │    │Off│Int│Red│Gre│Bl │Whi│Int│Red│Gre│Bl │Whi│Int│Red│Gre│Bl │Whi│Init│Program│Param│Param│Param│Curr │Nr of│ Step   │\n");
+	OutputDebugString(L"│   │    │Cha│ens│   │ en│ ue│ te│ens│   │ en│ ue│ te│ens│   │ en│ ue│ te│    │Number │  1  │  2  │  3  │Step │Steps│Duration│\n");
+	OutputDebugString(L"┼▬▬▬┼▬▬▬▬┼▬▬▬┼▬▬▬┼▬▬▬┼▬▬▬┼▬▬▬┼▬▬▬┼▬▬▬┬▬▬▬┼▬▬▬┼▬▬▬┼▬▬▬┼▬▬▬┼▬▬▬┼▬▬▬┼▬▬▬┼▬▬▬┼▬▬▬▬┼▬▬▬▬▬▬▬┼▬▬▬▬▬┼▬▬▬▬▬┼▬▬▬▬▬┼▬▬▬▬▬┼▬▬▬▬▬┼▬▬▬▬▬▬▬▬┼\n");
 
 
-	for (int parNumber = 0; parNumber < NR_OF_PARS; parNumber++)
+	for (par_number_t parNumber = 0; parNumber < NR_OF_PARS; parNumber++)
 	{
 		Par& par = GetPar(parNumber);
 		Irgbw& defaultColor = par.GetDefaultColor();
 		Irgbw& alternateColor = par.GetAlternateColor();
 		uint16_t dmx = par.GetDmxOffsetChannel();
 		const char* abbr = par.GetAbbr();
-
-		swprintf_s(message, L"%2u |%c%c%c |%3u|%3u %3u %3u %3u %3u|%3u %3u %3u %3u %3u|%3u %3u %3u %3u %3u|%3u %8u|%5u/%5u|%6u\n",
+				
+		swprintf_s(message, L"│%2u │%c%c%c │%3u│%3u:%3u:%3u:%3u:%3u│%3u:%3u:%3u:%3u:%3u│%3u:%3u:%3u:%3u:%3u│%4u│%7u│%5u:%5u:%5u│%5u│%5u│%6u  │\n",
 			parNumber,
 			wchar_t(abbr[0] == '\0' ? ' ' : abbr[0]),
 			wchar_t(abbr[1] == '\0' ? ' ' : abbr[1]),
@@ -97,9 +99,14 @@ void TestLightSetupClass::Print()
 			DmxSimple.read(dmx + DMX_OFFSET_CHANNEL_WHITE),
 			defaultColor.GetIntensity(), defaultColor.GetRed(), defaultColor.GetGreen(), defaultColor.GetBlue(), defaultColor.GetWhite(),
 			alternateColor.GetIntensity(), alternateColor.GetRed(), alternateColor.GetGreen(), alternateColor.GetBlue(), alternateColor.GetWhite(),
-			par.GetInitialize(), par.GetProgram(), par.GetCurrentStep(), par.GetNrOfSteps(), par.GetStepDuration());
+			par.GetInitialize(), par.GetProgram(), par.GetParameter1(), par.GetParameter2(), par.GetParameter3(),
+			par.GetCurrentStep(), par.GetNrOfSteps(), par.GetStepDuration());
 		OutputDebugString(message);
 	}
+
+	OutputDebugString(L"└▬▬▬┴▬▬▬▬┴▬▬▬┴▬▬▬┴▬▬▬┴▬▬▬┴▬▬▬┴▬▬▬┴▬▬▬┴▬▬▬┴▬▬▬┴▬▬▬┴▬▬▬┴▬▬▬┴▬▬▬┴▬▬▬┴▬▬▬┴▬▬▬┴▬▬▬▬┴▬▬▬▬▬▬▬┴▬▬▬▬▬┴▬▬▬▬▬┴▬▬▬▬▬┴▬▬▬▬▬┴▬▬▬▬▬┴▬▬▬▬▬▬▬▬┼\n");
+
+
 #endif
 }
 

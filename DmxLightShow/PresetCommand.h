@@ -6,6 +6,7 @@
 #include "ClassNames.h"
 #include HEADER_FILE(PAR_CLASS)
 #include <stdint.h>
+#include "MestraTypes.h"
 
 
 class PresetCommand
@@ -15,15 +16,21 @@ public:
 
 	~PresetCommand();
 
-	void Run(uint32_t parBits, uint16_t presetNumber);
+
+	void Run(par_bits_t parBits, preset_t presetNumber);
 
 private:
 	void CommandAllOff(Par& par);
 
-	void SetFixturePreset(uint16_t presetNumber, uint8_t parNumber, uint8_t selectedParIndex, uint8_t nrOfPars);
 
-	void SetFixedIrgb(Par& par, Irgbw& color, uint8_t intensity, uint8_t red, uint8_t green, uint8_t blue);
+	void SetFixturePreset(preset_t presetNumber, par_number_t parNumber, 
+		intensity_t selectedParIndex, intensity_t nrOfPars);
 
-	void SetFixedIrgbw(Par& par, Irgbw& color, uint8_t intensity, uint8_t red, uint8_t green, uint8_t blue, uint8_t white);
+
+	void SetFixedIrgb(Par& par, Irgbw& color, 
+		intensity_t intensity, intensity_t red, intensity_t green, intensity_t blue);
+
+	void SetFixedIrgbw(Par& par, Irgbw& color, 
+		intensity_t intensity, intensity_t red, intensity_t green, intensity_t blue, intensity_t white);
 };
 
