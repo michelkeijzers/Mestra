@@ -27,7 +27,6 @@ dmx_value_t WinPar::GetRed2Dmx(dmx_value_t red)
 }
 
 
-
 dmx_value_t WinPar::GetGreen2Dmx(dmx_value_t green)
 {
 	return Value2WindowsIntensity(green);
@@ -53,6 +52,5 @@ dmx_value_t WinPar::Value2WindowsIntensity(uint8_t x)
 {
 	return  (dmx_value_t)(255 * powf((float)x / MAX_PAR_INTENSITIES, 0.4f));
 }
-
 
 #endif

@@ -30,5 +30,4 @@ private:
 // Create instance.
 extern DmxSimpleClass DmxSimple;
 
-
 #endif // _WINDOWS

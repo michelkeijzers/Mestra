@@ -129,20 +129,20 @@
     <ClInclude Include="PlatformPar.h">
       <Filter>Header Files\Win32</Filter>
     </ClInclude>
-    <ClInclude Include="McuFixture.h">
-      <Filter>Header Files\Win32</Filter>
-    </ClInclude>
-    <ClInclude Include="McuPar.h">
-      <Filter>Header Files\Win32</Filter>
-    </ClInclude>
     <ClInclude Include="WinLightSetup.h">
-      <Filter>Header Files\Win32</Filter>
-    </ClInclude>
-    <ClInclude Include="McuLightSetup.h">
       <Filter>Header Files\Win32</Filter>
     </ClInclude>
     <ClInclude Include="PlatformLightSetup.h">
       <Filter>Header Files\Win32</Filter>
+    </ClInclude>
+    <ClInclude Include="McuFixture.h">
+      <Filter>Header Files\LightSetup</Filter>
+    </ClInclude>
+    <ClInclude Include="McuLightSetup.h">
+      <Filter>Header Files\LightSetup</Filter>
+    </ClInclude>
+    <ClInclude Include="McuPar.h">
+      <Filter>Header Files\LightSetup</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -216,12 +216,6 @@
     <ClCompile Include="WinPar.cpp">
       <Filter>Source Files\WIN32</Filter>
     </ClCompile>
-    <ClCompile Include="McuFixture.cpp">
-      <Filter>Source Files\WIN32</Filter>
-    </ClCompile>
-    <ClCompile Include="McuPar.cpp">
-      <Filter>Source Files\WIN32</Filter>
-    </ClCompile>
     <ClCompile Include="PlatformFixture.cpp">
       <Filter>Source Files\WIN32</Filter>
     </ClCompile>
@@ -234,8 +228,14 @@
     <ClCompile Include="PlatformLightSetup.cpp">
       <Filter>Source Files\WIN32</Filter>
     </ClCompile>
+    <ClCompile Include="McuFixture.cpp">
+      <Filter>Source Files\LightSetup</Filter>
+    </ClCompile>
     <ClCompile Include="McuLightSetup.cpp">
-      <Filter>Source Files\WIN32</Filter>
+      <Filter>Source Files\LightSetup</Filter>
+    </ClCompile>
+    <ClCompile Include="McuPar.cpp">
+      <Filter>Source Files\LightSetup</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -95,5 +95,3 @@ private:
 
 	void SetDelay(step_time_t delay);
 };
-
-	

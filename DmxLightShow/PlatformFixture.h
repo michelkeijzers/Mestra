@@ -22,4 +22,3 @@ public:
 
 	virtual void PostProcessCheckIncreaseStep(bool increased) = 0;
 };
-

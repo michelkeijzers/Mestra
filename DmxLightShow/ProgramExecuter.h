@@ -12,6 +12,7 @@ public:
 	~ProgramExecuter();
 
 	void Run();
+	void RunPars();
 
 	void FadeInOutProgram(Par& par, bool initialize);
 	void FadeOutProgram(Par& par, bool initialize);

@@ -34,5 +34,5 @@ private:
 	Strobo _strobo;
 };
 
-
+// Instance
 extern LightSetupClass LightSetup;

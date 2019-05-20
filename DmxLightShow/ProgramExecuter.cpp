@@ -25,6 +25,15 @@ ProgramExecuter::~ProgramExecuter()
 
 void ProgramExecuter::Run()
 {  
+	RunPars();
+
+	LightSetup.GetStrobo().Run();
+}
+
+
+void ProgramExecuter::RunPars()
+{
+	// Run each par.
 	for (fixture_number_t parNumber = 0; parNumber < NR_OF_PARS; parNumber++)
 	{
 		Par& par = LightSetup.GetPar(parNumber);
@@ -41,7 +50,7 @@ void ProgramExecuter::Run()
 		case 0:
 			FixedColorProgram(par, initialize);
 			break;
-					
+
 		case 10: // Only on at step Parameter 1 or 2 (On/off, Chase)
 			DualColorProgram(par, initialize);
 			break;
@@ -62,8 +71,6 @@ void ProgramExecuter::Run()
 			break;
 		}
 	}
-
-	LightSetup.GetStrobo().Run();
 }
 
 

@@ -11,7 +11,6 @@
 #include "LightSetup.h"
 #include "Irgbw.h"
 #include "TestProgramExecuter.h"
-#include "ClassNames.h"
 #include <string>
 #include "CommandBuffer.h"
 using namespace std;
@@ -41,7 +40,9 @@ int _refreshCounter;
 
 
 // Forward declarations of functions included in this code module:
+void HandleMestraMessages(MSG& msg);
 void InjectCommands();
+void InitMestra();
 
 ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
@@ -75,13 +76,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
   MSG msg;
 
-
-	// Mestra init
-	LightSetup.CreateFixtures();
-	LightSetup.SetPlatformLightSetup(new WinLightSetup());
-	LightSetup.GetPlatform()->SetProperties();
-
-	LightSetup.GetPlatform()->Print();
+	InitMestra();
 
   // Main message loop:
   while (GetMessage(&msg, nullptr, 0, 0))
@@ -91,32 +86,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
           TranslateMessage(&msg);
           DispatchMessage(&msg);
 
-					//Sleep(1);
-					_refreshCounter++;
-					InjectCommands();
-
-
-					// Reset par increase states (debug only).
-					for (fixture_number_t par = 0; par < NR_OF_PARS; par++)
-					{
-						LightSetup.GetPar(par).GetPlatformFixture().ResetAtLeastOneStepIncreased();
-					}
-
-					// Run program executer.
-					_programExecuter.Run();
-
-					bool atLeasOneParIncreased = false;
-					for (fixture_number_t par = 0; par < NR_OF_PARS; par++)
-					{
-						atLeasOneParIncreased |= LightSetup.GetPar(par).GetPlatformFixture().GetAtLeastOneStepIncreased();
-					}
-
-					if (atLeasOneParIncreased)
-					{
-						LightSetup.GetPlatform()->Print();
-					}
-
-					InvalidateRect(msg.hwnd, NULL, FALSE);
+					HandleMestraMessages(msg);
       }
   }
 
@@ -152,65 +122,6 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
 }
 
 
-void InjectString(const char* command)
-{
-	for (int i = 0; i < strlen(command); i++)
-	{
-		_commandBuffer.AddChar(command[i]);
-	}
-
-	_commandBuffer.AddChar('\n');
-	_commandBuffer.AddChar('\r');
-
-	_commandBuffer.Process();
-
-	// Print command.
-	wchar_t wCommandText[20];
-	size_t sizet;
-	mbstowcs_s(&sizet, wCommandText, command, strlen(command) + 1); //Plus null
-	
-	wchar_t message[128];
-	swprintf_s(message, L"\nCommand: %s\n", wCommandText);
-	
-	OutputDebugString(message);
-	LightSetup.GetPlatform()->Print();
-}
-
-
-void InjectCommands()
-{
-	if (_refreshCounter == 100)
-	{
-		//InjectString("s a 50");
-
-		
-		InjectString("t fa 10000");
-
-		InjectString("d fa irb");
-		InjectString("a fa ib");
-		InjectString("p fa 63");
-		
-		/*
-		InjectString("t d 1000");
-		InjectString("d d ib");
-		InjectString("a d ibg");
-		InjectString("p dl 50");
-		InjectString("p dr 51");
-
-		InjectString("t e 10000");
-		InjectString("d e 0");
-		InjectString("a e irgb");
-		InjectString("p e 50");
-
-		InjectString("t b 100");
-		InjectString("d b ir");
-		InjectString("a b i");
-		InjectString("p b 50");
-		*/
-	}
-}
-
-
 //
 //   FUNCTION: InitInstance(HINSTANCE, int)
 //
@@ -238,6 +149,28 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
    return TRUE;
 }
+
+
+// Message handler for about box.
+INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
+{
+	UNREFERENCED_PARAMETER(lParam);
+	switch (message)
+	{
+	case WM_INITDIALOG:
+		return (INT_PTR)TRUE;
+
+	case WM_COMMAND:
+		if (LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL)
+		{
+			EndDialog(hDlg, LOWORD(wParam));
+			return (INT_PTR)TRUE;
+		}
+		break;
+	}
+	return (INT_PTR)FALSE;
+}
+
 
 //
 //  FUNCTION: WndProc(HWND, UINT, WPARAM, LPARAM)
@@ -353,23 +286,104 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     return 0;
 }
 
-// Message handler for about box.
-INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
-{
-    UNREFERENCED_PARAMETER(lParam);
-    switch (message)
-    {
-    case WM_INITDIALOG:
-        return (INT_PTR)TRUE;
 
-    case WM_COMMAND:
-        if (LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL)
-        {
-            EndDialog(hDlg, LOWORD(wParam));
-            return (INT_PTR)TRUE;
-        }
-        break;
-    }
-    return (INT_PTR)FALSE;
+void InitMestra()
+{
+	LightSetup.CreateFixtures();
+	LightSetup.SetPlatformLightSetup(new WinLightSetup());
+	LightSetup.GetPlatform()->SetProperties();
+
+	LightSetup.GetPlatform()->Print();
 }
+
+
+void HandleMestraMessages(MSG& msg)
+{
+	Sleep(1);
+	_refreshCounter++;
+	InjectCommands();
+
+	// Reset par increase states (debug only).
+	for (fixture_number_t par = 0; par < NR_OF_PARS; par++)
+	{
+		LightSetup.GetPar(par).GetPlatformFixture().ResetAtLeastOneStepIncreased();
+	}
+
+	// Run program executer.
+	_programExecuter.Run();
+
+	bool atLeasOneParIncreased = false;
+	for (fixture_number_t par = 0; par < NR_OF_PARS; par++)
+	{
+		atLeasOneParIncreased |= LightSetup.GetPar(par).GetPlatformFixture().GetAtLeastOneStepIncreased();
+	}
+
+	if (atLeasOneParIncreased)
+	{
+		LightSetup.GetPlatform()->Print();
+	}
+
+	InvalidateRect(msg.hwnd, NULL, FALSE);
+}
+
+
+void InjectString(const char* command)
+{
+	for (int i = 0; i < strlen(command); i++)
+	{
+		_commandBuffer.AddChar(command[i]);
+	}
+
+	_commandBuffer.AddChar('\n');
+	_commandBuffer.AddChar('\r');
+
+	_commandBuffer.Process();
+
+	// Print command.
+	wchar_t wCommandText[20];
+	size_t sizet;
+	mbstowcs_s(&sizet, wCommandText, command, strlen(command) + 1); //Plus null
+
+	wchar_t message[128];
+	swprintf_s(message, L"\nCommand: %s\n", wCommandText);
+
+	OutputDebugString(message);
+	LightSetup.GetPlatform()->Print();
+}
+
+
+void InjectCommands()
+{
+	if (_refreshCounter == 100)
+	{
+		//InjectString("s a 50");
+
+
+		InjectString("t fa 10000");
+
+		InjectString("d fa irb");
+		InjectString("a fa ib");
+		InjectString("p fa 63");
+
+		/*
+		InjectString("t d 1000");
+		InjectString("d d ib");
+		InjectString("a d ibg");
+		InjectString("p dl 50");
+		InjectString("p dr 51");
+
+		InjectString("t e 10000");
+		InjectString("d e 0");
+		InjectString("a e irgb");
+		InjectString("p e 50");
+
+		InjectString("t b 100");
+		InjectString("d b ir");
+		InjectString("a b i");
+		InjectString("p b 50");
+		*/
+	}
+}
+
+
 #endif // _WINDOWS
