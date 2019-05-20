@@ -3,16 +3,13 @@
 
 #pragma once
 
-
 #include <stdint.h>
-
 
 class BitsUtils
 {
 private:
-	BitsUtils() { };
-
-	~BitsUtils() { };
+	BitsUtils();
+	~BitsUtils();
 
 public:
 	static uint8_t GetNrOfHighBits(uint32_t value);

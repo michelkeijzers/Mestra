@@ -8,7 +8,7 @@
 
 #include "ClassNames.h"
 #include HEADER_FILE(ARDUINO_CLASS)
-#include HEADER_FILE(LIGHT_SETUP_CLASS)
+#include "LightSetup.h"
 #include "ProgramExecuter.h"
 
 

@@ -7,7 +7,7 @@
 
 #include <string>
 #include "ClassNames.h"
-#include HEADER_FILE(LIGHT_SETUP_CLASS)
+#include "LightSetup.h"
 #include "WinFixture.h"
 #include "Par.h"
 
@@ -28,6 +28,36 @@ WinFixture::~WinFixture()
 }
 
 
+const char* WinFixture::GetName1() 
+{
+	return _name1; 
+}
+
+
+const char* WinFixture::GetName2() 
+{
+	return _name2; 
+}
+
+
+const char* WinFixture::GetAbbr()
+{
+	return _abbr; 
+}
+
+
+int WinFixture::GetX()
+{
+	return _x; 
+}
+
+
+int WinFixture::GetY() 
+{
+	return _y; 
+}
+
+
 /* override */ void WinFixture::SetProperties(
 	const char* name1, const char* name2, const char* abbr, int x, int y)
 {
@@ -36,7 +66,25 @@ WinFixture::~WinFixture()
 	strcpy_s(_abbr, abbr);
 
 	_x = x;
-	_y = y;	
+	_y = y;
+	_atLeastOneStepIncreased = false;
+}
+
+
+/* virtual */ void WinFixture::StroboChanged()
+{
+	_atLeastOneStepIncreased = true;
+}
+
+
+bool WinFixture::GetAtLeastOneStepIncreased()
+{
+	return _atLeastOneStepIncreased;
+}
+
+
+void WinFixture::ResetAtLeastOneStepIncreased()
+{
 	_atLeastOneStepIncreased = false;
 }
 

@@ -1,7 +1,6 @@
 // CommandBuffer.cpp
 // Contains buffer for one command.
 
-
 #include "CommandBuffer.h"
 #include "CharUtils.h"
 #include "StringUtils.h"

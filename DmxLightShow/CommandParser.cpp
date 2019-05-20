@@ -8,7 +8,7 @@
 #include <string.h>
 #include <ctype.h>
 #include "CharUtils.h"
-#include HEADER_FILE(LIGHT_SETUP_CLASS)
+#include "LightSetup.h"
 #include HEADER_FILE(ARDUINO_CLASS)
 
 

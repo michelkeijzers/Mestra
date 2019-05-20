@@ -6,7 +6,7 @@
 #include "ClassNames.h"
 #include HEADER_FILE(ARDUINO_CLASS)
 #include "Par.h"
-#include HEADER_FILE(LIGHT_SETUP_CLASS)
+#include "LightSetup.h"
 
 
 Strobo::Strobo() :
@@ -20,6 +20,54 @@ Strobo::Strobo() :
 
 Strobo::~Strobo()
 {
+}
+
+
+par_bits_t Strobo::GetParBits()
+{
+	return _parBits;
+}
+
+
+void Strobo::SetParBits(par_bits_t parBits)
+{
+	_parBits = parBits;
+}
+
+
+bool Strobo::GetState()
+{
+	return _state;
+}
+
+
+void Strobo::SetState(bool state)
+{
+	_state = state;
+}
+
+
+step_time_t Strobo::GetDuration()
+{
+	return _duration;
+}
+
+
+void Strobo::SetDuration(step_time_t duration)
+{
+	_duration = duration;
+}
+
+
+step_time_t Strobo::GetNextTime()
+{
+	return _nextTime;
+}
+
+
+void Strobo::SetNextTime(step_time_t nextTime)
+{
+	_duration = nextTime;
 }
 
 

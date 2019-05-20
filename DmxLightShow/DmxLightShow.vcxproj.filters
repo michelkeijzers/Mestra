@@ -51,9 +51,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="TestLightSetup.h">
-      <Filter>Header Files\Win32</Filter>
-    </ClInclude>
     <ClInclude Include="StringUtils.h">
       <Filter>Header Files\Utilities</Filter>
     </ClInclude>
@@ -138,6 +135,15 @@
     <ClInclude Include="McuPar.h">
       <Filter>Header Files\Win32</Filter>
     </ClInclude>
+    <ClInclude Include="WinLightSetup.h">
+      <Filter>Header Files\Win32</Filter>
+    </ClInclude>
+    <ClInclude Include="McuLightSetup.h">
+      <Filter>Header Files\Win32</Filter>
+    </ClInclude>
+    <ClInclude Include="PlatformLightSetup.h">
+      <Filter>Header Files\Win32</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DmxLightShow.rc">
@@ -153,9 +159,6 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="TestLightSetup.cpp">
-      <Filter>Source Files\WIN32</Filter>
-    </ClCompile>
     <ClCompile Include="DmxLightShowArduino.cpp">
       <Filter>Source Files\Framework</Filter>
     </ClCompile>
@@ -223,6 +226,15 @@
       <Filter>Source Files\WIN32</Filter>
     </ClCompile>
     <ClCompile Include="PlatformPar.cpp">
+      <Filter>Source Files\WIN32</Filter>
+    </ClCompile>
+    <ClCompile Include="WinLightSetup.cpp">
+      <Filter>Source Files\WIN32</Filter>
+    </ClCompile>
+    <ClCompile Include="PlatformLightSetup.cpp">
+      <Filter>Source Files\WIN32</Filter>
+    </ClCompile>
+    <ClCompile Include="McuLightSetup.cpp">
       <Filter>Source Files\WIN32</Filter>
     </ClCompile>
   </ItemGroup>

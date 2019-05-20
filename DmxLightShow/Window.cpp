@@ -8,7 +8,7 @@
 
 #include "framework.h"
 #include "DmxLightShow.h"
-#include "TestLightSetup.h"
+#include "LightSetup.h"
 #include "Irgbw.h"
 #include "TestProgramExecuter.h"
 #include "ClassNames.h"
@@ -18,7 +18,7 @@ using namespace std;
 #include HEADER_FILE(ARDUINO_CLASS)
 #include HEADER_FILE(DMX_SIMPLE_CLASS)
 #include "MestraTypes.h"
-
+#include "WinLightsetup.h"
 
 #define MAX_LOADSTRING 100
 
@@ -54,7 +54,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                      _In_ int       nCmdShow)
 {
 
-	LightSetup.AddFixtures();
+	LightSetup.CreateFixtures();
 	_refreshCounter = 0;
 
   UNREFERENCED_PARAMETER(hPrevInstance);
@@ -75,6 +75,14 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
   MSG msg;
 
+
+	// Mestra init
+	LightSetup.CreateFixtures();
+	LightSetup.SetPlatformLightSetup(new WinLightSetup());
+	LightSetup.GetPlatform()->SetProperties();
+
+	LightSetup.GetPlatform()->Print();
+
   // Main message loop:
   while (GetMessage(&msg, nullptr, 0, 0))
   {
@@ -85,8 +93,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 					//Sleep(1);
 					_refreshCounter++;
-
 					InjectCommands();
+
 
 					// Reset par increase states (debug only).
 					for (fixture_number_t par = 0; par < NR_OF_PARS; par++)
@@ -105,7 +113,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 					if (atLeasOneParIncreased)
 					{
-						LightSetup.Print();
+						LightSetup.GetPlatform()->Print();
 					}
 
 					InvalidateRect(msg.hwnd, NULL, FALSE);
@@ -165,7 +173,7 @@ void InjectString(const char* command)
 	swprintf_s(message, L"\nCommand: %s\n", wCommandText);
 	
 	OutputDebugString(message);
-	LightSetup.Print();
+	LightSetup.GetPlatform()->Print();
 }
 
 
@@ -272,63 +280,66 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 					for (fixture_number_t parNumber = 0; parNumber < NR_OF_PARS; parNumber++)
 					{
-						Par& par = (Par&) LightSetup.GetPar(parNumber);
-						dmx_channel_t dmxStartChannel = par.GetDmxOffsetChannel();
-						dmx_value_t intensity = DmxSimple.read(dmxStartChannel + DMX_OFFSET_CHANNEL_INTENSITY);
+						Par& par = (Par&)LightSetup.GetPar(parNumber);
+						if ((LightSetup.GetPlatform() != 0) && LightSetup.GetPlatform()->ArePropertiesSet())
+						{
+							dmx_channel_t dmxStartChannel = par.GetDmxOffsetChannel();
+							dmx_value_t intensity = DmxSimple.read(dmxStartChannel + DMX_OFFSET_CHANNEL_INTENSITY);
 
-						SelectObject(hdc, GetStockObject(DC_BRUSH));
-						
-						dmx_value_t white = DmxSimple.read(dmxStartChannel + DMX_OFFSET_CHANNEL_WHITE);
+							SelectObject(hdc, GetStockObject(DC_BRUSH));
 
-						dmx_value_t red   = max(white, DmxSimple.read(dmxStartChannel + DMX_OFFSET_CHANNEL_RED  ));
-						dmx_value_t green = max(white, DmxSimple.read(dmxStartChannel + DMX_OFFSET_CHANNEL_GREEN));
-						dmx_value_t blue  = max(white, DmxSimple.read(dmxStartChannel + DMX_OFFSET_CHANNEL_BLUE ));
+							dmx_value_t white = DmxSimple.read(dmxStartChannel + DMX_OFFSET_CHANNEL_WHITE);
 
-						SetDCBrushColor(hdc, RGB(
-							red   * intensity / 255,
-							green * intensity / 255,
-							blue  * intensity / 255));
+							dmx_value_t red = max(white, DmxSimple.read(dmxStartChannel + DMX_OFFSET_CHANNEL_RED));
+							dmx_value_t green = max(white, DmxSimple.read(dmxStartChannel + DMX_OFFSET_CHANNEL_GREEN));
+							dmx_value_t blue = max(white, DmxSimple.read(dmxStartChannel + DMX_OFFSET_CHANNEL_BLUE));
 
-						PlatformFixture& platformFixture = par.GetPlatformFixture();
-						Ellipse(hdc, 
-							platformFixture.GetX() * PAR_DISTANCE_X + xOffset , 
-							platformFixture.GetY() * PAR_DISTANCE_Y + yOffset,
-							platformFixture.GetX() * PAR_DISTANCE_X + PAR_DIAMETER + xOffset,
-							platformFixture.GetY() * PAR_DISTANCE_Y + PAR_DIAMETER + yOffset) ;
-				
-						wchar_t wtext[20];
-						size_t sizet;
+							SetDCBrushColor(hdc, RGB(
+								red * intensity / 255,
+								green * intensity / 255,
+								blue * intensity / 255));
 
-						// Line 1
-						mbstowcs_s(&sizet, wtext, platformFixture.GetName1(),
-							strlen(platformFixture.GetName1()) + 1); //Plus null
-						LPWSTR ptr = wtext;
+							PlatformFixture & platformFixture = par.GetPlatformFixture();
+							Ellipse(hdc,
+								platformFixture.GetX() * PAR_DISTANCE_X + xOffset,
+								platformFixture.GetY() * PAR_DISTANCE_Y + yOffset,
+								platformFixture.GetX() * PAR_DISTANCE_X + PAR_DIAMETER + xOffset,
+								platformFixture.GetY() * PAR_DISTANCE_Y + PAR_DIAMETER + yOffset);
 
-						TextOut(hdc, 
-							platformFixture.GetX() * PAR_DISTANCE_X + xOffset,
-							platformFixture.GetY() * PAR_DISTANCE_Y + PAR_DIAMETER + FONT_SIZE - 2 - 8 + yOffset,
-							wtext, lstrlen(wtext));
+							wchar_t wtext[20];
+							size_t sizet;
 
-						// Line 2
-						mbstowcs_s(&sizet, 
-							wtext, platformFixture.GetName2(),
-							strlen(platformFixture.GetName2()) + 1); //Plus null
-						ptr = wtext;
+							// Line 1
+							mbstowcs_s(&sizet, wtext, platformFixture.GetName1(),
+								strlen(platformFixture.GetName1()) + 1); //Plus null
+							LPWSTR ptr = wtext;
 
-						TextOut(hdc, 
-							platformFixture.GetX() * PAR_DISTANCE_X + xOffset,
-							platformFixture.GetY() * PAR_DISTANCE_Y + PAR_DIAMETER + (FONT_SIZE + 2) * 2 - 8 + yOffset,
-							wtext, lstrlen(wtext));
+							TextOut(hdc,
+								platformFixture.GetX() * PAR_DISTANCE_X + xOffset,
+								platformFixture.GetY() * PAR_DISTANCE_Y + PAR_DIAMETER + FONT_SIZE - 2 - 8 + yOffset,
+								wtext, lstrlen(wtext));
 
-						// Abbr
-						mbstowcs_s(&sizet, wtext, platformFixture.GetAbbr(), 
-							strlen(platformFixture.GetAbbr()) + 1); //Plus null
-						ptr = wtext;
+							// Line 2
+							mbstowcs_s(&sizet,
+								wtext, platformFixture.GetName2(),
+								strlen(platformFixture.GetName2()) + 1); //Plus null
+							ptr = wtext;
 
-						TextOut(hdc, 
-							platformFixture.GetX() * PAR_DISTANCE_X + xOffset,
-							platformFixture.GetY() * PAR_DISTANCE_Y + PAR_DIAMETER + (FONT_SIZE + 2) * 3 - 4 + yOffset,
-							wtext, lstrlen(wtext));
+							TextOut(hdc,
+								platformFixture.GetX() * PAR_DISTANCE_X + xOffset,
+								platformFixture.GetY() * PAR_DISTANCE_Y + PAR_DIAMETER + (FONT_SIZE + 2) * 2 - 8 + yOffset,
+								wtext, lstrlen(wtext));
+
+							// Abbr
+							mbstowcs_s(&sizet, wtext, platformFixture.GetAbbr(),
+								strlen(platformFixture.GetAbbr()) + 1); //Plus null
+							ptr = wtext;
+
+							TextOut(hdc,
+								platformFixture.GetX() * PAR_DISTANCE_X + xOffset,
+								platformFixture.GetY() * PAR_DISTANCE_Y + PAR_DIAMETER + (FONT_SIZE + 2) * 3 - 4 + yOffset,
+								wtext, lstrlen(wtext));
+						}
 					}
 					EndPaint(hWnd, &ps);
         }

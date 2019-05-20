@@ -163,6 +163,7 @@
     <ClInclude Include="CommandParser.h" />
     <ClInclude Include="DmxSimpleStub.h" />
     <ClInclude Include="McuFixture.h" />
+    <ClInclude Include="McuLightSetup.h" />
     <ClInclude Include="McuPar.h" />
     <ClInclude Include="MestraTypes.h" />
     <ClInclude Include="Fixture.h" />
@@ -171,6 +172,7 @@
     <ClInclude Include="LightSetup.h" />
     <ClInclude Include="MathUtils.h" />
     <ClInclude Include="PlatformFixture.h" />
+    <ClInclude Include="PlatformLightSetup.h" />
     <ClInclude Include="PlatformPar.h" />
     <ClInclude Include="PresetCommand.h" />
     <ClInclude Include="ProgramExecuter.h" />
@@ -182,7 +184,7 @@
     <ClInclude Include="Strobo.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="WinFixture.h" />
-    <ClInclude Include="TestLightSetup.h" />
+    <ClInclude Include="WinLightSetup.h" />
     <ClInclude Include="WinPar.h" />
     <ClInclude Include="DmxLightShow.h" />
   </ItemGroup>
@@ -198,9 +200,11 @@
     <ClCompile Include="LightSetup.cpp" />
     <ClCompile Include="MathUtils.cpp" />
     <ClCompile Include="McuFixture.cpp" />
+    <ClCompile Include="McuLightSetup.cpp" />
     <ClCompile Include="McuPar.cpp" />
     <ClCompile Include="Par.cpp" />
     <ClCompile Include="PlatformFixture.cpp" />
+    <ClCompile Include="PlatformLightSetup.cpp" />
     <ClCompile Include="PlatformPar.cpp" />
     <ClCompile Include="PresetCommand.cpp" />
     <ClCompile Include="ProgramExecuter.cpp" />
@@ -208,7 +212,7 @@
     <ClCompile Include="StringUtils.cpp" />
     <ClCompile Include="Strobo.cpp" />
     <ClCompile Include="WinFixture.cpp" />
-    <ClCompile Include="TestLightSetup.cpp" />
+    <ClCompile Include="WinLightSetup.cpp" />
     <ClCompile Include="WinPar.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>

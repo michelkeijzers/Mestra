@@ -49,44 +49,33 @@
 //  21 FadeOut    Yes  Yes   -   Like FadeInOut, but only FadeOut
 //  30 FaceChase  Yes  Yes  Yes  Fade + chase combined (par 3 = Nr of pars in group)
 
-
 #pragma once
-
 
 #include <string.h>
 #include "ClassNames.h"
 #include "Par.h"
 
-
 class CommandParser
 {
 public:
 	CommandParser();
-
 	~CommandParser();
-
 
 	void Parse(char* command);
 
 private:
 	// Current index within string
-
 	char* _command;
-
 
 	uint8_t _currentIndex;
 
-
 	par_bits_t _parBits;
 
-
 	bool _parseError;
-
 
 	void ParseColorCommand(Par::EActiveColor color);
 
 	void ParseIrgbwAsNumbers(Irgbw& irgwb);
-
 	void ParseIrgbwAsCharacters(Irgbw& irgbw);
 
 	void SetIrgbw(Par::EActiveColor color, Irgbw& irgbw);
@@ -100,13 +89,11 @@ private:
 	void ParseParBits();
 
 	void ParseWhitespace();
-
 	void SkipWhitespace();
 
 	void SkipUntilComma();
 
 	void SetDelay(step_time_t delay);
-
 };
 
 	

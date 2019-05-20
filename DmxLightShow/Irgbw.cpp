@@ -36,6 +36,61 @@ Irgbw::~Irgbw()
 }
 
 
+intensity_t Irgbw::GetIntensity()
+{
+	return _intensity;
+}
+
+void Irgbw::SetIntensity(intensity_t intensity)
+{
+	_intensity = intensity;
+}
+
+
+intensity_t Irgbw::GetRed()
+{
+	return _red;
+}
+
+void Irgbw::SetRed(intensity_t red)
+{
+	_red = red;
+}
+
+
+intensity_t Irgbw::GetGreen()
+{
+	return _green;
+}
+
+void Irgbw::SetGreen(intensity_t green)
+{
+	_green = green;
+}
+
+
+intensity_t Irgbw::GetBlue()
+{
+	return _blue;
+}
+
+void Irgbw::SetBlue(intensity_t blue)
+{
+	_blue = blue;
+}
+
+
+intensity_t Irgbw::GetWhite()
+{
+	return _white;
+}
+
+void Irgbw::SetWhite(intensity_t white)
+{
+	_white = white;
+}
+
+
 void Irgbw::SetIrgb(Irgbw& irgbw)
 {
 	SetIrgb(irgbw.GetIntensity(), irgbw.GetRed(), irgbw.GetGreen(), irgbw.GetBlue());

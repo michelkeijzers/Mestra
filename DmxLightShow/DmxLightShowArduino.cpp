@@ -3,7 +3,6 @@
 
 #ifdef _WINDOWS
 
-
 // DmxLightShowArduino.cpp : Defines the functions for the static library.
 //
 

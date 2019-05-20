@@ -36,11 +36,30 @@ Par::~Par()
 }
 
 
+PlatformPar& Par::GetPlatformPar()
+{
+	return *_platformPar;
+}
+
+
 void Par::SetPlatform(PlatformFixture* platformFixture, PlatformPar* platformPar)
 {
 	SetPlatformFixture(platformFixture);
-	SetPlatformPar(platformPar);
+	_platformPar = platformPar;
 }
+
+
+Irgbw& Par::GetDefaultColor()
+{
+	return _defaultColor;
+}
+
+
+Irgbw& Par::GetAlternateColor()
+{
+	return _alternateColor;
+}
+
 
 /* virtual */ dmx_value_t Par::GetRed2Dmx(dmx_value_t red)
 {

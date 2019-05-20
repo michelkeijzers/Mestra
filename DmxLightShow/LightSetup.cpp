@@ -7,12 +7,12 @@
 #include "MestraTypes.h"
 
 
-#ifndef _WINDOWS
 LightSetupClass LightSetup;
-#endif
 
 
 LightSetupClass::LightSetupClass()
+	:
+	_platformLightSetup(0)
 {
 }
 
@@ -22,14 +22,33 @@ LightSetupClass::~LightSetupClass()
 }
 
 
-void LightSetupClass::AddFixtures()
+PlatformLightSetup* LightSetupClass::GetPlatform() 
+{
+	return _platformLightSetup; 
+}
+
+
+void LightSetupClass::SetPlatformLightSetup(PlatformLightSetup* platformLightSetup)
+{
+	_platformLightSetup = platformLightSetup;
+	_platformLightSetup->SetPars(_pars);
+}
+
+
+Strobo& LightSetupClass::GetStrobo()
+{
+	return _strobo;
+}
+
+
+void LightSetupClass::CreateFixtures()
 {
 	// Do not use PROGMEM, this results in segmentation faults in Arduino IDE when unrelated code changes
 	static const dmx_channel_t dmxOffsetChannels[NR_OF_PARS] =
 	  { 1, 9, 17, 25, 33, 41, 49, 57, 65, 73, 81, 89, 97, 105 };
 
 	for (int n = 0; n < NR_OF_PARS; n++)
-	{
+	{ 
 		_pars[n].SetDmxOffsetChannel(dmxOffsetChannels[n]);
 	}
 }

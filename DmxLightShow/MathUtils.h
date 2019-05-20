@@ -2,13 +2,11 @@
 
 #pragma once
 
-
 class MathUtils
 {
 private:
-	MathUtils() { }
-
-	~MathUtils() { }
+	MathUtils();
+	~MathUtils();
 
 public:
 	static inline int Min(int a, int b) { return a < b ? a : b; }

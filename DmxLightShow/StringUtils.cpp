@@ -6,6 +6,17 @@
 #include "CharUtils.h"
 #include "StringUtils.h"
 
+
+StringUtils::StringUtils()
+{
+}
+
+
+StringUtils::~StringUtils()
+{
+}
+
+
 /**
  * -1 if not found, else index, only checks a-z, no capitals
  */
@@ -22,7 +33,6 @@
 
 	return -1;
 }
-
 
 
 /* static */ char* StringUtils::TrimWhitespace(char* str)

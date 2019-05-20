@@ -2,9 +2,7 @@
 
 #pragma once
 
-
 #include <stdint.h>
-
 
 typedef uint32_t par_bits_t;
 typedef uint8_t  dmx_channel_t;

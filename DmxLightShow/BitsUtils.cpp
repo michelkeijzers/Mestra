@@ -3,6 +3,15 @@
 
 #include "BitsUtils.h"
 
+BitsUtils::BitsUtils()
+{
+}
+
+
+BitsUtils::~BitsUtils()
+{
+}
+
 
 /* static */ uint8_t BitsUtils::GetNrOfHighBits(uint32_t value)
 {

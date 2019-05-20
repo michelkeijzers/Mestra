@@ -4,7 +4,7 @@
 #include "PresetCommand.h"
 #include "BitsUtils.h"
 #include "ClassNames.h"
-#include HEADER_FILE(LIGHT_SETUP_CLASS)
+#include "LightSetup.h"
 #include "Irgbw.h"
 
 

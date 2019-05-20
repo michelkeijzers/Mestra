@@ -3,17 +3,14 @@
 
 #pragma once
 
-
 class CharUtils
 {
 private:
-	CharUtils() { }
-
-	~CharUtils() { }
+	CharUtils();
+	~CharUtils();
 
 public:
 	static char ToUpper(char ch);
-
 	static char ToLower(char ch);
 
 	static char* TrimWhitespace(char* str);

@@ -3,12 +3,9 @@
 
 #ifdef _WINDOWS
 
-
 #include "DmxSimpleStub.h"
 
-
 DmxSimpleClass DmxSimple;
-
 
 DmxSimpleClass::DmxSimpleClass()
 	: _buffer()
@@ -35,5 +32,12 @@ void DmxSimpleClass::write(int address, uint8_t value)
 {
 	_buffer[address] = value;
 }
+
+
+void DmxSimpleClass::maxChannel(int maxChannels)
+{
+	(void)maxChannels;
+}
+
 
 #endif // _WINDOWS

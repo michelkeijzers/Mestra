@@ -5,62 +5,75 @@
 #ifdef _WINDOWS
 
 #include "ClassNames.h"
-#include <stdio.h>
 #include HEADER_FILE(ARDUINO_CLASS)
-#include "TestLightSetup.h"
+#include <stdio.h>
+#include "LightSetup.h"
+#include "WinLightSetup.h"
 #include "Par.h" 
 #include "Windows.h"
+#include "WinFixture.h"
+#include "WinPar.h"
 
 
-TestLightSetupClass LightSetup;
-
-
-TestLightSetupClass::TestLightSetupClass()
-	: LightSetupClass()
+WinLightSetup::WinLightSetup()
+	:
+	PlatformLightSetup(),
+	_propertiesAreSet(false)
 {
 	ftime(&_programStartTime);
 }
 
 
-TestLightSetupClass::~TestLightSetupClass()
+WinLightSetup::~WinLightSetup()
 {
 }
 
 
-void TestLightSetupClass::AddFixtures()
+bool WinLightSetup::ArePropertiesSet()
 {
-	LightSetupClass::AddFixtures();
+	return _propertiesAreSet;
+}
 
-	_pars[ 0].SetProperties("Front", "Left 1", "FL1", 2, 1);
-	_pars[ 1].SetProperties("Front", "Left 2", "FL2", 3, 1);
-	_pars[ 2].SetProperties("Front", "Left 3", "FL3", 4, 1);
-	_pars[ 3].SetProperties("Front", "Left 4", "FL4", 5, 1);
 
-	_pars[ 4].SetProperties("Front", "Right 1", "FR1", 7, 1);
-	_pars[ 5].SetProperties("Front", "Right 2", "FR2", 8, 1);
-	_pars[ 6].SetProperties("Front", "Right 3", "FR3", 9, 1);
-	_pars[ 7].SetProperties("Front", "Right 4", "FR4", 10, 1);
+void WinLightSetup::SetProperties()
+{
+	for (int parNumber = 0; parNumber < NR_OF_PARS; parNumber++)
+	{
+		GetPar((fixture_number_t) parNumber).SetPlatform(new WinFixture(), new WinPar());
+	}
 
-	_pars[ 8].SetProperties("Drums", "Left", "DL", 6, 3);
-	_pars[ 9].SetProperties("Drums", "Right", "DR", 7, 3);
+	GetPar((fixture_number_t)0).GetPlatformFixture().SetProperties("Front", "Left 1", "FL1", 2, 1);
+	GetPar((fixture_number_t)1).GetPlatformFixture().SetProperties("Front", "Left 2", "FL2", 3, 1);
+	GetPar((fixture_number_t)2).GetPlatformFixture().SetProperties("Front", "Left 3", "FL3", 4, 1);
+	GetPar((fixture_number_t)3).GetPlatformFixture().SetProperties("Front", "Left 4", "FL4", 5, 1);
+
+	GetPar((fixture_number_t)4).GetPlatformFixture().SetProperties("Front", "Right 1", "FR1", 7, 1);
+	GetPar((fixture_number_t) 5).GetPlatformFixture().SetProperties("Front", "Right 2", "FR2", 8, 1);
+	GetPar((fixture_number_t)6).GetPlatformFixture().SetProperties("Front", "Right 3", "FR3", 9, 1);
+	GetPar((fixture_number_t)7).GetPlatformFixture().SetProperties("Front", "Right 4", "FR4", 10, 1);
+
+	GetPar((fixture_number_t)8).GetPlatformFixture().SetProperties("Drums", "Left", "DL", 6, 3);
+	GetPar((fixture_number_t)9).GetPlatformFixture().SetProperties("Drums", "Right", "DR", 7, 3);
 
 	//Par("Keyboards", 	"Left", 	"KL",   4, 3);
 	//Par("Keyboards", 	"Right", 	"KR",   5, 3);
 
-	_pars[10].SetProperties("Banner", "Left", "BL", 1, 2);
-	_pars[11].SetProperties("Banner", "Right", "BR", 11, 2);
+	GetPar((fixture_number_t)10).GetPlatformFixture().SetProperties("Banner", "Left", "BL", 1, 2);
+	GetPar((fixture_number_t)11).GetPlatformFixture().SetProperties("Banner", "Right", "BR", 11, 2);
 
-	_pars[12].SetProperties("Ego Riser", "Left", "EL", 3, 2);
-	_pars[13].SetProperties("Ego Riser", "Right", "ER", 9, 2);
+	GetPar((fixture_number_t)12).GetPlatformFixture().SetProperties("Ego Riser", "Left", "EL", 3, 2);
+	GetPar((fixture_number_t)13).GetPlatformFixture().SetProperties("Ego Riser", "Right", "ER", 9, 2);
 
 	//for (int n = 0; n < NR_OF_PARS; n++)
 	//{
-	//	_pars[n].SetColor();
+	//	_pars[n]->SetColor();
 	//}
+
+	_propertiesAreSet = true;
 }
 
 
-void TestLightSetupClass::Print()
+void WinLightSetup::Print()
 {
 #define OUTPUT_LIGHT_SETUP 1
 #ifdef OUTPUT_LIGHT_SETUP
@@ -78,13 +91,13 @@ void TestLightSetupClass::Print()
 	OutputDebugString(L"┼▬▬▬┼▬▬▬▬┼▬▬▬┼▬▬▬┼▬▬▬┼▬▬▬┼▬▬▬┼▬▬▬┼▬▬▬┬▬▬▬┼▬▬▬┼▬▬▬┼▬▬▬┼▬▬▬┼▬▬▬┼▬▬▬┼▬▬▬┼▬▬▬┼▬▬▬▬┼▬▬▬▬▬▬▬┼▬▬▬▬▬┼▬▬▬▬▬┼▬▬▬▬▬┼▬▬▬▬▬┼▬▬▬▬▬┼▬▬▬▬▬▬▬▬┼\n");
 
 
-	for (par_number_t parNumber = 0; parNumber < NR_OF_PARS; parNumber++)
+	for (fixture_number_t parNumber = 0; parNumber < NR_OF_PARS; parNumber++)
 	{
 		Par& par = GetPar(parNumber);
 		Irgbw& defaultColor = par.GetDefaultColor();
 		Irgbw& alternateColor = par.GetAlternateColor();
 		uint16_t dmx = par.GetDmxOffsetChannel();
-		const char* abbr = par.GetAbbr();
+		const char* abbr = par.GetPlatformFixture().GetAbbr();
 				
 		swprintf_s(message, L"│%2u │%c%c%c │%3u│%3u:%3u:%3u:%3u:%3u│%3u:%3u:%3u:%3u:%3u│%3u:%3u:%3u:%3u:%3u│%4u│%7u│%5u:%5u:%5u│%5u│%5u│%6u  │\n",
 			parNumber,
@@ -105,7 +118,6 @@ void TestLightSetupClass::Print()
 	}
 
 	OutputDebugString(L"└▬▬▬┴▬▬▬▬┴▬▬▬┴▬▬▬┴▬▬▬┴▬▬▬┴▬▬▬┴▬▬▬┴▬▬▬┴▬▬▬┴▬▬▬┴▬▬▬┴▬▬▬┴▬▬▬┴▬▬▬┴▬▬▬┴▬▬▬┴▬▬▬┴▬▬▬▬┴▬▬▬▬▬▬▬┴▬▬▬▬▬┴▬▬▬▬▬┴▬▬▬▬▬┴▬▬▬▬▬┴▬▬▬▬▬┴▬▬▬▬▬▬▬▬┼\n");
-
 
 #endif
 }
