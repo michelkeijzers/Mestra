@@ -426,7 +426,7 @@ void CommandParser::ParseParBits()
 
 void CommandParser::SetDelay(step_time_t delay)
 {
-	for (par_number_t parNumber = 0; parNumber < NR_OF_PARS; parNumber++)
+	for (fixture_number_t parNumber = 0; parNumber < NR_OF_PARS; parNumber++)
 	{
 		if ((_parBits & (0x8000 >> parNumber)) > 0)
 		{
@@ -440,7 +440,7 @@ void CommandParser::SetDelay(step_time_t delay)
 
 void CommandParser::SetIrgbw(Par::EActiveColor color, Irgbw& irgbw)
 {
-	for (par_number_t parNumber = 0; parNumber < NR_OF_PARS; parNumber++)
+	for (fixture_number_t parNumber = 0; parNumber < NR_OF_PARS; parNumber++)
 	{
 		if ((_parBits & (0x8000 >> parNumber)) > 0)
 		{

@@ -5,7 +5,7 @@
 #include "Strobo.h"
 #include "ClassNames.h"
 #include HEADER_FILE(ARDUINO_CLASS)
-#include HEADER_FILE(PAR_CLASS)
+#include "Par.h"
 #include HEADER_FILE(LIGHT_SETUP_CLASS)
 
 
@@ -26,7 +26,7 @@ Strobo::~Strobo()
 void Strobo::Start(par_bits_t parBits, step_time_t duration)
 {
 	// Stop all current strobo (white).
-	for (par_number_t parNumber = 0; parNumber < NR_OF_PARS; parNumber++)
+	for (fixture_number_t parNumber = 0; parNumber < NR_OF_PARS; parNumber++)
 	{
 		if ((_parBits & (0x8000 >> parNumber)) > 0)
 		{
@@ -46,7 +46,7 @@ void Strobo::Start(par_bits_t parBits, step_time_t duration)
 	_nextTime = millis() + _duration; // Execute next time
 
 	// Initialize generic parbits intensity.
-	for (par_number_t parNumber = 0; parNumber < NR_OF_PARS; parNumber++)
+	for (fixture_number_t parNumber = 0; parNumber < NR_OF_PARS; parNumber++)
 	{
 		if ((_parBits & (0x8000 >> parNumber)) > 0)
 		{
@@ -68,7 +68,7 @@ void Strobo::Run()
 	{
 		_state = !_state;
 
-		for (par_number_t parNumber = 0; parNumber < NR_OF_PARS; parNumber++)
+		for (fixture_number_t parNumber = 0; parNumber < NR_OF_PARS; parNumber++)
 		{
 			if ((_parBits & (0x8000 >> parNumber)) > 0)
 			{

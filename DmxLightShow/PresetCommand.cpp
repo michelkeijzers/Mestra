@@ -20,12 +20,12 @@ PresetCommand::~PresetCommand()
 
 void PresetCommand::Run(par_bits_t parBits, preset_t presetNumber)
 {
-	par_number_t selectedParIndex = 0;
-	for (par_number_t parNumber = 0; parNumber < NR_OF_PARS; parNumber++)
+	fixture_number_t selectedParIndex = 0;
+	for (fixture_number_t parNumber = 0; parNumber < NR_OF_PARS; parNumber++)
 	{
 		if ((parBits & (0x8000 >> parNumber)) > 0)
 		{
-			par_number_t nrOfPars = BitsUtils::GetNrOfHighBits(parBits);
+			fixture_number_t nrOfPars = BitsUtils::GetNrOfHighBits(parBits);
 			SetFixturePreset(presetNumber, parNumber, selectedParIndex, nrOfPars);
 			selectedParIndex++;
 		}
@@ -34,7 +34,7 @@ void PresetCommand::Run(par_bits_t parBits, preset_t presetNumber)
 
 
 // GetValue contains preset number.
-void PresetCommand::SetFixturePreset(preset_t presetNumber, par_number_t parNumber, par_number_t selectedParIndex, par_number_t nrOfPars)
+void PresetCommand::SetFixturePreset(preset_t presetNumber, fixture_number_t parNumber, fixture_number_t selectedParIndex, fixture_number_t nrOfPars)
 {
 	Par& par = LightSetup.GetPar(parNumber);
 	step_t nrOfSteps = 1;

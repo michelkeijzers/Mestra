@@ -55,7 +55,7 @@
 
 #include <string.h>
 #include "ClassNames.h"
-#include HEADER_FILE(PAR_CLASS)
+#include "Par.h"
 
 
 class CommandParser

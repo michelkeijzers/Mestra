@@ -22,10 +22,11 @@ static const dmx_value_t _white2Dmx[MAX_PAR_INTENSITIES] PROGMEM = { 0, 2,  2,  
 
 
 Par::Par()
-	: FIXTURE_CLASS(),
-	  _defaultColor(),
-	  _alternateColor(),
-	  _activeColor(true)
+	:  
+	_platformPar(0),
+	_defaultColor(),
+	_alternateColor(),
+	_activeColor(true)
 {
 }
 
@@ -34,6 +35,12 @@ Par::~Par()
 {
 }
 
+
+void Par::SetPlatform(PlatformFixture* platformFixture, PlatformPar* platformPar)
+{
+	SetPlatformFixture(platformFixture);
+	SetPlatformPar(platformPar);
+}
 
 /* virtual */ dmx_value_t Par::GetRed2Dmx(dmx_value_t red)
 {

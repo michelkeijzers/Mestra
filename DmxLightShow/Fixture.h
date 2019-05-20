@@ -6,10 +6,14 @@
 #include <stdint.h>
 #include "MestraTypes.h"
 
+#include "PlatformFixture.h"
 
 /* abstract */ class Fixture
 {
 private:
+	PlatformFixture* _platformFixture;
+
+
 	dmx_channel_t	_dmxOffsetChannel;
 
 	// True until it has been processed for the first time.
@@ -40,9 +44,15 @@ public:
 	~Fixture();
 
 
+
 	void InitializeProgram(program_t programNumber, step_t nrOfSteps, step_t startStep,
 		parameter_t parameter1 = 0, parameter_t parameter2 = 0, parameter_t parameter3 = 0);
 
+
+	PlatformFixture& GetPlatformFixture()
+	{
+		return *_platformFixture;
+	}
 
 	virtual bool CheckIncreaseStep();
 
@@ -160,5 +170,8 @@ public:
 	{
 		_parameter3 = parameter3; 
 	}
+
+protected:
+	void SetPlatformFixture(PlatformFixture* platformFixture);
 
 };

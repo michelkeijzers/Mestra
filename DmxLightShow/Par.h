@@ -8,8 +8,8 @@
 #include "ClassNames.h"
 #include "Irgbw.h"
 #include "Fixture.h"
-#include HEADER_FILE(FIXTURE_CLASS)
 #include "MestraTypes.h"
+#include "PlatformPar.h"
 
 
 #define MAX_PAR_INTENSITIES           49  // For red, green, blue, white
@@ -23,9 +23,11 @@
 #define DMX_OFFSET_CHANNEL_WHITE      4
 
 
-class Par : public FIXTURE_CLASS
+class Par : public Fixture
 {
-protected:
+private:
+	PlatformPar* _platformPar;
+
 	Irgbw _defaultColor;
 
 	// Used for cross/multicolor programs
@@ -39,11 +41,20 @@ public:
 
 	~Par();
 
+	void SetPlatform(PlatformFixture* platformFixture, PlatformPar* platformPar);
+
 	enum EActiveColor
 	{
 		Default,
 		Alternate
 	};
+
+
+	PlatformPar& GetPlatformPar()
+	{
+		return *_platformPar;
+	}
+
 
 	Irgbw& GetActualColor(Irgbw& actualColor);
 
@@ -75,4 +86,10 @@ private:
 	dmx_value_t GetBlue2Dmx(intensity_t blue);
 
 	dmx_value_t GetWhite2Dmx(intensity_t white);
+
+protected:
+  void SetPlatformPar(PlatformPar* platformPar)
+	{
+		_platformPar = platformPar;
+	}
 };

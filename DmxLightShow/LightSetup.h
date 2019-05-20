@@ -4,18 +4,18 @@
 #pragma once
 
 #include "ClassNames.h" 
-#include HEADER_FILE(PAR_CLASS)
+#include "Par.h"
 #include "Strobo.h"
 #include "MestraTypes.h"
 
 
-const par_number_t NR_OF_PARS = 14;
+const fixture_number_t NR_OF_PARS = 14;
 
 
 class LightSetupClass
 {
 protected:
-	PAR_CLASS _pars[NR_OF_PARS];
+  Par _pars[NR_OF_PARS];
 
 
   Strobo _strobo; 
@@ -30,7 +30,7 @@ public:
 	virtual void AddFixtures();
 
 
-	Par& GetPar(par_number_t parNumber);
+	Par& GetPar(fixture_number_t parNumber);
 
 
 	Strobo& GetStrobo()

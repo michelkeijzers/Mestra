@@ -4,7 +4,7 @@
 #pragma once
 
 #include "ClassNames.h"
-#include HEADER_FILE(PAR_CLASS)
+#include "Par.h"
 #include <stdint.h>
 #include "MestraTypes.h"
 
@@ -23,7 +23,7 @@ private:
 	void CommandAllOff(Par& par);
 
 
-	void SetFixturePreset(preset_t presetNumber, par_number_t parNumber, 
+	void SetFixturePreset(preset_t presetNumber, fixture_number_t parNumber, 
 		intensity_t selectedParIndex, intensity_t nrOfPars);
 
 

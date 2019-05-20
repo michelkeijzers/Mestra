@@ -8,11 +8,11 @@
 #include <string>
 #include "ClassNames.h"
 #include HEADER_FILE(LIGHT_SETUP_CLASS)
-#include "TestFixture.h"
+#include "WinFixture.h"
 #include "Par.h"
 
 
-TestFixture::TestFixture()
+WinFixture::WinFixture()
 	: _x(0),
 	  _y(0),
 	  _atLeastOneStepIncreased(false)
@@ -23,12 +23,12 @@ TestFixture::TestFixture()
 }
 
 
-TestFixture::~TestFixture()
+WinFixture::~WinFixture()
 {
 }
 
 
-void TestFixture::SetProperties(
+/* override */ void WinFixture::SetProperties(
 	const char* name1, const char* name2, const char* abbr, int x, int y)
 {
 	strcpy_s(_name1, name1);
@@ -41,15 +41,12 @@ void TestFixture::SetProperties(
 }
 
 
-bool TestFixture::CheckIncreaseStep()
+void WinFixture::PostProcessCheckIncreaseStep(bool increased)
 {
-	bool increased = Fixture::CheckIncreaseStep();
 	if (increased)
 	{
 		_atLeastOneStepIncreased = true;
 	}
-
-	return increased;
 }
 
 #endif // _WINDOWS

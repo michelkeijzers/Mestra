@@ -49,14 +49,8 @@
     <Filter Include="Header Files\LightSetup">
       <UniqueIdentifier>{487ef4dc-d7db-4d83-9140-b470232c395b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Documentation">
-      <UniqueIdentifier>{61809f0a-7932-4e80-b6d0-ec42a088b264}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="TestFixture.h">
-      <Filter>Header Files\Win32</Filter>
-    </ClInclude>
     <ClInclude Include="TestLightSetup.h">
       <Filter>Header Files\Win32</Filter>
     </ClInclude>
@@ -65,9 +59,6 @@
     </ClInclude>
     <ClInclude Include="CharUtils.h">
       <Filter>Header Files\Utilities</Filter>
-    </ClInclude>
-    <ClInclude Include="TestPar.h">
-      <Filter>Header Files\Win32</Filter>
     </ClInclude>
     <ClInclude Include="Fixture.h">
       <Filter>Header Files\LightSetup</Filter>
@@ -127,7 +118,25 @@
       <Filter>Header Files\Utilities</Filter>
     </ClInclude>
     <ClInclude Include="MestraTypes.h">
-      <Filter>Header Files\LightSetup</Filter>
+      <Filter>Header Files\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="WinFixture.h">
+      <Filter>Header Files\Win32</Filter>
+    </ClInclude>
+    <ClInclude Include="WinPar.h">
+      <Filter>Header Files\Win32</Filter>
+    </ClInclude>
+    <ClInclude Include="PlatformFixture.h">
+      <Filter>Header Files\Win32</Filter>
+    </ClInclude>
+    <ClInclude Include="PlatformPar.h">
+      <Filter>Header Files\Win32</Filter>
+    </ClInclude>
+    <ClInclude Include="McuFixture.h">
+      <Filter>Header Files\Win32</Filter>
+    </ClInclude>
+    <ClInclude Include="McuPar.h">
+      <Filter>Header Files\Win32</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -145,12 +154,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="TestLightSetup.cpp">
-      <Filter>Source Files\WIN32</Filter>
-    </ClCompile>
-    <ClCompile Include="TestFixture.cpp">
-      <Filter>Source Files\WIN32</Filter>
-    </ClCompile>
-    <ClCompile Include="TestPar.cpp">
       <Filter>Source Files\WIN32</Filter>
     </ClCompile>
     <ClCompile Include="DmxLightShowArduino.cpp">
@@ -204,19 +207,31 @@
     <ClCompile Include="MathUtils.cpp">
       <Filter>Source Files\Utilities</Filter>
     </ClCompile>
+    <ClCompile Include="WinFixture.cpp">
+      <Filter>Source Files\WIN32</Filter>
+    </ClCompile>
+    <ClCompile Include="WinPar.cpp">
+      <Filter>Source Files\WIN32</Filter>
+    </ClCompile>
+    <ClCompile Include="McuFixture.cpp">
+      <Filter>Source Files\WIN32</Filter>
+    </ClCompile>
+    <ClCompile Include="McuPar.cpp">
+      <Filter>Source Files\WIN32</Filter>
+    </ClCompile>
+    <ClCompile Include="PlatformFixture.cpp">
+      <Filter>Source Files\WIN32</Filter>
+    </ClCompile>
+    <ClCompile Include="PlatformPar.cpp">
+      <Filter>Source Files\WIN32</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="DmxLightShow.ino">
       <Filter>Source Files</Filter>
     </None>
-    <None Include="..\Documentation\Mestra.eap">
-      <Filter>Documentation</Filter>
-    </None>
-    <None Include="..\Documentation\Mestra.xlsx">
-      <Filter>Documentation</Filter>
-    </None>
-    <None Include="..\Documentation.docx">
-      <Filter>Documentation</Filter>
-    </None>
+    <None Include="..\Documentation.docx" />
+    <None Include="..\Documentation\Mestra.eap" />
+    <None Include="..\Documentation\Mestra.xlsx" />
   </ItemGroup>
 </Project>

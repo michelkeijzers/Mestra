@@ -35,6 +35,7 @@ WCHAR szWindowClass[MAX_LOADSTRING];            // the main window class name
 
 CommandBuffer _commandBuffer;
 ProgramExecuter _programExecuter;
+Fixture _fixtures[NR_OF_PARS];
 
 int _refreshCounter;
 
@@ -52,65 +53,66 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                      _In_ LPWSTR    lpCmdLine,
                      _In_ int       nCmdShow)
 {
-		LightSetup.AddFixtures();
-		_refreshCounter = 0;
 
-    UNREFERENCED_PARAMETER(hPrevInstance);
-    UNREFERENCED_PARAMETER(lpCmdLine);
+	LightSetup.AddFixtures();
+	_refreshCounter = 0;
 
-    // Initialize global strings
-    LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
-    LoadStringW(hInstance, IDC_DMXLIGHTSHOW, szWindowClass, MAX_LOADSTRING);
-    MyRegisterClass(hInstance);
+  UNREFERENCED_PARAMETER(hPrevInstance);
+  UNREFERENCED_PARAMETER(lpCmdLine);
 
-    // Perform application initialization:
-    if (!InitInstance (hInstance, nCmdShow))
-    {
-        return FALSE;
-    }
+  // Initialize global strings
+  LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
+  LoadStringW(hInstance, IDC_DMXLIGHTSHOW, szWindowClass, MAX_LOADSTRING);
+  MyRegisterClass(hInstance);
 
-    HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_DMXLIGHTSHOW));
+  // Perform application initialization:
+  if (!InitInstance (hInstance, nCmdShow))
+  {
+      return FALSE;
+  }
 
-    MSG msg;
+  HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_DMXLIGHTSHOW));
 
-    // Main message loop:
-    while (GetMessage(&msg, nullptr, 0, 0))
-    {
-        if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
-        {
-            TranslateMessage(&msg);
-            DispatchMessage(&msg);
+  MSG msg;
 
-						//Sleep(1);
-						_refreshCounter++;
+  // Main message loop:
+  while (GetMessage(&msg, nullptr, 0, 0))
+  {
+      if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
+      {
+          TranslateMessage(&msg);
+          DispatchMessage(&msg);
 
-						InjectCommands();
+					//Sleep(1);
+					_refreshCounter++;
 
-						// Reset par increase states (debug only).
-						for (par_number_t par = 0; par < NR_OF_PARS; par++)
-						{
-							LightSetup.GetPar(par).ResetAtLeastOneStepIncreased();
-						}
+					InjectCommands();
 
-						// Run program executer.
-						_programExecuter.Run();
+					// Reset par increase states (debug only).
+					for (fixture_number_t par = 0; par < NR_OF_PARS; par++)
+					{
+						LightSetup.GetPar(par).GetPlatformFixture().ResetAtLeastOneStepIncreased();
+					}
 
-						bool atLeasOneParIncreased = false;
-						for (par_number_t par = 0; par < NR_OF_PARS; par++)
-						{
-							atLeasOneParIncreased |= LightSetup.GetPar(par).GetAtLeastOneStepIncreased();
-						}
+					// Run program executer.
+					_programExecuter.Run();
 
-						if (atLeasOneParIncreased)
-						{
-							LightSetup.Print();
-						}
+					bool atLeasOneParIncreased = false;
+					for (fixture_number_t par = 0; par < NR_OF_PARS; par++)
+					{
+						atLeasOneParIncreased |= LightSetup.GetPar(par).GetPlatformFixture().GetAtLeastOneStepIncreased();
+					}
 
-						InvalidateRect(msg.hwnd, NULL, FALSE);
-        }
-    }
+					if (atLeasOneParIncreased)
+					{
+						LightSetup.Print();
+					}
 
-    return (int) msg.wParam;
+					InvalidateRect(msg.hwnd, NULL, FALSE);
+      }
+  }
+
+  return (int) msg.wParam;
 }
 
 
@@ -171,14 +173,14 @@ void InjectCommands()
 {
 	if (_refreshCounter == 100)
 	{
-		InjectString("s a 50");
+		//InjectString("s a 50");
 
 		
 		InjectString("t fa 10000");
 
-		InjectString("d fr irb");
-		InjectString("a fr ib");
-		InjectString("p fr 63");
+		InjectString("d fa irb");
+		InjectString("a fa ib");
+		InjectString("p fa 63");
 		
 		/*
 		InjectString("t d 1000");
@@ -268,7 +270,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 					int xOffset = -40;
 					int yOffset = -70;
 
-					for (par_number_t parNumber = 0; parNumber < NR_OF_PARS; parNumber++)
+					for (fixture_number_t parNumber = 0; parNumber < NR_OF_PARS; parNumber++)
 					{
 						Par& par = (Par&) LightSetup.GetPar(parNumber);
 						dmx_channel_t dmxStartChannel = par.GetDmxOffsetChannel();
@@ -287,42 +289,45 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 							green * intensity / 255,
 							blue  * intensity / 255));
 
+						PlatformFixture& platformFixture = par.GetPlatformFixture();
 						Ellipse(hdc, 
-							par.GetX() * PAR_DISTANCE_X + xOffset , 
-							par.GetY() * PAR_DISTANCE_Y + yOffset,
-							par.GetX() * PAR_DISTANCE_X + PAR_DIAMETER + xOffset, 
-							par.GetY() * PAR_DISTANCE_Y + PAR_DIAMETER + yOffset) ;
+							platformFixture.GetX() * PAR_DISTANCE_X + xOffset , 
+							platformFixture.GetY() * PAR_DISTANCE_Y + yOffset,
+							platformFixture.GetX() * PAR_DISTANCE_X + PAR_DIAMETER + xOffset,
+							platformFixture.GetY() * PAR_DISTANCE_Y + PAR_DIAMETER + yOffset) ;
 				
 						wchar_t wtext[20];
 						size_t sizet;
 
 						// Line 1
-						mbstowcs_s(&sizet, wtext, par.GetName1(), strlen(par.GetName1()) + 1); //Plus null
+						mbstowcs_s(&sizet, wtext, platformFixture.GetName1(),
+							strlen(platformFixture.GetName1()) + 1); //Plus null
 						LPWSTR ptr = wtext;
 
 						TextOut(hdc, 
-							par.GetX() * PAR_DISTANCE_X + xOffset,
-							par.GetY() * PAR_DISTANCE_Y + PAR_DIAMETER + FONT_SIZE - 2 - 8 + yOffset,
+							platformFixture.GetX() * PAR_DISTANCE_X + xOffset,
+							platformFixture.GetY() * PAR_DISTANCE_Y + PAR_DIAMETER + FONT_SIZE - 2 - 8 + yOffset,
 							wtext, lstrlen(wtext));
 
 						// Line 2
 						mbstowcs_s(&sizet, 
-							wtext, par.GetName2(), 
-							strlen(par.GetName2()) + 1); //Plus null
+							wtext, platformFixture.GetName2(),
+							strlen(platformFixture.GetName2()) + 1); //Plus null
 						ptr = wtext;
 
 						TextOut(hdc, 
-							par.GetX() * PAR_DISTANCE_X + xOffset,
-							par.GetY() * PAR_DISTANCE_Y + PAR_DIAMETER + (FONT_SIZE + 2) * 2 - 8 + yOffset,
+							platformFixture.GetX() * PAR_DISTANCE_X + xOffset,
+							platformFixture.GetY() * PAR_DISTANCE_Y + PAR_DIAMETER + (FONT_SIZE + 2) * 2 - 8 + yOffset,
 							wtext, lstrlen(wtext));
 
 						// Abbr
-						mbstowcs_s(&sizet, wtext, par.GetAbbr(), strlen(par.GetAbbr()) + 1); //Plus null
+						mbstowcs_s(&sizet, wtext, platformFixture.GetAbbr(), 
+							strlen(platformFixture.GetAbbr()) + 1); //Plus null
 						ptr = wtext;
 
 						TextOut(hdc, 
-							par.GetX() * PAR_DISTANCE_X + xOffset,
-							par.GetY() * PAR_DISTANCE_Y + PAR_DIAMETER + (FONT_SIZE + 2) * 3 - 4 + yOffset,
+							platformFixture.GetX() * PAR_DISTANCE_X + xOffset,
+							platformFixture.GetY() * PAR_DISTANCE_Y + PAR_DIAMETER + (FONT_SIZE + 2) * 3 - 4 + yOffset,
 							wtext, lstrlen(wtext));
 					}
 					EndPaint(hWnd, &ps);

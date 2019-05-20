@@ -1,10 +1,10 @@
 // DmxLightShow.ino
 //
-//            U N O        M E G A   D U E
-//          Flash SRAM   Flash SRAM  Does
-// Maximum: 32256 2048  253952 8192  not
-// Current:  9620 1268    5736 1153  compile
-//       %:    29   61
+//            U N O        M E G A
+//          Flash SRAM   Flash SRAM
+// Maximum: 32256 2048  253952 8192
+// Current:  9448 1324    5736 1153
+//       %:    29   64
 //
 // 
 
@@ -38,7 +38,8 @@ void setup()
   _commandBuffer.Process();
 
   _programExecuter.Run();
-  LightSetup.GetStrobo().Run();
+
+  
 }
 
 

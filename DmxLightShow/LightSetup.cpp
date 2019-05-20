@@ -35,7 +35,7 @@ void LightSetupClass::AddFixtures()
 }
 
 
-Par& LightSetupClass::GetPar(par_number_t parNumber)
+Par& LightSetupClass::GetPar(fixture_number_t parNumber)
 {
 	return _pars[parNumber];
 }

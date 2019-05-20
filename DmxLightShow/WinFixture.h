@@ -3,14 +3,13 @@
 
 #pragma once
 
-
-#include "Fixture.h"
+#include "PlatformFixture.h"
 
 
 #define MAX_NAME_LENGTH 128
 
 
-class TestFixture : public Fixture
+class WinFixture : public PlatformFixture
 {
 protected:
 	// Name (2 lines) and abbreviation.
@@ -26,9 +25,10 @@ protected:
 	bool _atLeastOneStepIncreased;
 
 public:
-	TestFixture();
+	WinFixture();
 
-	~TestFixture();
+	~WinFixture();
+
 
 	const char* GetName1() { return _name1; }
 
@@ -41,14 +41,29 @@ public:
 
 	int GetY() { return _y; }
 
-	void SetProperties(const char* name1, const char* name2, const char* abbr,
+
+	/* override */ void SetProperties(const char* name1, const char* name2, const char* abbr,
 		int x, int y);
 
-	/* override */ bool CheckIncreaseStep();
+	/* virtual */ void StroboChanged()
+	{
+		_atLeastOneStepIncreased = true; 
+	}
 
-	/* virtual */ void StroboChanged() { _atLeastOneStepIncreased = true; }
 
-	bool GetAtLeastOneStepIncreased() { return _atLeastOneStepIncreased; }
+	bool GetAtLeastOneStepIncreased() 
+	{
+		return _atLeastOneStepIncreased; 
+	}
 	
-	void ResetAtLeastOneStepIncreased() { _atLeastOneStepIncreased = false; }
+
+	void ResetAtLeastOneStepIncreased() 
+	{
+		_atLeastOneStepIncreased = false; 
+	}
+
+
+	/* override */ void PostProcessCheckIncreaseStep(bool increased);
+
 };
+

@@ -9,6 +9,7 @@
 
 Fixture::Fixture()
 :
+	_platformFixture(0),
 	_dmxOffsetChannel(0),
 	_initialize(true),
 	_program(0),
@@ -25,6 +26,12 @@ Fixture::Fixture()
 
 Fixture::~Fixture()
 {
+}
+
+
+void Fixture::SetPlatformFixture(PlatformFixture* platformFixture)
+{
+	_platformFixture = platformFixture;
 }
 
 
@@ -54,6 +61,8 @@ bool Fixture::CheckIncreaseStep()
 		SetStepTime(GetStepTime() + GetStepDuration());
 		isIncreased = true;
 	}
+
+	_platformFixture->PostProcessCheckIncreaseStep(isIncreased);
 
 	return isIncreased;
 }

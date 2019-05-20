@@ -25,7 +25,7 @@ ProgramExecuter::~ProgramExecuter()
 
 void ProgramExecuter::Run()
 {  
-	for (par_number_t parNumber = 0; parNumber < NR_OF_PARS; parNumber++)
+	for (fixture_number_t parNumber = 0; parNumber < NR_OF_PARS; parNumber++)
 	{
 		Par& par = LightSetup.GetPar(parNumber);
 		bool initialize = par.GetInitialize();
