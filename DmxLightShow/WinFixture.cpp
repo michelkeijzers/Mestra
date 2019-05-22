@@ -13,9 +13,11 @@
 
 
 WinFixture::WinFixture()
-	: _x(0),
-	  _y(0),
-	  _atLeastOneStepIncreased(false)
+	:
+	_x(0),
+	_y(0),
+  _atLeastOneStepIncreased(false),
+	_colorHasChanged(false)
 {
 	_name1[0] = '\0';
 	_name2[0] = '\0';
@@ -71,7 +73,19 @@ int WinFixture::GetY()
 }
 
 
-/* virtual */ void WinFixture::StroboChanged()
+/* override */ bool WinFixture::HasColorChanged() 
+{
+	return _colorHasChanged;
+}
+
+
+/* override */ void WinFixture::SetColorChanged(bool changed)
+{
+	_colorHasChanged = changed;
+}
+
+
+/* override */ void WinFixture::StroboChanged()
 {
 	_atLeastOneStepIncreased = true;
 }

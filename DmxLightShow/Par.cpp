@@ -89,6 +89,8 @@ void Par::WriteIrgb(Irgbw& irgbw)
 {
 	dmx_channel_t dmxOffsetChannel = GetDmxOffsetChannel();
 
+	GetPlatformPar().CheckColorChanged(*this, dmxOffsetChannel, irgbw);
+
 	DmxSimple.write(dmxOffsetChannel + DMX_OFFSET_CHANNEL_INTENSITY,              irgbw.GetIntensity());
 	DmxSimple.write(dmxOffsetChannel + DMX_OFFSET_CHANNEL_RED      , GetRed2Dmx  (irgbw.GetRed      ()));
 	DmxSimple.write(dmxOffsetChannel + DMX_OFFSET_CHANNEL_GREEN    , GetGreen2Dmx(irgbw.GetGreen    ()));

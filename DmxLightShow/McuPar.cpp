@@ -40,3 +40,11 @@ McuPar::~McuPar()
 {
 	return value;
 };
+
+
+/* override */ void McuPar::CheckColorChanged(Par& par, dmx_channel_t dmxOffsetChannel, Irgbw& irgbw)
+{
+	(void)par;
+	(void)dmxOffsetChannel;
+	(void)irgbw;
+}

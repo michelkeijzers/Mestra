@@ -5,7 +5,7 @@
 #include <stdint.h>
 
 typedef uint32_t par_bits_t;
-typedef uint8_t  dmx_channel_t;
+typedef uint16_t dmx_channel_t;
 typedef uint8_t  dmx_value_t;
 typedef uint8_t  program_t;
 typedef uint8_t  preset_t;

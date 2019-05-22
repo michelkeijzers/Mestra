@@ -19,6 +19,9 @@ public:
 	/* override */ void SetProperties(
 		const char* name1, const char* name2, const char* abbr, int x, int y);
 
+	/* override */ bool HasColorChanged();
+	/* override */ void SetColorChanged(bool changed);
+
 	/* override */ void StroboChanged();
 
 	/* override */ bool GetAtLeastOneStepIncreased();

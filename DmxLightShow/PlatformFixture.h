@@ -15,6 +15,9 @@ public:
 	virtual void SetProperties(
 		const char* name1, const char* name2, const char* abbr, int x, int y) = 0;
 
+	virtual bool HasColorChanged() = 0;
+	virtual void SetColorChanged(bool changed) = 0;
+
 	virtual void StroboChanged() = 0;
 
 	virtual bool GetAtLeastOneStepIncreased() = 0;

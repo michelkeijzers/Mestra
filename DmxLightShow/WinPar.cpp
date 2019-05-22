@@ -8,7 +8,7 @@
 #include <math.h>
 #include "WinPar.h"
 #include "MestraTypes.h"
-
+#include "ArduinoStub.h"
 
 WinPar::WinPar()
 {
@@ -53,4 +53,24 @@ dmx_value_t WinPar::Value2WindowsIntensity(uint8_t x)
 	return  (dmx_value_t)(255 * powf((float)x / MAX_PAR_INTENSITIES, 0.4f));
 }
 
+
+/* override */ void WinPar::CheckColorChanged(Par& par, dmx_channel_t dmxOffsetChannel, Irgbw& irgbw)
+{
+	PlatformPar& platformPar = par.GetPlatformPar();
+
+	bool colorHasChanged = (
+		(DmxSimple.read(dmxOffsetChannel + DMX_OFFSET_CHANNEL_INTENSITY) != 
+			irgbw.GetIntensity()) ||
+		(DmxSimple.read(dmxOffsetChannel + DMX_OFFSET_CHANNEL_RED) != 
+			platformPar.GetRed2Dmx(irgbw.GetRed())) ||
+		(DmxSimple.read(dmxOffsetChannel + DMX_OFFSET_CHANNEL_GREEN) != 
+			platformPar.GetGreen2Dmx(irgbw.GetGreen())) ||
+		(DmxSimple.read(dmxOffsetChannel + DMX_OFFSET_CHANNEL_BLUE) != 
+			platformPar.GetBlue2Dmx(irgbw.GetBlue())));
+
+	if (colorHasChanged)
+	{
+		par.GetPlatformFixture().SetColorChanged(true);
+	}
+}
 #endif

@@ -2,6 +2,9 @@
 
 #include "PlatformFixture.h"
 #include "MestraTypes.h"
+#include "Irgbw.h"
+
+class Par;
 
 /* abstract */ class PlatformPar
 {
@@ -15,5 +18,7 @@ public:
 	virtual dmx_value_t GetWhite2Dmx(dmx_value_t white) = 0;
 
 	virtual dmx_value_t Value2WindowsIntensity(uint8_t x) = 0;
+
+	virtual void CheckColorChanged(Par& par, dmx_channel_t dmxOffsetChannel, Irgbw& irgbw) = 0;
 };
 

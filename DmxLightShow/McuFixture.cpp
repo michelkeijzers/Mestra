@@ -53,6 +53,18 @@ McuFixture::~McuFixture()
 }
 
 
+/* override */ bool McuFixture::HasColorChanged()
+{
+	return true;
+}
+
+
+/* override */ void McuFixture::SetColorChanged(bool changed)
+{
+	(void)changed;
+}
+
+
 /* override */ void McuFixture::StroboChanged()
 {
 }

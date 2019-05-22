@@ -5,34 +5,39 @@
 
 #include "ClassNames.h" 
 #include "Par.h"
+#include "PlatformLightSetup.h"
 #include "Strobo.h"
 #include "MestraTypes.h"
-#include "PlatformLightSetup.h"
 
-const fixture_number_t NR_OF_PARS = 14;
+
+const fixture_number_t NR_OF_PARS = 17;
+
 
 class LightSetupClass
 {
 public:
 	LightSetupClass();
+
 	~LightSetupClass();
-
-	PlatformLightSetup* GetPlatform();
-	void SetPlatformLightSetup(PlatformLightSetup* platformLightSetup);
-
-	void CreateFixtures();
 
 	Par& GetPar(fixture_number_t parNumber);
 
+	PlatformLightSetup* GetPlatform();
+	
+	void SetPlatformLightSetup(PlatformLightSetup* platformLightSetup);
+	
 	Strobo& GetStrobo();
 
-private:
-	PlatformLightSetup* _platformLightSetup;
+	void CreateFixtures();
 
+protected:
 	Par _pars[NR_OF_PARS];
 
 	Strobo _strobo;
+
+	PlatformLightSetup* _platformLightSetup;
 };
 
-// Instance
+
 extern LightSetupClass LightSetup;
+
