@@ -21,25 +21,25 @@ WinPar::~WinPar()
 }
 
 
-dmx_value_t WinPar::GetRed2Dmx(dmx_value_t red)
+dmx_value_t WinPar::GetRed2GammaCorrectedDmx(dmx_value_t red)
 {
 	return Value2WindowsIntensity(red);
 }
 
 
-dmx_value_t WinPar::GetGreen2Dmx(dmx_value_t green)
+dmx_value_t WinPar::GetGreen2GammaCorrectedDmx(dmx_value_t green)
 {
 	return Value2WindowsIntensity(green);
 }
 
 
-dmx_value_t WinPar::GetBlue2Dmx(dmx_value_t blue)
+dmx_value_t WinPar::GetBlue2GammaCorrectedDmx(dmx_value_t blue)
 {
 	return Value2WindowsIntensity(blue);
 }
 
 
-dmx_value_t WinPar::GetWhite2Dmx(dmx_value_t white)
+dmx_value_t WinPar::GetWhite2GammaCorrectedDmx(dmx_value_t white)
 {
 	return Value2WindowsIntensity(white);
 }
@@ -54,6 +54,7 @@ dmx_value_t WinPar::Value2WindowsIntensity(uint8_t x)
 }
 
 
+#ifdef COLOR_CHANGE_CHECKING
 /* override */ void WinPar::CheckColorChanged(Par& par, dmx_channel_t dmxOffsetChannel, Irgbw& irgbw)
 {
 	PlatformPar& platformPar = par.GetPlatformPar();
@@ -62,15 +63,18 @@ dmx_value_t WinPar::Value2WindowsIntensity(uint8_t x)
 		(DmxSimple.read(dmxOffsetChannel + DMX_OFFSET_CHANNEL_INTENSITY) != 
 			irgbw.GetIntensity()) ||
 		(DmxSimple.read(dmxOffsetChannel + DMX_OFFSET_CHANNEL_RED) != 
-			platformPar.GetRed2Dmx(irgbw.GetRed())) ||
+			platformPar.GetRed2GammaCorrectedDmx(irgbw.GetRed())) ||
 		(DmxSimple.read(dmxOffsetChannel + DMX_OFFSET_CHANNEL_GREEN) != 
-			platformPar.GetGreen2Dmx(irgbw.GetGreen())) ||
+			platformPar.GetGreen2GammaCorrectedDmx(irgbw.GetGreen())) ||
 		(DmxSimple.read(dmxOffsetChannel + DMX_OFFSET_CHANNEL_BLUE) != 
-			platformPar.GetBlue2Dmx(irgbw.GetBlue())));
+			platformPar.GetBlue2GammaCorrectedDmx(irgbw.GetBlue())));
 
 	if (colorHasChanged)
 	{
 		par.GetPlatformFixture().SetColorChanged(true);
 	}
 }
+#endif // COLOR_CHANGE_CHECKING
+
+
 #endif

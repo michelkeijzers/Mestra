@@ -61,27 +61,27 @@ Irgbw& Par::GetAlternateColor()
 }
 
 
-/* virtual */ dmx_value_t Par::GetRed2Dmx(dmx_value_t red)
+/* virtual */ dmx_value_t Par::GetRed2Dmx(intensity_t red)
 {
-	return _red2Dmx[red];
+	return GetPlatformPar().GetRed2GammaCorrectedDmx(red);
 }
 
 
-/* virtual */ dmx_value_t Par::GetGreen2Dmx(dmx_value_t green)
+/* virtual */ dmx_value_t Par::GetGreen2Dmx(intensity_t green)
 {
-	return _green2Dmx[green];
+	return GetPlatformPar().GetGreen2GammaCorrectedDmx(green);
 }
 
 
-/* virtual */ dmx_value_t Par::GetBlue2Dmx(dmx_value_t blue)
+/* virtual */ dmx_value_t Par::GetBlue2Dmx(intensity_t blue)
 {
-	return _blue2Dmx[blue];
+	return GetPlatformPar().GetBlue2GammaCorrectedDmx(blue);
 }
 
 
-/* virtual */ dmx_value_t Par::GetWhite2Dmx(dmx_value_t white)
+/* virtual */ dmx_value_t Par::GetWhite2Dmx(intensity_t white)
 {
-	return _white2Dmx[white];
+	return GetPlatformPar().GetWhite2GammaCorrectedDmx(white);
 }
 
 
@@ -89,7 +89,9 @@ void Par::WriteIrgb(Irgbw& irgbw)
 {
 	dmx_channel_t dmxOffsetChannel = GetDmxOffsetChannel();
 
+#ifdef COLOR_CHANGE_CHECKING
 	GetPlatformPar().CheckColorChanged(*this, dmxOffsetChannel, irgbw);
+#endif // COLOR_CHANGE_CHECKING
 
 	DmxSimple.write(dmxOffsetChannel + DMX_OFFSET_CHANNEL_INTENSITY,              irgbw.GetIntensity());
 	DmxSimple.write(dmxOffsetChannel + DMX_OFFSET_CHANNEL_RED      , GetRed2Dmx  (irgbw.GetRed      ()));

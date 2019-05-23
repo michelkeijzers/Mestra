@@ -10,7 +10,7 @@
 #include "MestraTypes.h"
 
 
-const fixture_number_t NR_OF_PARS = 17;
+const fixture_number_t NR_OF_PARS = 14;
 
 
 class LightSetupClass

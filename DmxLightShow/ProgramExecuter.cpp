@@ -148,7 +148,7 @@ void ProgramExecuter::FadeOutProgram(Par & par, bool initialize)
 }
 
 
-void ProgramExecuter::DualColorFadeProgram(Par & par, bool initialize)
+void ProgramExecuter::DualColorFadeProgram(Par& par, bool initialize)
 {
 	if (initialize)
 	{

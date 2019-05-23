@@ -184,7 +184,7 @@ void PresetCommand::SetFixturePreset(preset_t presetNumber, fixture_number_t par
 		// Fade chase left -> right -> left
 		nrOfSteps = (nrOfPars - 1) * 2;
 		par.InitializeProgram(30, nrOfSteps * (MAX_PAR_INTENSITIES - 1), 0,
-			selectedParIndex, (nrOfSteps - selectedParIndex) % nrOfSteps, nrOfPars);
+			selectedParIndex, (nrOfSteps - selectedParIndex) % nrOfSteps, nrOfSteps);
 		break;
 
 	case 63:

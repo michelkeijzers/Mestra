@@ -9,6 +9,7 @@
 #include <cmath>
 #include "math.h"
 #include "framework.h"
+#include "PlatformPar.h"
 #include "DmxLightShow.h"
 #include "LightSetup.h"
 #include "Irgbw.h"
@@ -23,11 +24,13 @@ using namespace std;
 
 #define MAX_LOADSTRING 100
 
+//#define SMART_BACKGROUND_PAINTING
+//#define SHOW_LEDS       
 #define PAR_DISTANCE_X 100
 #define PAR_DISTANCE_Y 180
 #define PAR_DIAMETER   (PAR_DISTANCE_X - 3)
 #define PAR_RADIUS     (PAR_DIAMETER / 2)
-#define LED_DIAMETER   (PAR_DIAMETER / 4 - 5)
+#define LED_DIAMETER   (PAR_DIAMETER / 4 - 12)
 #define LED_RADIUS     (LED_DIAMETER / 2)
 #define TEXT_OFFSET_X  -30
 #define TEXT_OFFSET_Y  -100
@@ -153,7 +156,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    hInst = hInstance; // Store instance handle in our global variable
 
    HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
-      50, 50, 1200, 600, nullptr, nullptr, hInstance, nullptr);
+      50, 50, 1200, 700, nullptr, nullptr, hInstance, nullptr);
 
    if (!hWnd)
    {
@@ -230,36 +233,19 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 						{
 							_backgroundFixturePaint = true;
 
-							dmx_channel_t dmxStartChannel = par.GetDmxOffsetChannel();
-							dmx_value_t intensity = DmxSimple.read(dmxStartChannel + DMX_OFFSET_CHANNEL_INTENSITY);
-				
 							SelectObject(hdc, GetStockObject(DC_BRUSH));
-
-							dmx_value_t white = (dmx_value_t) (intensity * 
-								DmxSimple.read(dmxStartChannel + DMX_OFFSET_CHANNEL_WHITE) / MAX_INTENSITY);
-
-							dmx_value_t red = (dmx_value_t)(intensity * 
-								DmxSimple.read(dmxStartChannel + DMX_OFFSET_CHANNEL_RED) / MAX_INTENSITY);
-							
-							dmx_value_t green = (dmx_value_t)(intensity * 
-								DmxSimple.read(dmxStartChannel + DMX_OFFSET_CHANNEL_GREEN) / MAX_INTENSITY);
-							
-							dmx_value_t blue = (dmx_value_t)(intensity * 
-								DmxSimple.read(dmxStartChannel + DMX_OFFSET_CHANNEL_BLUE) / MAX_INTENSITY);
 													 
 							PlatformFixture& platformFixture = par.GetPlatformFixture(); 
 							
 							int centerX = FIXTURE_OFFSET_X + platformFixture.GetX() * PAR_DISTANCE_X;
 							int centerY = FIXTURE_OFFSET_Y + platformFixture.GetY() * PAR_DISTANCE_Y;
 								
-							int x;
-							int y;
-						
 							// If color not changed, continue with next par.
-							if (par.GetPlatformFixture().HasColorChanged())
+#ifdef COLOR_CHANGE_CHECKING
+							//if (par.GetPlatformFixture().HasColorChanged())
 							{
-								par.GetPlatformFixture().SetColorChanged(false);
-
+								//par.GetPlatformFixture().SetColorChanged(false);
+#endif // COLOR_CHANGE_CHECKING
 								// Black PAR.
 								if (!_backgroundPainted)
 								{
@@ -271,9 +257,25 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 								}
 
 								// Total color
-								dmx_value_t totalRed = max(white, DmxSimple.read(dmxStartChannel + DMX_OFFSET_CHANNEL_RED));
-								dmx_value_t totalGreen = max(white, DmxSimple.read(dmxStartChannel + DMX_OFFSET_CHANNEL_GREEN));
-								dmx_value_t totalBlue = max(white, DmxSimple.read(dmxStartChannel + DMX_OFFSET_CHANNEL_BLUE));
+
+								dmx_channel_t dmxStartChannel = par.GetDmxOffsetChannel();
+								dmx_value_t intensity = DmxSimple.read(dmxStartChannel + DMX_OFFSET_CHANNEL_INTENSITY);
+
+								dmx_value_t white = (dmx_value_t)(intensity *
+									DmxSimple.read(dmxStartChannel + DMX_OFFSET_CHANNEL_WHITE) / MAX_INTENSITY);
+
+								dmx_value_t red = (dmx_value_t)(intensity *
+									DmxSimple.read(dmxStartChannel + DMX_OFFSET_CHANNEL_RED) / MAX_INTENSITY);
+
+								dmx_value_t green = (dmx_value_t)(intensity *
+									DmxSimple.read(dmxStartChannel + DMX_OFFSET_CHANNEL_GREEN) / MAX_INTENSITY);
+
+								dmx_value_t blue = (dmx_value_t)(intensity *
+									DmxSimple.read(dmxStartChannel + DMX_OFFSET_CHANNEL_BLUE) / MAX_INTENSITY);
+
+  							dmx_value_t totalRed = max(white, red);
+								dmx_value_t totalGreen = max(white, green);
+								dmx_value_t totalBlue = max(white, blue);
 
 								SetDCBrushColor(hdc, RGB(totalRed, totalGreen, totalBlue));
 
@@ -281,7 +283,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 									centerX - PAR_RADIUS, centerY - PAR_RADIUS,
 									centerX + PAR_RADIUS, centerY + PAR_RADIUS);
 
-
+#ifdef SHOW_LEDS
 								// Red circles
 								SetDCBrushColor(hdc, RGB(red, 0, 0));
 
@@ -351,6 +353,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 								Ellipse(hdc,
 									x - LED_RADIUS, y - LED_RADIUS,
 									x + LED_RADIUS, y + LED_RADIUS);
+#endif // SHOW_LEDS
 
 								wchar_t wtext[20];
 								size_t sizet;
@@ -386,7 +389,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 									TEXT_OFFSET_Y + platformFixture.GetY() * PAR_DISTANCE_Y + PAR_DIAMETER + (FONT_SIZE + 2) * 3 - 4,
 									wtext, lstrlen(wtext));
 							}
+#ifdef COLOR_CHANGE_CHECKING
 						}
+#endif // COLOR_CHANGE_CHECKING
 					}
 
 					if (_backgroundFixturePaint)
@@ -482,15 +487,17 @@ void InjectCommands()
 {
 	if (_refreshCounter == 100)
 	{
-		//InjectString("s a 10000");
 
+	  InjectString("t fl 4000");
+		InjectString("t fr 4000");
 
-	  InjectString("t fl 10000");
-
-		InjectString("d fl irbg");
+		InjectString("d fl irb");
 		InjectString("a fl ib");
-		InjectString("p fl 60");
+		InjectString("p fl 62");
 
+		InjectString("d fr irb");
+		InjectString("a fr ib");
+		InjectString("p fr 63");
 		/*
 		InjectString("t d 1000");
 		InjectString("d d ib");

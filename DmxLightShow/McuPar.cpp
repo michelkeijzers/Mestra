@@ -12,25 +12,25 @@ McuPar::~McuPar()
 }
 
 
-/* override */ dmx_value_t McuPar::GetRed2Dmx(dmx_value_t red)
+/* override */ dmx_value_t McuPar::GetRed2GammaCorrectedDmx(dmx_value_t red)
 {
 	return red;
 }
 
 
-/* override */dmx_value_t McuPar::GetGreen2Dmx(dmx_value_t green)
+/* override */dmx_value_t McuPar::GetGreen2GammaCorrectedDmx(dmx_value_t green)
 {
 	return green;
 }
 
 
-/* override */ dmx_value_t  McuPar::GetBlue2Dmx(dmx_value_t blue)
+/* override */ dmx_value_t  McuPar::GetBlue2GammaCorrectedDmx(dmx_value_t blue)
 {
 	return blue;
 }
 
 
-/* override */ dmx_value_t McuPar::GetWhite2Dmx(dmx_value_t white)
+/* override */ dmx_value_t McuPar::GetWhite2GammaCorrectedDmx(dmx_value_t white)
 {
 	return white;
 }
@@ -42,9 +42,11 @@ McuPar::~McuPar()
 };
 
 
+#ifdef COLOR_CHANGE_CHECKING
 /* override */ void McuPar::CheckColorChanged(Par& par, dmx_channel_t dmxOffsetChannel, Irgbw& irgbw)
 {
 	(void)par;
 	(void)dmxOffsetChannel;
 	(void)irgbw;
 }
+#endif // #ifdef COLOR_CHANGE_CHECKING

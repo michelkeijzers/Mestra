@@ -3,13 +3,14 @@
 //            U N O        M E G A
 //          Flash SRAM   Flash SRAM
 // Maximum: 32256 2048  253952 8192
-// Current:  9368 1435    5736 1153
-//       %:   29   70
+// Current: 10290 1412    5736 1153
+//       %:   31   68
 //
 // 
 
 #include "SerialPrint.h"
 #include <DmxSimple.h>
+#include "McuLightSetup.h"
 #include "LightSetup.h"
 #include "CommandBuffer.h"
 #include "ProgramExecuter.h"
@@ -21,7 +22,7 @@ const uint16_t DMX_MAX_CHANNELS = 140;
 
 CommandBuffer   _commandBuffer;
 ProgramExecuter _programExecuter;
-
+McuLightSetup   _mcuLightSetup;
 
 void setup() 
 {
@@ -34,12 +35,16 @@ void setup()
   DmxSimple.maxChannel(DMX_MAX_CHANNELS);
   DmxSimple.write(1, 10);
 
+  LightSetup.CreateFixtures();
+  LightSetup.SetPlatformLightSetup(&_mcuLightSetup);
+  LightSetup.GetPlatform()->SetProperties();
+  LightSetup.GetPlatform()->Print();
+
+
   _commandBuffer.AddChar('c');
   _commandBuffer.Process();
 
   _programExecuter.Run();
-
-  
 }
 
 
