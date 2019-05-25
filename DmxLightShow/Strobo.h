@@ -18,6 +18,8 @@ public:
 	
 	void Run();
 	
+	void AllOff();
+
 	par_bits_t GetParBits();
 	void SetParBits(par_bits_t parBits);
 

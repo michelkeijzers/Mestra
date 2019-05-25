@@ -177,14 +177,14 @@ void Fixture::InitializeProgram(program_t programNumber, step_t nrOfSteps, step_
 }
 
 
-bool Fixture::CheckIncreaseStep()
+bool Fixture::CheckIncreaseStep(step_t stepsToIncrease /* = 1 */)
 {
 	bool isIncreased = false;
 	uint32_t currentMillis = millis();
 
 	if (currentMillis >= GetStepTime())
 	{
-		SetCurrentStep((GetCurrentStep() + 1) % GetNrOfSteps());
+		SetCurrentStep((GetCurrentStep() + stepsToIncrease) % GetNrOfSteps());
 		SetStepTime(GetStepTime() + GetStepDuration());
 		isIncreased = true;
 	}

@@ -26,8 +26,16 @@
 // Preset              Preset Program Description
 // Group               number
 // ------------------- ------ ------- ------------------------------------------
-// Switch colors           10    n.a. Switch default and alternate color
-// Solid color             20      0  Default color
+// Switch colors           10    n.a. Default color    -> Alternate color
+//                         11    n.a. Alternate color  -> Default color
+//                         12    n.a. Default color   <-> Alternate color
+//                         13    n.a. Default color    -> Actual color
+//                         14    n.a. Actual color     -> Default color
+//                         15    n.a. Default color   <-> Actual color
+//                         16    n.a. Alternate color  -> Actual color
+//                         17    n.a. Actual color     -> Alternate color
+//                         18    n.a. Alternate color <-> Actual color
+// Solid color             20      0  Solod (Default) color
 // Dual colors             30     10  Switch between default and alternate color
 //                         31     10  Switch between alternate and default color
 // Chase                   40     10  Chase left -> right
@@ -35,9 +43,17 @@
 //                         42     10  Chase left -> right -> left
 //                         43     10  Chase right -> left -> right
 // Fade in/out             50     20  Fade default color->alternate color
-//                         51     20  Fade alternate color->default color
-//                         52     25  Fade def->alt->def
-//                         53     25  Fade alt->def->alt
+//                         51     21  Fade alternate color->default color
+//                         52     20  Fade def->alt->def
+//                         53     20  Fade alt->def->alt
+// Fade + Chase            60     30  Fade + Chase, left -> right
+//                         61     30  Fade + Chase, right -> left
+//                         62     30  Fade + Chase, left -> right -> left
+//                         63     30  Fade + Chase, right -> left -> right
+// Rainbow colors          70     40  No fade, left -> right, 
+//                         71     40  No fade, right -> left
+//                         72     40  Fade, left -> right
+//                         73     40  Fade, right -> left
 //
 // Program List
 // 
@@ -48,6 +64,7 @@
 //  20 FadeInOut  Yes  Yes   -   Fade in using default color for fade in, alt color for fade out
 //  21 FadeOut    Yes  Yes   -   Like FadeInOut, but only FadeOut
 //  30 FaceChase  Yes  Yes  Yes  Fade + chase combined (par 3 = Nr of pars in group)
+//  40 Rainbow    Yes   -    -   Step increase
 
 #pragma once
 

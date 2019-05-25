@@ -2,6 +2,7 @@
 // Command for changing a default color property of a Par.
 
 #include "PresetCommand.h"
+#include "ProgramExecuter.h"
 #include "BitsUtils.h"
 #include "ClassNames.h"
 #include "LightSetup.h"
@@ -194,6 +195,34 @@ void PresetCommand::SetFixturePreset(preset_t presetNumber, fixture_number_t par
 			nrOfPars - 1 - selectedParIndex, nrOfPars - 1 + selectedParIndex, nrOfSteps);
 		break;
 
+	case 70:
+		// Rainbow colors, left -> right
+		par.InitializeProgram(40, MAX_PAR_INTENSITIES * RAINBOW_COLORS,
+			MAX_PAR_INTENSITIES * (selectedParIndex % RAINBOW_COLORS), 
+			-MAX_PAR_INTENSITIES); // -MAX_PAR_INTENSITIES means decreasing a full color (no fade), left -> right
+		break;
+
+	case 71:
+		// Rainbow colors, right -> left
+		par.InitializeProgram(40, MAX_PAR_INTENSITIES * RAINBOW_COLORS,
+			MAX_PAR_INTENSITIES * (RAINBOW_COLORS - 1) - MAX_PAR_INTENSITIES * (selectedParIndex % RAINBOW_COLORS),
+			MAX_PAR_INTENSITIES); // MAX_PAR_INTENSITIES means increasing a full color (no fade), right -> left
+		break;
+
+	case 72:
+		// Rainbow colors + Fade, left -> right
+		par.InitializeProgram(40, MAX_PAR_INTENSITIES * RAINBOW_COLORS, 
+			MAX_PAR_INTENSITIES * (RAINBOW_COLORS) - 1 - MAX_PAR_INTENSITIES * (selectedParIndex % RAINBOW_COLORS), 
+			1); // 1 means left -> right
+		break;
+
+	case 73:
+		// Rainbow colors + Fade, right -> left (note left->right->left or vice versa is not needed)
+		par.InitializeProgram(40, MAX_PAR_INTENSITIES * RAINBOW_COLORS,
+			MAX_PAR_INTENSITIES * (selectedParIndex % RAINBOW_COLORS),
+			1); // -1 means right -> left
+		break;
+
 	default:
 		break;
 	}
@@ -204,7 +233,8 @@ void PresetCommand::CommandAllOff(Par& par)
 {
 	SetFixedIrgb(par, par.GetDefaultColor(), MAX_INTENSITY, 0, 0, 0);
 	SetFixedIrgb(par, par.GetAlternateColor(), MAX_INTENSITY, 0, 0, 0);
-	//TODO: Strobo off
+	
+	LightSetup.GetStrobo().AllOff();
 }
 
 

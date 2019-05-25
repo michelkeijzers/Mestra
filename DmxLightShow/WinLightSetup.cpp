@@ -78,7 +78,7 @@ void WinLightSetup::Print()
 #define OUTPUT_LIGHT_SETUP 1
 #ifdef OUTPUT_LIGHT_SETUP
 
-  WCHAR message[128];
+  WCHAR message[256];
 
 	swprintf_s(message, L"Time: %u\n", millis() - ((uint32_t)(_programStartTime.time * 1000 + _programStartTime.millitm)));
 	OutputDebugString(message);

@@ -12,7 +12,6 @@
 #include "ProgramExecuter.h"
 
 
-
 ProgramExecuter::ProgramExecuter()
 {
 }
@@ -65,6 +64,10 @@ void ProgramExecuter::RunPars()
 
 		case 30: // Only fade in/out at step Parameter 1 or 2 (Chase)
 			DualColorFadeProgram(par, initialize);
+			break;
+
+		case 40: // Rainbow colors, param 1 = +1 / -1
+			RainbowColorProgram(par, initialize);
 			break;
 
 		default:
@@ -205,64 +208,65 @@ void ProgramExecuter::DualColorFadeProgram(Par& par, bool initialize)
 	}
 }
 
-/*
-void ProgramExecuter::DualColorFadeProgram(Par& par, bool initialize)
+
+// Both normal and fade
+// Fade steps with increments of +1 or -1 through all steps (# Rainbow colors * MAX_PAR_INTENSITIES steps,
+// +1 for right, -1 for left (stored in parameter 1).
+// Normal skips with steps of MAX_PAR_INTENSITIES, i.e. steps to the next/previous 'full' rainbow color.
+// Normal and default colors are not used (SetRainbowColor instead).
+void ProgramExecuter::RainbowColorProgram(Par& par, bool initialize)
 {
 	if (initialize)
 	{
-		// Always exactly default color or alternate color, not an inbetween color
-		par.WriteIrgb(
-			((par.GetParameter1() * (MAX_PAR_INTENSITIES - 1) == par.GetCurrentStep()) ||
-			(par.GetParameter2() * (MAX_PAR_INTENSITIES - 1) == par.GetCurrentStep()))
-			? par.GetDefaultColor()
-			: par.GetAlternateColor());
+		SetRainbowColor(par, par.GetCurrentStep());
 
-		par.SetStepDuration(par.GetStepDuration() / (2 * (par.GetParameter3() - 1) * (MAX_PAR_INTENSITY - 1)));
+		par.SetStepDuration(par.GetStepDuration() / (RAINBOW_COLORS * MAX_PAR_INTENSITY / abs(par.GetParameter1())));
 		par.SetStepTime(millis() + par.GetStepDuration());
 	}
-	else if (par.CheckIncreaseStep())
+	else if (par.CheckIncreaseStep(par.GetParameter1()))
 	{
-		step_t activeStep1 = par.GetParameter1() * (MAX_PAR_INTENSITIES - 1);
-		if ((activeStep1 == 0) && (par.GetCurrentStep() >= MAX_PAR_INTENSITIES))
-		{
-			activeStep1 += par.GetParameter3() * (MAX_PAR_INTENSITIES - 1);
-		}
-
-		step_t activeStep2 = par.GetParameter2() * (MAX_PAR_INTENSITIES - 1);
-		if ((activeStep2 == 0) && (par.GetCurrentStep() >= MAX_PAR_INTENSITIES))
-		{
-			activeStep2 += par.GetParameter3() * (MAX_PAR_INTENSITIES - 1);
-		}
-
-		if (abs(par.GetCurrentStep() - activeStep1) < MAX_PAR_INTENSITIES)
-		{
-			if (par.GetCurrentStep() < activeStep1)
-			{
-				// Towards active step 1.
-				SetFadeColor(par, activeStep1 - par.GetCurrentStep());
-			}
-			else
-			{
-				// Away from step 1.
-				SetFadeColor(par, par.GetCurrentStep() - activeStep1);
-			}
-		}
-		else if (abs(par.GetCurrentStep() - activeStep2) < MAX_PAR_INTENSITIES)
-		{
-			if (par.GetCurrentStep() < activeStep2)
-			{
-				// Towards active step 2.
-				SetFadeColor(par, activeStep2 - par.GetCurrentStep());
-			}
-			else
-			{
-				// Away from step 2.
-				SetFadeColor(par, par.GetCurrentStep() - activeStep2);
-			}
-		}
+		SetRainbowColor(par, par.GetCurrentStep());
 	}
 }
-*/
+
+
+/*
+ * Colors:
+ * 0 * MAX_PAR_INTENSITIES    Red
+ * 1 * MAX_PAR_INTENSITIES    Green
+ * 2 * MAX_PAR_INTENSITIES    Blue
+ */
+void ProgramExecuter::SetRainbowColor(Par& par, step_t step)
+{
+	Irgbw targetColor;
+	
+	targetColor.SetIntensity(MAX_INTENSITY);
+	
+	targetColor.SetRed((intensity_t)
+		step < MAX_PAR_INTENSITIES
+		? MAX_PAR_INTENSITIES - 1 - step
+		: (step < 2 * MAX_PAR_INTENSITIES
+			? 0
+			: step - 2 * MAX_PAR_INTENSITIES));
+
+	targetColor.SetGreen( (intensity_t)
+		step < MAX_PAR_INTENSITIES
+		? step
+		: (step < 2 * MAX_PAR_INTENSITIES
+			? 2 * MAX_PAR_INTENSITIES - 1 - step
+			: 0));
+
+	targetColor.SetBlue((intensity_t)
+		step < MAX_PAR_INTENSITIES
+		? 0
+		: (step < 2 * MAX_PAR_INTENSITIES
+			? step - MAX_PAR_INTENSITIES
+			: 3 * MAX_PAR_INTENSITIES - 1 - step));
+
+	par.WriteIrgb(targetColor);
+}
+
+
 /*
 Step: 0=100% default color, step MAX_PAR_INTENSITY=100% alternate color
 */

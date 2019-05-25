@@ -5,6 +5,9 @@
 
 #include "LightSetup.h"
 
+// R -> G -> B
+#define RAINBOW_COLORS 3
+
 class ProgramExecuter
 {
 public:
@@ -21,6 +24,10 @@ public:
 	void DualColorFadeProgram(Par& par, bool initialize);
 
 	void FixedColorProgram(Par& par, bool initialize);
+
+	void RainbowColorProgram(Par& par, bool initialize); // Both normal and fade
+
+	void SetRainbowColor(Par& par, step_t step);
 
 	void SetFadeColor(Par& par, step_t step);
 

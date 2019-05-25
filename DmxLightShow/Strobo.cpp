@@ -135,3 +135,17 @@ void Strobo::Run()
 		_nextTime = millis() + _duration;
 	}
 }
+
+
+void Strobo::AllOff()
+{
+	for (fixture_number_t parNumber = 0; parNumber < NR_OF_PARS; parNumber++)
+	{
+		Irgbw irgbw;
+		Par& par = LightSetup.GetPar(parNumber);
+		par.GetActualColor(irgbw);
+		irgbw.SetWhite(0);
+		par.WriteIrgbw(irgbw);
+		par.StroboChanged();
+	}
+}

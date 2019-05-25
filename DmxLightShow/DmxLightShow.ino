@@ -3,8 +3,8 @@
 //            U N O        M E G A
 //          Flash SRAM   Flash SRAM
 // Maximum: 32256 2048  253952 8192
-// Current: 10290 1412    5736 1153
-//       %:   31   68
+// Current: 10936 1346    5736 1153
+//       %:   33   65
 //
 // 
 

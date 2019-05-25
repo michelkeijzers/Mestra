@@ -19,7 +19,7 @@ public:
 
 	PlatformFixture& GetPlatformFixture();
 
-	virtual bool CheckIncreaseStep();
+	virtual bool CheckIncreaseStep(step_t stepsToIncrease = 1);
 
 	virtual void StroboChanged();
 

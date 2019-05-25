@@ -26,20 +26,20 @@ using namespace std;
 
 //#define SMART_BACKGROUND_PAINTING
 //#define SHOW_LEDS       
-#define PAR_DISTANCE_X 100
-#define PAR_DISTANCE_Y 180
-#define PAR_DIAMETER   (PAR_DISTANCE_X - 3)
-#define PAR_RADIUS     (PAR_DIAMETER / 2)
-#define LED_DIAMETER   (PAR_DIAMETER / 4 - 12)
-#define LED_RADIUS     (LED_DIAMETER / 2)
-#define TEXT_OFFSET_X  -30
-#define TEXT_OFFSET_Y  -100
-#define FIXTURE_OFFSET_X -10
-#define FIXTURE_OFFSET_Y -80
+#define PAR_DISTANCE_X		 100
+#define PAR_DISTANCE_Y		 180
+#define PAR_DIAMETER			(PAR_DISTANCE_X - 3)
+#define PAR_RADIUS				(PAR_DIAMETER / 2)
+#define LED_DIAMETER			(PAR_DIAMETER / 4 - 12)
+#define LED_RADIUS				(LED_DIAMETER / 2)
+#define TEXT_OFFSET_X      -30
+#define TEXT_OFFSET_Y			-100
+#define FIXTURE_OFFSET_X	 -10
+#define FIXTURE_OFFSET_Y	 -80
 #define RGB_DISTANCE 0.4
-#define WHITE_DISTANCE 0.15
+#define WHITE_DISTANCE	     0.15
 
-#define FONT_SIZE      11
+#define FONT_SIZE           11
 
 #define PI_F 3.14159265358979f
 
@@ -488,16 +488,17 @@ void InjectCommands()
 	if (_refreshCounter == 100)
 	{
 
-	  InjectString("t fl 4000");
-		InjectString("t fr 4000");
+	  InjectString("t fa 5000");
+		//InjectString("t fr 1000");
 
-		InjectString("d fl irb");
-		InjectString("a fl ib");
-		InjectString("p fl 62");
+		//InjectString("d fl irb");
+		//InjectString("a fl ib");
+		InjectString("p fl 72");
+		InjectString("p fr 73");
 
-		InjectString("d fr irb");
-		InjectString("a fr ib");
-		InjectString("p fr 63");
+		//InjectString("d fr irb");
+		//InjectString("a fr ib");
+		//InjectString("p fr 63");
 		/*
 		InjectString("t d 1000");
 		InjectString("d d ib");

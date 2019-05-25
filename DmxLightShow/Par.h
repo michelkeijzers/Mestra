@@ -10,15 +10,15 @@
 #include "MestraTypes.h"
 #include "PlatformPar.h"
 
-#define MAX_PAR_INTENSITIES           49  // For red, green, blue, white
-#define MAX_PAR_INTENSITY            (MAX_PAR_INTENSITIES - 1)
-#define MAX_INTENSITY                255 // For intensity, assumed linear
+#define MAX_PAR_INTENSITIES          (intensity_t)    49  // For red, green, blue, white
+#define MAX_PAR_INTENSITY            (intensity_t)    (MAX_PAR_INTENSITIES - 1)
+#define MAX_INTENSITY                (intensity_t)   255 // For intensity, assumed linear
 
-#define DMX_OFFSET_CHANNEL_INTENSITY  0
-#define DMX_OFFSET_CHANNEL_RED        1
-#define DMX_OFFSET_CHANNEL_GREEN      2
-#define DMX_OFFSET_CHANNEL_BLUE       3
-#define DMX_OFFSET_CHANNEL_WHITE      4
+#define DMX_OFFSET_CHANNEL_INTENSITY (dmx_channel_t)   0
+#define DMX_OFFSET_CHANNEL_RED       (dmx_channel_t)   1
+#define DMX_OFFSET_CHANNEL_GREEN     (dmx_channel_t)   2
+#define DMX_OFFSET_CHANNEL_BLUE      (dmx_channel_t)   3
+#define DMX_OFFSET_CHANNEL_WHITE     (dmx_channel_t)   4
 
 class Par : public Fixture
 {
