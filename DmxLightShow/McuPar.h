@@ -19,7 +19,7 @@ public:
 	/* override */ dmx_value_t Value2WindowsIntensity(uint8_t value);
 
 #ifdef COLOR_CHANGE_CHECKING
-	/* override */ void CheckColorChanged(Par& par, dmx_channel_t dmxOffsetChannel, Irgbw& irgbw);
+	/* override */ void CheckColorChanged(ParRgb& par, dmx_channel_t dmxOffsetChannel, Irgbw& irgbw);
 #endif // COLOR_CHANGE_CHECKING
 };
 

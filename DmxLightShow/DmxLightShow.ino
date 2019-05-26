@@ -1,10 +1,10 @@
 // DmxLightShow.ino
 //
-//            U N O        M E G A
-//          Flash SRAM   Flash SRAM
+//            U N O        M E G A    Before dynamic memory Uno
+//          Flash SRAM   Flash SRAM   
 // Maximum: 32256 2048  253952 8192
-// Current: 10936 1346    5736 1153
-//       %:   33   65
+// Current: 11548  846    5736 1153   10000 1469
+//       %:   35   41                   33   71
 //
 // 
 

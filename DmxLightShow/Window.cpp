@@ -228,7 +228,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 					for (fixture_number_t parNumber = 0; parNumber < NR_OF_PARS; parNumber++)
 					{
-						Par& par = (Par&)LightSetup.GetPar(parNumber);
+						Par& par = (Par&) LightSetup.GetPar(parNumber);
+						Irgbw actualColor;
+						par.GetActualColor(actualColor);
+
 						if ((LightSetup.GetPlatform() != 0) && LightSetup.GetPlatform()->ArePropertiesSet())
 						{
 							_backgroundFixturePaint = true;
@@ -257,21 +260,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 								}
 
 								// Total color
-
-								dmx_channel_t dmxStartChannel = par.GetDmxOffsetChannel();
-								dmx_value_t intensity = DmxSimple.read(dmxStartChannel + DMX_OFFSET_CHANNEL_INTENSITY);
-
-								dmx_value_t white = (dmx_value_t)(intensity *
-									DmxSimple.read(dmxStartChannel + DMX_OFFSET_CHANNEL_WHITE) / MAX_INTENSITY);
-
-								dmx_value_t red = (dmx_value_t)(intensity *
-									DmxSimple.read(dmxStartChannel + DMX_OFFSET_CHANNEL_RED) / MAX_INTENSITY);
-
-								dmx_value_t green = (dmx_value_t)(intensity *
-									DmxSimple.read(dmxStartChannel + DMX_OFFSET_CHANNEL_GREEN) / MAX_INTENSITY);
-
-								dmx_value_t blue = (dmx_value_t)(intensity *
-									DmxSimple.read(dmxStartChannel + DMX_OFFSET_CHANNEL_BLUE) / MAX_INTENSITY);
+								dmx_value_t intensity = actualColor.GetIntensity();
+								dmx_value_t red = actualColor.GetRed();
+								dmx_value_t green = actualColor.GetGreen();
+								dmx_value_t blue = actualColor.GetBlue();
+								dmx_value_t white = actualColor.GetWhite();
 
   							dmx_value_t totalRed = max(white, red);
 								dmx_value_t totalGreen = max(white, green);

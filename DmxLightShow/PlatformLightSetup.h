@@ -14,11 +14,11 @@ public:
 	virtual void Print() = 0;
 
 	Par& GetPar(fixture_number_t parNumber);
-	void SetPars(Par* pars);
+	void SetPars(Par* pars[]);
 
 	virtual bool ArePropertiesSet() = 0;
 
 private:
-	Par* _pars;
+	Par** _pars;
 };
 

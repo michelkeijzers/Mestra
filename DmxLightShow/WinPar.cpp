@@ -55,7 +55,7 @@ dmx_value_t WinPar::Value2WindowsIntensity(uint8_t x)
 
 
 #ifdef COLOR_CHANGE_CHECKING
-/* override */ void WinPar::CheckColorChanged(Par& par, dmx_channel_t dmxOffsetChannel, Irgbw& irgbw)
+/* override */ void WinPar::CheckColorChanged(ParRgb& par, dmx_channel_t dmxOffsetChannel, Irgbw& irgbw)
 {
 	PlatformPar& platformPar = par.GetPlatformPar();
 

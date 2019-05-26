@@ -43,7 +43,7 @@ McuPar::~McuPar()
 
 
 #ifdef COLOR_CHANGE_CHECKING
-/* override */ void McuPar::CheckColorChanged(Par& par, dmx_channel_t dmxOffsetChannel, Irgbw& irgbw)
+/* override */ void McuPar::CheckColorChanged(ParRgb& par, dmx_channel_t dmxOffsetChannel, Irgbw& irgbw)
 {
 	(void)par;
 	(void)dmxOffsetChannel;

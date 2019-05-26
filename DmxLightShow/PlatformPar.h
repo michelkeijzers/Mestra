@@ -22,7 +22,7 @@ public:
 	virtual dmx_value_t Value2WindowsIntensity(uint8_t x) = 0;
 
 #ifdef COLOR_CHANGE_CHECKING
-	virtual void CheckColorChanged(Par& par, dmx_channel_t dmxOffsetChannel, Irgbw& irgbw) = 0;
+	virtual void CheckColorChanged(ParRgb& par, dmx_channel_t dmxOffsetChannel, Irgbw& irgbw) = 0;
 #endif // COLOR_CHANGE_CHECKING
 };
 

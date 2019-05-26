@@ -22,9 +22,6 @@
     <Filter Include="Header Files\Framework">
       <UniqueIdentifier>{4ac4b2ce-d106-4ca3-a73f-d37acd0ffb01}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Framework">
-      <UniqueIdentifier>{a1d676f5-f4f6-4254-bb02-4d15506195e9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Utilities">
       <UniqueIdentifier>{712af8cf-b88f-49ad-9290-02ba9b591413}</UniqueIdentifier>
     </Filter>
@@ -34,20 +31,20 @@
     <Filter Include="Header Files\Commands">
       <UniqueIdentifier>{2b003ea1-72fd-477e-a1ea-ad8e8761fec6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Programs">
-      <UniqueIdentifier>{ed6dae38-1a42-49d7-9e62-07e6cba4f333}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Commands">
       <UniqueIdentifier>{2b1b1fb6-fcb8-4968-98a8-ec80d467644e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Programs">
-      <UniqueIdentifier>{297b9619-2712-4fb9-ad10-e81ee43731f5}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\LightSetup">
       <UniqueIdentifier>{72e36e4c-fc9c-4c2e-97dd-b41f19d20cab}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\LightSetup">
       <UniqueIdentifier>{487ef4dc-d7db-4d83-9140-b470232c395b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\LightSetup\FixtureTypes">
+      <UniqueIdentifier>{c57d3fba-1461-4171-b1e7-14f8e6d97683}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\LightSetup\FixtureTypes">
+      <UniqueIdentifier>{296269b4-1c3a-4f7e-9f09-4f4956005203}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -64,9 +61,6 @@
       <Filter>Header Files\LightSetup</Filter>
     </ClInclude>
     <ClInclude Include="LightSetup.h">
-      <Filter>Header Files\LightSetup</Filter>
-    </ClInclude>
-    <ClInclude Include="Par.h">
       <Filter>Header Files\LightSetup</Filter>
     </ClInclude>
     <ClInclude Include="Strobo.h">
@@ -90,13 +84,7 @@
     <ClInclude Include="BitsUtils.h">
       <Filter>Header Files\Utilities</Filter>
     </ClInclude>
-    <ClInclude Include="ProgramExecuter.h">
-      <Filter>Header Files\Programs</Filter>
-    </ClInclude>
     <ClInclude Include="DmxSimpleStub.h">
-      <Filter>Header Files\Win32</Filter>
-    </ClInclude>
-    <ClInclude Include="targetver.h">
       <Filter>Header Files\Win32</Filter>
     </ClInclude>
     <ClInclude Include="Resource.h">
@@ -144,6 +132,18 @@
     <ClInclude Include="McuPar.h">
       <Filter>Header Files\LightSetup</Filter>
     </ClInclude>
+    <ClInclude Include="ChinesePar.h">
+      <Filter>Header Files\LightSetup\FixtureTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="Par.h">
+      <Filter>Header Files\LightSetup\FixtureTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="ProgramExecuter.h">
+      <Filter>Header Files\LightSetup</Filter>
+    </ClInclude>
+    <ClInclude Include="LedBarSegment.h">
+      <Filter>Header Files\LightSetup\FixtureTypes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DmxLightShow.rc">
@@ -159,9 +159,6 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="DmxLightShowArduino.cpp">
-      <Filter>Source Files\Framework</Filter>
-    </ClCompile>
     <ClCompile Include="StringUtils.cpp">
       <Filter>Source Files\Utilities</Filter>
     </ClCompile>
@@ -177,9 +174,6 @@
     <ClCompile Include="LightSetup.cpp">
       <Filter>Source Files\LightSetup</Filter>
     </ClCompile>
-    <ClCompile Include="Par.cpp">
-      <Filter>Source Files\LightSetup</Filter>
-    </ClCompile>
     <ClCompile Include="Strobo.cpp">
       <Filter>Source Files\LightSetup</Filter>
     </ClCompile>
@@ -191,9 +185,6 @@
     </ClCompile>
     <ClCompile Include="BitsUtils.cpp">
       <Filter>Source Files\Utilities</Filter>
-    </ClCompile>
-    <ClCompile Include="ProgramExecuter.cpp">
-      <Filter>Source Files\Programs</Filter>
     </ClCompile>
     <ClCompile Include="ArduinoStub.cpp">
       <Filter>Source Files\WIN32</Filter>
@@ -236,6 +227,18 @@
     </ClCompile>
     <ClCompile Include="McuPar.cpp">
       <Filter>Source Files\LightSetup</Filter>
+    </ClCompile>
+    <ClCompile Include="ChinesePar.cpp">
+      <Filter>Source Files\LightSetup\FixtureTypes</Filter>
+    </ClCompile>
+    <ClCompile Include="Par.cpp">
+      <Filter>Source Files\LightSetup\FixtureTypes</Filter>
+    </ClCompile>
+    <ClCompile Include="ProgramExecuter.cpp">
+      <Filter>Source Files\LightSetup</Filter>
+    </ClCompile>
+    <ClCompile Include="LedBarSegment.cpp">
+      <Filter>Source Files\LightSetup\FixtureTypes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

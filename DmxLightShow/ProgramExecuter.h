@@ -27,11 +27,13 @@ public:
 
 	void RainbowColorProgram(Par& par, bool initialize); // Both normal and fade
 
-	void SetRainbowColor(Par& par, step_t step);
-
 	void SetFadeColor(Par& par, step_t step);
 
 private:
 	void SetDefaultOrAlternate(Par& par, Par::EActiveColor color);
+
+	void SetRainbowColor(Par& par, step_t step);
+	intensity_t CalcRainbowColor(step_t step,
+		intensity_t firstRangeValue, intensity_t secondRangeValue, intensity_t thirdRangeValue);
 };
 

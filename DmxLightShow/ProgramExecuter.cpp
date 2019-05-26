@@ -111,7 +111,7 @@ void ProgramExecuter::DualColorProgram(Par& par, bool initialize)
 }
 
 
-void ProgramExecuter::FadeInOutProgram(Par & par, bool initialize)
+void ProgramExecuter::FadeInOutProgram(Par& par, bool initialize)
 {
 	if (initialize)
 	{
@@ -133,7 +133,7 @@ void ProgramExecuter::FadeInOutProgram(Par & par, bool initialize)
 }
 
 
-void ProgramExecuter::FadeOutProgram(Par & par, bool initialize)
+void ProgramExecuter::FadeOutProgram(Par& par, bool initialize)
 {
 	{
 		if (initialize)
@@ -240,30 +240,34 @@ void ProgramExecuter::SetRainbowColor(Par& par, step_t step)
 {
 	Irgbw targetColor;
 	
-	targetColor.SetIntensity(MAX_INTENSITY);
-	
-	targetColor.SetRed((intensity_t)
-		step < MAX_PAR_INTENSITIES
-		? MAX_PAR_INTENSITIES - 1 - step
-		: (step < 2 * MAX_PAR_INTENSITIES
-			? 0
-			: step - 2 * MAX_PAR_INTENSITIES));
+	targetColor.SetIrgb(
+		MAX_INTENSITY,
+		CalcRainbowColor(step, 
+		 (intensity_t) (MAX_PAR_INTENSITIES - 1 - step), 
+		 0, 
+		 (intensity_t)(step - 2 * MAX_PAR_INTENSITIES)),
 
-	targetColor.SetGreen( (intensity_t)
-		step < MAX_PAR_INTENSITIES
-		? step
-		: (step < 2 * MAX_PAR_INTENSITIES
-			? 2 * MAX_PAR_INTENSITIES - 1 - step
-			: 0));
-
-	targetColor.SetBlue((intensity_t)
-		step < MAX_PAR_INTENSITIES
-		? 0
-		: (step < 2 * MAX_PAR_INTENSITIES
-			? step - MAX_PAR_INTENSITIES
-			: 3 * MAX_PAR_INTENSITIES - 1 - step));
+		CalcRainbowColor(step, 
+		 (intensity_t)step,
+		 (intensity_t) (2 * MAX_PAR_INTENSITIES - 1 - step), 
+		 0),
+		
+		CalcRainbowColor(step, 
+		 0, 
+		 (intensity_t) (step - MAX_PAR_INTENSITIES), 
+		 (intensity_t) (3 * MAX_PAR_INTENSITIES - 1 - step)));
 
 	par.WriteIrgb(targetColor);
+}
+
+
+intensity_t ProgramExecuter::CalcRainbowColor(step_t step, 
+	intensity_t firstRangeValue, intensity_t secondRangeValue, intensity_t thirdRangeValue)
+{
+	return step < MAX_PAR_INTENSITIES ? firstRangeValue
+		: (step < 2 * MAX_PAR_INTENSITIES
+			? secondRangeValue
+			: thirdRangeValue);
 }
 
 

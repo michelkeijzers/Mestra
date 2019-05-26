@@ -94,22 +94,25 @@ void WinLightSetup::Print()
 	for (fixture_number_t parNumber = 0; parNumber < NR_OF_PARS; parNumber++)
 	{
 		Par& par = GetPar(parNumber);
+		Irgbw actualColor;
+		par.GetActualColor(actualColor);
 		Irgbw& defaultColor = par.GetDefaultColor();
 		Irgbw& alternateColor = par.GetAlternateColor();
-		uint16_t dmx = par.GetDmxOffsetChannel();
+		
 		const char* abbr = par.GetPlatformFixture().GetAbbr();
 				
+	  //                   Par Number                                                        Init Program               Current Step
+		//                      |  Abbreviation                                                           \ Program              |    Number of Steps
+		//                      |     |  DMX Channel                                                       \ Number              |    / 
+		//                      |     |      |    --Actual Color--   --Default Color--   -Alternate Color-  \    |   Parameters  |   /  Step Duration
+		//                      |     |      |   /                \ /                 \ /                 \  |   |  /         |  |   |   |
 		swprintf_s(message, L"│%2u │%c%c%c │%3u│%3u:%3u:%3u:%3u:%3u│%3u:%3u:%3u:%3u:%3u│%3u:%3u:%3u:%3u:%3u│%4u│%7u│%5u:%5u:%5u│%5u│%5u│%6u  │\n",
 			parNumber,
 			wchar_t(abbr[0] == '\0' ? ' ' : abbr[0]),
 			wchar_t(abbr[1] == '\0' ? ' ' : abbr[1]),
 			wchar_t(abbr[2] == '\0' ? ' ' : abbr[2]),
-			dmx,
-			DmxSimple.read(dmx + DMX_OFFSET_CHANNEL_INTENSITY),
-			DmxSimple.read(dmx + DMX_OFFSET_CHANNEL_RED),
-			DmxSimple.read(dmx + DMX_OFFSET_CHANNEL_GREEN),
-			DmxSimple.read(dmx + DMX_OFFSET_CHANNEL_BLUE),
-			DmxSimple.read(dmx + DMX_OFFSET_CHANNEL_WHITE),
+			par.GetDmxOffsetChannel(),
+		  actualColor.GetIntensity(), actualColor.GetRed(), actualColor.GetGreen(), actualColor.GetBlue(), actualColor.GetWhite(),
 			defaultColor.GetIntensity(), defaultColor.GetRed(), defaultColor.GetGreen(), defaultColor.GetBlue(), defaultColor.GetWhite(),
 			alternateColor.GetIntensity(), alternateColor.GetRed(), alternateColor.GetGreen(), alternateColor.GetBlue(), alternateColor.GetWhite(),
 			par.GetInitialize(), par.GetProgram(), par.GetParameter1(), par.GetParameter2(), par.GetParameter3(),
