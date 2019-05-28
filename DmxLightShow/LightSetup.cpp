@@ -52,14 +52,10 @@ void LightSetupClass::CreateFixtures()
 		_pars[fixtureNumber] = new ChinesePar();
 	}
 
-	for (fixture_number_t fixtureNumber = 0; fixtureNumber < NR_OF_CHINESE_PARS; fixtureNumber++)
-	{
-		_pars[fixtureNumber] = new ChinesePar();
-	}
-
 	for (fixture_number_t fixtureNumber = NR_OF_CHINESE_PARS; fixtureNumber < NR_OF_PARS; fixtureNumber++)
 	{
 		_pars[fixtureNumber] = new LedBarSegment();
+		((LedBarSegment&)(_pars[fixtureNumber])).SetSegmentNumber((fixtureNumber - NR_OF_CHINESE_PARS) % 3);
 	}
 
 	// Do not use PROGMEM, this results in segmentation faults in Arduino IDE when unrelated code changes

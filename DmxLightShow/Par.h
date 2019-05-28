@@ -10,9 +10,9 @@
 #include "MestraTypes.h"
 #include "PlatformPar.h"
 
-#define MAX_PAR_INTENSITIES          (intensity_t)    49  // For red, green, blue, ...
-#define MAX_PAR_INTENSITY            (intensity_t)    (MAX_PAR_INTENSITIES - 1)
-#define MAX_INTENSITY                (intensity_t)   255 // For intensity, assumed linear
+#define MAX_PAR_INTENSITIES         (intensity_t)   49  // For red, green, blue, ...
+#define MAX_PAR_INTENSITY           (intensity_t)  (MAX_PAR_INTENSITIES - 1)
+#define MAX_INTENSITY               (intensity_t)  255 // For intensity, assumed linear
 
 
 class Par : public Fixture
@@ -41,10 +41,10 @@ public:
 	Irgbw& GetAlternateColor();
 
 protected:
-	dmx_value_t GetRed2Dmx(intensity_t red);
-	dmx_value_t GetGreen2Dmx(intensity_t green);
-	dmx_value_t GetBlue2Dmx(intensity_t blue);
-	virtual dmx_value_t GetWhite2Dmx(intensity_t white);
+	virtual dmx_value_t GetRed2Dmx(intensity_t red) = 0;
+	virtual dmx_value_t GetGreen2Dmx(intensity_t green) = 0;
+	virtual dmx_value_t GetBlue2Dmx(intensity_t blue) = 0;
+	virtual dmx_value_t GetWhite2Dmx(intensity_t white) = 0;
 
 private:
 	PlatformPar* _platformPar;

@@ -12,6 +12,151 @@
 #include HEADER_FILE(ARDUINO_CLASS)
 
 
+//                                                   LED Bar   Ego  Banners      
+//                                                             Risers      Drums  Front Left  Front Right
+//                                                   BL  BC BR EL ER NL NR DL DR  FL FL FL FL FR FR FR FR
+//                                                                                4  3  2  1  1  2  3  4
+// Byte 3--------------------3  2--------------------2   1-------------- -----1   0--------------------0
+// Bit  7  6  5  4  3  2  1  0  7  6  5  4  3  2  1  0   7  6  5  4  3  2  1  0   7  6  5  4  3  2  1  0
+// Index   30 29 28 27 26 25 24 23 22 21 20 19 18 17 16  15 14 13 12 11 10 9  8   7  6  5  4  3  2  1  0
+// Fixture Group      Fixture Part                   Set
+// ------------------ ------------------------------ -------- ----- ----- -----  ----------- -----------
+// A All Groups       A All                          1   1  1  1  1  1  1  1  1   1  1  1  1  1  1  1  1
+//                    C Center                       0   1  0  0  0  0  0  0  0   0  1  1  0  0  1  1  0  
+//                    E All Except Ego Risers        1   1  1  0  0  1  1  1  1   1  1  1  1  1  1  1  1
+//                    L Left                         1   0  0  0  0  1  0  1  0   1  1  1  1  0  0  0  0  
+//                    R Right                        0   0  1  0  0  0  1  0  1   0  0  0  0  1  1  1  1  
+// B Led Bar          A All                          1   1  1  0  0  0  0  0  0   0  0  0  0  0  0  0  0  
+//                    C Center                       0   1  0  0  0  0  0  0  0   0  0  0  0  0  0  0  0  
+//                    L Left                         1   0  0  0  0  0  0  0  0   0  0  0  0  0  0  0  0  
+//                    R Right                        0   0  1  0  0  0  0  0  0   0  0  0  0  0  0  0  0  
+// D Drums            A All                          0   0  0  1  1  0  0  0  0   0  0  0  0  0  0  0  0  
+//                    L Left                         0   0  0  1  0  0  0  0  0   0  0  0  0  0  0  0  0  
+//                    R Right                        0   0  0  0  1  0  0  0  0   0  0  0  0  0  0  0  0  
+// E Ego Risers       A All                          0   0  0  1  1  0  0  0  0   0  0  0  0  0  0  0  0  
+//                    L Left                         0   0  0  1  0  0  0  0  0   0  0  0  0  0  0  0  0  
+//                    R Right                        0   0  0  0  1  0  0  0  0   0  0  0  0  0  0  0  0  
+// F Front            A All                          0   0  0  0  0  0  0  0  0   1  1  1  1  1  1  1  1  
+//                    C Corners                      0   0  0  0  0  0  0  0  0   1  0  0  1  1  0  0  1  
+//                    M Middle                       0   0  0  0  0  0  0  0  0   0  1  1  0  0  1  1  0  
+//                    I Inner                        0   0  0  0  0  0  0  0  0   0  1  1  1  1  1  1  0  
+//                    O Outer                        0   0  0  0  0  0  0  0  0   1  0  0  0  0  0  0  1  
+// L (Front) Left     1 Inside                       0   0  0  0  0  0  0  0  0   0  0  0  1  0  0  0  1  
+//                    2                              0   0  0  0  0  0  0  0  0   0  0  1  0  0  0  0  0  
+//                    3                              0   0  0  0  0  0  0  0  0   0  1  0  0  0  0  0  0  
+//                    4 Outside                      0   0  0  0  0  0  0  0  0   1  0  0  0  0  0  0  0  
+//                    A All Left                     0   0  0  0  0  0  0  0  0   1  1  1  1  0  0  0  0  
+//                    I Inner                        0   0  0  0  0  0  0  0  0   0  1  1  0  0  0  0  0  
+//                    O Outer                        0   0  0  0  0  0  0  0  0   1  0  0  1  0  0  0  0  
+// N Banner           A All                          0   0  0  0  0  1  1  0  0   0  0  0  0  0  0  0  0  
+//                    L Left                         0   0  0  0  0  1  0  0  0   0  0  0  0  0  0  0  0  
+//                    R Right                        0   0  0  0  0  0  1  0  0   0  0  0  0  0  0  0  0  
+// R (Front) Right    1 Inside                       0   0  0  0  0  0  0  0  0   0  0  0  0  1  0  0  0  
+//                    2                              0   0  0  0  0  0  0  0  0   0  0  0  0  0  1  0  0  
+//                    3                              0   0  0  0  0  0  0  0  0   0  0  0  0  0  0  1  0  
+//                    4 Outside                      0   0  0  0  0  0  0  0  0   0  0  0  0  0  0  0  1  
+//                    A All                          0   0  0  0  0  0  0  0  0   0  0  0  0  1  1  1  1  
+//                    I Inner                        0   0  0  0  0  0  0  0  0   0  0  0  0  0  1  1  0  
+//                    O Outer                        0   0  0  0  0  0  0  0  0   0  0  0  0  1  0  0  1  
+
+
+const par_bits_t PAR_R4 = 1 << 0;
+const par_bits_t PAR_R3 = 1 << 1;
+const par_bits_t PAR_R2 = 1 << 2;
+const par_bits_t PAR_R1 = 1 << 3;
+const par_bits_t PAR_L1 = 1 << 4;
+const par_bits_t PAR_L2 = 1 << 5;
+const par_bits_t PAR_L3 = 1 << 6;
+const par_bits_t PAR_L4 = 1 << 7;
+const par_bits_t PAR_DR = 1 << 8;
+const par_bits_t PAR_DL = 1 << 9;
+const par_bits_t PAR_NR = 1 << 10;
+const par_bits_t PAR_NL = 1 << 11;
+const par_bits_t PAR_ER = 1 << 12;
+const par_bits_t PAR_EL = 1 << 13;
+const par_bits_t PAR_BR = 1 << 14;
+const par_bits_t PAR_BC = 1 << 15;
+const par_bits_t PAR_BL = 1 << 16;
+
+const par_bits_t PAR_BA = PAR_BL + PAR_BC + PAR_BR;
+
+const par_bits_t PAR_DA = PAR_DL + PAR_DR;
+
+const par_bits_t PAR_EA = PAR_EL + PAR_ER;
+
+const par_bits_t PAR_LI = PAR_L2 + PAR_L3;
+const par_bits_t PAR_LO = PAR_L4 + PAR_L1;
+const par_bits_t PAR_LA = PAR_LI + PAR_LO;
+
+const par_bits_t PAR_NA = PAR_NL + PAR_NR;
+
+const par_bits_t PAR_RI = PAR_R2 + PAR_R3;
+const par_bits_t PAR_RO = PAR_R4 + PAR_R1;
+const par_bits_t PAR_RA = PAR_RI + PAR_RO;
+
+const par_bits_t PAR_FA = PAR_LA + PAR_RA;
+const par_bits_t PAR_FC = PAR_LO + PAR_RO;
+const par_bits_t PAR_FM = PAR_LI + PAR_RI;
+const par_bits_t PAR_FI = PAR_FM + PAR_L1 + PAR_R1;
+const par_bits_t PAR_FO = PAR_L4 + PAR_R4;
+
+const par_bits_t PAR_AA = PAR_FA + PAR_DA + PAR_NA + PAR_EA + PAR_BA;
+const par_bits_t PAR_AC = PAR_FM + PAR_BC;
+const par_bits_t PAR_AE = PAR_FA + PAR_DA + PAR_NA + PAR_BA;
+const par_bits_t PAR_AL = PAR_LA + PAR_DL + PAR_NL + PAR_BL;
+const par_bits_t PAR_AR = PAR_RA + PAR_DR + PAR_NR + PAR_BR;
+
+
+
+struct Chars2ParBits
+{
+	const char* abbr;
+	par_bits_t  parBits;
+};
+
+
+Chars2ParBits Chars2ParBitsMapping[] =
+{
+	{ "AA", PAR_AA },
+	{ "AC", PAR_AC },
+	{ "AE", PAR_AE },
+	{ "AL", PAR_AL },
+	{ "AR", PAR_AR },
+	{ "BA", PAR_BA },
+	{ "BC", PAR_BC },
+	{ "BL", PAR_BL },
+	{ "BR", PAR_BR },
+	{ "DA", PAR_DA },
+	{ "DL", PAR_DL },
+	{ "DR", PAR_DR },
+	{ "EA", PAR_EA },
+	{ "EL", PAR_EL },
+	{ "ER", PAR_ER },
+	{ "FA", PAR_FA },
+	{ "FC", PAR_FC },
+	{ "FI", PAR_FI },
+	{ "FM", PAR_FM },
+	{ "FO", PAR_FO },
+	{ "L1", PAR_L1 },
+	{ "L2", PAR_L2 },
+	{ "L3", PAR_L3 },
+	{ "L4", PAR_L4 },
+	{ "LA", PAR_LA },
+	{ "LI", PAR_LI },
+	{ "LO", PAR_LO },
+	{ "NA", PAR_NA },
+	{ "NL", PAR_NL },
+	{ "NR", PAR_NR },
+	{ "R1", PAR_R1 },
+	{ "R2", PAR_R2 },
+	{ "R3", PAR_R3 },
+	{ "R4", PAR_R4 },
+	{ "RA", PAR_RA },
+	{ "RI", PAR_RI },
+	{ "RO", PAR_RO }
+};
+
+
 CommandParser::CommandParser()
 	: _command('\0'), 
 		_currentIndex(0),
@@ -318,107 +463,21 @@ void CommandParser::SkipUntilComma()
 
 void CommandParser::ParseParBits()
 {
-  _parBits = 0; // Use 32 bits although 16 are used because of 16/32 bit conversion for <</+ operations below
-	uint8_t parBitsLength = 0;
+  _parBits = 0; 
 
-  switch (CharUtils::ToUpper(_command[_currentIndex]))
-  {
-  case 'A':
-    switch (CharUtils::ToUpper((_command[_currentIndex + 1])))
-    {
-		case ' ': _parBits = (0b11111111 << 8) + 0b11111100; parBitsLength = 1; break;
-    }
-    break;
+	char abbr0 = _command[_currentIndex];
+	char abbr1 = _command[_currentIndex + 1];
+	_currentIndex += 2;
 
-  case 'B':
-    switch (CharUtils::ToUpper((_command[_currentIndex + 1])))
-    {
-    case ' ': _parBits = (0b00000000 << 8) + 0b00110000; parBitsLength = 1; break;
-    case 'D': _parBits = (0b00000000 << 8) + 0b11110000; parBitsLength = 2; break;
-    case 'L': _parBits = (0b00000000 << 8) + 0b00100000; parBitsLength = 2; break;
-    case 'R': _parBits = (0b00000000 << 8) + 0b00010000; parBitsLength = 2; break;
-    }
-    break;
-
-  case 'D':
-    switch (CharUtils::ToUpper((_command[_currentIndex + 1])))
-    {
-    case ' ': _parBits = (0b00000000 << 8) + 0b11000000; parBitsLength = 1; break;
-    case 'L': _parBits = (0b00000000 << 8) + 0b10000000; parBitsLength = 2; break;
-    case 'R': _parBits = (0b00000000 << 8) + 0b01000000; parBitsLength = 2; break;
-    }
-    break;
-
-  case 'E':
-    switch (CharUtils::ToUpper((_command[_currentIndex + 1])))
-    {
-    case ' ': _parBits = (0b00000000 << 8) + 0b00001100; parBitsLength = 1; break;
-    case 'L': _parBits = (0b00000000 << 8) + 0b00001000; parBitsLength = 2; break;
-    case 'R': _parBits = (0b00000000 << 8) + 0b00000100; parBitsLength = 2; break;
-    case 'E': _parBits = (0b01010101 << 8) + 0b01010100; parBitsLength = 2; break;
-    }
-    break;
-
-  case 'F':
-    switch (CharUtils::ToUpper((_command[_currentIndex + 1])))
-    {
-		case ' ': _parBits = (0b11111111 << 8) + 0b00000000; parBitsLength = 1; break;
-    case 'A': _parBits = (0b11111111 << 8) + 0b00000000; parBitsLength = 2; break;
-    case 'O': _parBits = (0b10000001 << 8) + 0b00000000; parBitsLength = 2; break;
-    case 'I': _parBits = (0b01111110 << 8) + 0b00000000; parBitsLength = 2; break;
-    case 'C': _parBits = (0b10011001 << 8) + 0b00000000; parBitsLength = 2; break;
-    case 'E': _parBits = (0b01100110 << 8) + 0b00000000; parBitsLength = 2; break;
-    case 'L':
-      switch (CharUtils::ToUpper((_command[_currentIndex + 2])))
-      {
-      case ' ': _parBits = (0b11110000 << 8) + 0b00000000; parBitsLength = 2; break;
-      case 'C': _parBits = (0b10010000 << 8) + 0b00000000; parBitsLength = 3; break;
-      case 'E': _parBits = (0b01100000 << 8) + 0b00000000; parBitsLength = 3; break;
-      case '1': _parBits = (0b10000000 << 8) + 0b00000000; parBitsLength = 3; break;
-      case '2': _parBits = (0b01000000 << 8) + 0b00000000; parBitsLength = 3; break;
-      case '3': _parBits = (0b00100000 << 8) + 0b00000000; parBitsLength = 3; break;
-      case '4': _parBits = (0b00010000 << 8) + 0b00000000; parBitsLength = 3; break;
-      }
-      break;
-
-    case 'R':
-      switch (CharUtils::ToUpper((_command[_currentIndex + 2])))
-      {
-      case ' ': _parBits = (0b00001111 << 8) + 0b00000000; parBitsLength = 2; break;
-      case 'C': _parBits = (0b00001001 << 8) + 0b00000000; parBitsLength = 3; break;
-      case 'E': _parBits = (0b00000110 << 8) + 0b00000000; parBitsLength = 3; break;
-      case '1': _parBits = (0b00001000 << 8) + 0b00000000; parBitsLength = 3; break;
-      case '2': _parBits = (0b00000100 << 8) + 0b00000000; parBitsLength = 3; break;
-      case '3': _parBits = (0b00000010 << 8) + 0b00000000; parBitsLength = 3; break;
-      case '4': _parBits = (0b00000001 << 8) + 0b00000000; parBitsLength = 3; break;
-      }
-      break;
-    }
-    break;
-
-  case 'N':
-    switch (CharUtils::ToUpper((_command[_currentIndex + 1])))
-    {
-    case 'F':
-      switch (CharUtils::ToUpper((_command[_currentIndex + 2])))
-      {
-			case ' ': _parBits = (0b00000000 << 8) + 0b11110000; parBitsLength = 2; break;
-			case 'E': _parBits = (0b00000000 << 8) + 0b11111100; parBitsLength = 3; break;
-			}
-      break;
-    }
-    break;
-
-  case 'U':
-    switch (CharUtils::ToUpper((_command[_currentIndex + 1])))
-    {
-    case 'N':  _parBits = (0b01010101 << 8) + 0b01010100; parBitsLength = 2; break;
-      break;
-    }
-    break;
-  }
-
-	_currentIndex += parBitsLength;
+	for (int index = 0; index < sizeof(Chars2ParBitsMapping) / sizeof(Chars2ParBits); index++)
+	{
+		Chars2ParBits& mapping = Chars2ParBitsMapping[index];
+		if ((abbr0 == mapping.abbr[0]) &&
+			(abbr1 == mapping.abbr[1]))
+		{
+			_parBits = mapping.parBits;
+		}
+	}
 
 	_parseError &= (_parBits == 0);
 }
@@ -428,7 +487,7 @@ void CommandParser::SetDelay(step_time_t delay)
 {
 	for (fixture_number_t parNumber = 0; parNumber < NR_OF_PARS; parNumber++)
 	{
-		if ((_parBits & (0x8000 >> parNumber)) > 0)
+		if ((_parBits & (1 << parNumber)) > 0)
 		{
 			Par& par = LightSetup.GetPar(parNumber);
 			par.SetStepDuration(delay);
@@ -442,7 +501,7 @@ void CommandParser::SetIrgbw(Par::EActiveColor color, Irgbw& irgbw)
 {
 	for (fixture_number_t parNumber = 0; parNumber < NR_OF_PARS; parNumber++)
 	{
-		if ((_parBits & (0x8000 >> parNumber)) > 0)
+		if ((_parBits & (1 << parNumber)) > 0)
 		{
 			Par& par = LightSetup.GetPar(parNumber);
 			Irgbw* irgbwTarget = NULL;

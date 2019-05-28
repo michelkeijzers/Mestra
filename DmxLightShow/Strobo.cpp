@@ -76,7 +76,7 @@ void Strobo::Start(par_bits_t parBits, step_time_t duration)
 	// Stop all current strobo (white).
 	for (fixture_number_t parNumber = 0; parNumber < NR_OF_PARS; parNumber++)
 	{
-		if ((_parBits & (0x8000 >> parNumber)) > 0)
+		if ((_parBits & (1 << parNumber)) > 0)
 		{
 			Par& par = LightSetup.GetPar(parNumber);
 			Irgbw irgbw;
@@ -96,7 +96,7 @@ void Strobo::Start(par_bits_t parBits, step_time_t duration)
 	// Initialize generic parbits intensity.
 	for (fixture_number_t parNumber = 0; parNumber < NR_OF_PARS; parNumber++)
 	{
-		if ((_parBits & (0x8000 >> parNumber)) > 0)
+		if ((_parBits & (1 << parNumber)) > 0)
 		{
 			Par& par = LightSetup.GetPar(parNumber);
 			Irgbw irgbw;
@@ -118,7 +118,7 @@ void Strobo::Run()
 
 		for (fixture_number_t parNumber = 0; parNumber < NR_OF_PARS; parNumber++)
 		{
-			if ((_parBits & (0x8000 >> parNumber)) > 0)
+			if ((_parBits & (1 << parNumber)) > 0)
 			{
 				Par& par = LightSetup.GetPar(parNumber);
 				Irgbw irgbw;

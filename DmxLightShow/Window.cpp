@@ -21,6 +21,9 @@ using namespace std;
 #include HEADER_FILE(DMX_SIMPLE_CLASS)
 #include "MestraTypes.h"
 #include "WinLightsetup.h"
+#include "ChinesePar.h"
+#include "LedBar.h"
+
 
 #define MAX_LOADSTRING 100
 
@@ -249,16 +252,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 							{
 								//par.GetPlatformFixture().SetColorChanged(false);
 #endif // COLOR_CHANGE_CHECKING
-								// Black PAR.
-								if (!_backgroundPainted)
-								{
-									SetDCBrushColor(hdc, RGB(0, 0, 0));
-
-									Ellipse(hdc,
-										centerX - PAR_RADIUS, centerY - PAR_RADIUS,
-										centerX + PAR_RADIUS, centerY + PAR_RADIUS);
-								}
-
 								// Total color
 								dmx_value_t intensity = actualColor.GetIntensity();
 								dmx_value_t red = actualColor.GetRed();
@@ -266,87 +259,108 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 								dmx_value_t blue = actualColor.GetBlue();
 								dmx_value_t white = actualColor.GetWhite();
 
-  							dmx_value_t totalRed = max(white, red);
-								dmx_value_t totalGreen = max(white, green);
-								dmx_value_t totalBlue = max(white, blue);
+  							dmx_value_t totalRed = min(intensity, max(white, red));
+								dmx_value_t totalGreen = min(intensity, max(white, green));
+								dmx_value_t totalBlue = min(intensity, max(white, blue));
 
 								SetDCBrushColor(hdc, RGB(totalRed, totalGreen, totalBlue));
 
-								Ellipse(hdc,
-									centerX - PAR_RADIUS, centerY - PAR_RADIUS,
-									centerX + PAR_RADIUS, centerY + PAR_RADIUS);
+								if (parNumber >= NR_OF_CHINESE_PARS)
+								{
+									// Led Bar.
+
+									SetDCBrushColor(hdc, RGB(totalRed, totalGreen, totalBlue));
+
+									Rectangle(hdc, centerX - 20, centerY - 20, centerX + (2 * PAR_DISTANCE_X) - 25, centerY + 20);
+								}
+								else
+								{
+									// Black PAR.
+									if (!_backgroundPainted)
+									{
+										SetDCBrushColor(hdc, RGB(0, 0, 0));
+
+										Ellipse(hdc,
+											centerX - PAR_RADIUS, centerY - PAR_RADIUS,
+											centerX + PAR_RADIUS, centerY + PAR_RADIUS);
+									}
+
+									Ellipse(hdc,
+										centerX - PAR_RADIUS, centerY - PAR_RADIUS,
+										centerX + PAR_RADIUS, centerY + PAR_RADIUS);
 
 #ifdef SHOW_LEDS
-								// Red circles
-								SetDCBrushColor(hdc, RGB(red, 0, 0));
+									// Red circles
+									SetDCBrushColor(hdc, RGB(red, 0, 0));
 
-								CalcCenter(40, centerX, centerY, (int)(PAR_DIAMETER * RGB_DISTANCE), &x, &y);
-								Ellipse(hdc,
-									x - LED_RADIUS, y - LED_RADIUS,
-									x + LED_RADIUS, y + LED_RADIUS);
+									CalcCenter(40, centerX, centerY, (int)(PAR_DIAMETER * RGB_DISTANCE), &x, &y);
+									Ellipse(hdc,
+										x - LED_RADIUS, y - LED_RADIUS,
+										x + LED_RADIUS, y + LED_RADIUS);
 
-								CalcCenter(40 + 120, centerX, centerY, (int)(PAR_DIAMETER * RGB_DISTANCE), &x, &y);
-								Ellipse(hdc,
-									x - LED_RADIUS, y - LED_RADIUS,
-									x + LED_RADIUS, y + LED_RADIUS);
+									CalcCenter(40 + 120, centerX, centerY, (int)(PAR_DIAMETER * RGB_DISTANCE), &x, &y);
+									Ellipse(hdc,
+										x - LED_RADIUS, y - LED_RADIUS,
+										x + LED_RADIUS, y + LED_RADIUS);
 
-								CalcCenter(40 + 240, centerX, centerY, (int)(PAR_DIAMETER * RGB_DISTANCE), &x, &y);
-								Ellipse(hdc,
-									x - LED_RADIUS, y - LED_RADIUS,
-									x + LED_RADIUS, y + LED_RADIUS);
+									CalcCenter(40 + 240, centerX, centerY, (int)(PAR_DIAMETER * RGB_DISTANCE), &x, &y);
+									Ellipse(hdc,
+										x - LED_RADIUS, y - LED_RADIUS,
+										x + LED_RADIUS, y + LED_RADIUS);
 
-								// Green circles
-								SetDCBrushColor(hdc, RGB(0, green, 0));
-								CalcCenter(0, centerX, centerY, (int)(PAR_DIAMETER * RGB_DISTANCE), &x, &y);
-								Ellipse(hdc,
-									x - LED_RADIUS, y - LED_RADIUS,
-									x + LED_RADIUS, y + LED_RADIUS);
+									// Green circles
+									SetDCBrushColor(hdc, RGB(0, green, 0));
+									CalcCenter(0, centerX, centerY, (int)(PAR_DIAMETER * RGB_DISTANCE), &x, &y);
+									Ellipse(hdc,
+										x - LED_RADIUS, y - LED_RADIUS,
+										x + LED_RADIUS, y + LED_RADIUS);
 
-								CalcCenter(0 + 120, centerX, centerY, (int)(PAR_DIAMETER * RGB_DISTANCE), &x, &y);
-								Ellipse(hdc,
-									x - LED_RADIUS, y - LED_RADIUS,
-									x + LED_RADIUS, y + LED_RADIUS);
+									CalcCenter(0 + 120, centerX, centerY, (int)(PAR_DIAMETER * RGB_DISTANCE), &x, &y);
+									Ellipse(hdc,
+										x - LED_RADIUS, y - LED_RADIUS,
+										x + LED_RADIUS, y + LED_RADIUS);
 
-								CalcCenter(0 + 240, centerX, centerY, (int)(PAR_DIAMETER * RGB_DISTANCE), &x, &y);
-								Ellipse(hdc,
-									x - LED_RADIUS, y - LED_RADIUS,
-									x + LED_RADIUS, y + LED_RADIUS);
+									CalcCenter(0 + 240, centerX, centerY, (int)(PAR_DIAMETER * RGB_DISTANCE), &x, &y);
+									Ellipse(hdc,
+										x - LED_RADIUS, y - LED_RADIUS,
+										x + LED_RADIUS, y + LED_RADIUS);
 
-								// Blue circles
-								SetDCBrushColor(hdc, RGB(0, 0, blue));
-								CalcCenter(80, centerX, centerY, (int)(PAR_DIAMETER * RGB_DISTANCE), &x, &y);
-								Ellipse(hdc,
-									x - LED_RADIUS, y - LED_RADIUS,
-									x + LED_RADIUS, y + LED_RADIUS);
+									// Blue circles
+									SetDCBrushColor(hdc, RGB(0, 0, blue));
+									CalcCenter(80, centerX, centerY, (int)(PAR_DIAMETER * RGB_DISTANCE), &x, &y);
+									Ellipse(hdc,
+										x - LED_RADIUS, y - LED_RADIUS,
+										x + LED_RADIUS, y + LED_RADIUS);
 
-								CalcCenter(80 + 120, centerX, centerY, (int)(PAR_DIAMETER * RGB_DISTANCE), &x, &y);
-								Ellipse(hdc,
-									x - LED_RADIUS, y - LED_RADIUS,
-									x + LED_RADIUS, y + LED_RADIUS);
+									CalcCenter(80 + 120, centerX, centerY, (int)(PAR_DIAMETER * RGB_DISTANCE), &x, &y);
+									Ellipse(hdc,
+										x - LED_RADIUS, y - LED_RADIUS,
+										x + LED_RADIUS, y + LED_RADIUS);
 
-								CalcCenter(80 + 240, centerX, centerY, (int)(PAR_DIAMETER * RGB_DISTANCE), &x, &y);
-								Ellipse(hdc,
-									x - LED_RADIUS, y - LED_RADIUS,
-									x + LED_RADIUS, y + LED_RADIUS);
+									CalcCenter(80 + 240, centerX, centerY, (int)(PAR_DIAMETER * RGB_DISTANCE), &x, &y);
+									Ellipse(hdc,
+										x - LED_RADIUS, y - LED_RADIUS,
+										x + LED_RADIUS, y + LED_RADIUS);
 
 
-								// White circles
-								SetDCBrushColor(hdc, RGB(white, white, white));
-								CalcCenter(0, centerX, centerY, (int)(PAR_DIAMETER * WHITE_DISTANCE), &x, &y);
-								Ellipse(hdc,
-									x - LED_RADIUS, y - LED_RADIUS,
-									x + LED_RADIUS, y + LED_RADIUS);
+									// White circles
+									SetDCBrushColor(hdc, RGB(white, white, white));
+									CalcCenter(0, centerX, centerY, (int)(PAR_DIAMETER * WHITE_DISTANCE), &x, &y);
+									Ellipse(hdc,
+										x - LED_RADIUS, y - LED_RADIUS,
+										x + LED_RADIUS, y + LED_RADIUS);
 
-								CalcCenter(120, centerX, centerY, (int)(PAR_DIAMETER * WHITE_DISTANCE), &x, &y);
-								Ellipse(hdc,
-									x - LED_RADIUS, y - LED_RADIUS,
-									x + LED_RADIUS, y + LED_RADIUS);
+									CalcCenter(120, centerX, centerY, (int)(PAR_DIAMETER * WHITE_DISTANCE), &x, &y);
+									Ellipse(hdc,
+										x - LED_RADIUS, y - LED_RADIUS,
+										x + LED_RADIUS, y + LED_RADIUS);
 
-								CalcCenter(240, centerX, centerY, (int)(PAR_DIAMETER * WHITE_DISTANCE), &x, &y);
-								Ellipse(hdc,
-									x - LED_RADIUS, y - LED_RADIUS,
-									x + LED_RADIUS, y + LED_RADIUS);
+									CalcCenter(240, centerX, centerY, (int)(PAR_DIAMETER * WHITE_DISTANCE), &x, &y);
+									Ellipse(hdc,
+										x - LED_RADIUS, y - LED_RADIUS,
+										x + LED_RADIUS, y + LED_RADIUS);
 #endif // SHOW_LEDS
+								}
 
 								wchar_t wtext[20];
 								size_t sizet;
@@ -481,13 +495,21 @@ void InjectCommands()
 	if (_refreshCounter == 100)
 	{
 
-	  InjectString("t fa 5000");
+	  InjectString("t AA 4000");
 		//InjectString("t fr 1000");
 
-		//InjectString("d fl irb");
+		InjectString("d EA irbw");
+		InjectString("p EA 10");
+
+		InjectString("d AL ir");
+		InjectString("d AR ib");
+		InjectString("d AC ig");
 		//InjectString("a fl ib");
-		InjectString("p fl 72");
-		InjectString("p fr 73");
+		InjectString("p AA 10");
+		//InjectString("p AA 73");
+
+		//InjectString("t BA 4000");
+		//InjectString("p BA 72");
 
 		//InjectString("d fr irb");
 		//InjectString("a fr ib");
