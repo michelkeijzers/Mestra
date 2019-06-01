@@ -10,54 +10,7 @@
 #include "CharUtils.h"
 #include "LightSetup.h"
 #include HEADER_FILE(ARDUINO_CLASS)
-
-
-//                                                   LED Bar   Ego  Banners      
-//                                                             Risers      Drums  Front Left  Front Right
-//                                                   BL  BC BR EL ER NL NR DL DR  FL FL FL FL FR FR FR FR
-//                                                                                4  3  2  1  1  2  3  4
-// Byte 3--------------------3  2--------------------2   1-------------- -----1   0--------------------0
-// Bit  7  6  5  4  3  2  1  0  7  6  5  4  3  2  1  0   7  6  5  4  3  2  1  0   7  6  5  4  3  2  1  0
-// Index   30 29 28 27 26 25 24 23 22 21 20 19 18 17 16  15 14 13 12 11 10 9  8   7  6  5  4  3  2  1  0
-// Fixture Group      Fixture Part                   Set
-// ------------------ ------------------------------ -------- ----- ----- -----  ----------- -----------
-// A All Groups       A All                          1   1  1  1  1  1  1  1  1   1  1  1  1  1  1  1  1
-//                    C Center                       0   1  0  0  0  0  0  0  0   0  1  1  0  0  1  1  0  
-//                    E All Except Ego Risers        1   1  1  0  0  1  1  1  1   1  1  1  1  1  1  1  1
-//                    L Left                         1   0  0  0  0  1  0  1  0   1  1  1  1  0  0  0  0  
-//                    R Right                        0   0  1  0  0  0  1  0  1   0  0  0  0  1  1  1  1  
-// B Led Bar          A All                          1   1  1  0  0  0  0  0  0   0  0  0  0  0  0  0  0  
-//                    C Center                       0   1  0  0  0  0  0  0  0   0  0  0  0  0  0  0  0  
-//                    L Left                         1   0  0  0  0  0  0  0  0   0  0  0  0  0  0  0  0  
-//                    R Right                        0   0  1  0  0  0  0  0  0   0  0  0  0  0  0  0  0  
-// D Drums            A All                          0   0  0  1  1  0  0  0  0   0  0  0  0  0  0  0  0  
-//                    L Left                         0   0  0  1  0  0  0  0  0   0  0  0  0  0  0  0  0  
-//                    R Right                        0   0  0  0  1  0  0  0  0   0  0  0  0  0  0  0  0  
-// E Ego Risers       A All                          0   0  0  1  1  0  0  0  0   0  0  0  0  0  0  0  0  
-//                    L Left                         0   0  0  1  0  0  0  0  0   0  0  0  0  0  0  0  0  
-//                    R Right                        0   0  0  0  1  0  0  0  0   0  0  0  0  0  0  0  0  
-// F Front            A All                          0   0  0  0  0  0  0  0  0   1  1  1  1  1  1  1  1  
-//                    C Corners                      0   0  0  0  0  0  0  0  0   1  0  0  1  1  0  0  1  
-//                    M Middle                       0   0  0  0  0  0  0  0  0   0  1  1  0  0  1  1  0  
-//                    I Inner                        0   0  0  0  0  0  0  0  0   0  1  1  1  1  1  1  0  
-//                    O Outer                        0   0  0  0  0  0  0  0  0   1  0  0  0  0  0  0  1  
-// L (Front) Left     1 Inside                       0   0  0  0  0  0  0  0  0   0  0  0  1  0  0  0  1  
-//                    2                              0   0  0  0  0  0  0  0  0   0  0  1  0  0  0  0  0  
-//                    3                              0   0  0  0  0  0  0  0  0   0  1  0  0  0  0  0  0  
-//                    4 Outside                      0   0  0  0  0  0  0  0  0   1  0  0  0  0  0  0  0  
-//                    A All Left                     0   0  0  0  0  0  0  0  0   1  1  1  1  0  0  0  0  
-//                    I Inner                        0   0  0  0  0  0  0  0  0   0  1  1  0  0  0  0  0  
-//                    O Outer                        0   0  0  0  0  0  0  0  0   1  0  0  1  0  0  0  0  
-// N Banner           A All                          0   0  0  0  0  1  1  0  0   0  0  0  0  0  0  0  0  
-//                    L Left                         0   0  0  0  0  1  0  0  0   0  0  0  0  0  0  0  0  
-//                    R Right                        0   0  0  0  0  0  1  0  0   0  0  0  0  0  0  0  0  
-// R (Front) Right    1 Inside                       0   0  0  0  0  0  0  0  0   0  0  0  0  1  0  0  0  
-//                    2                              0   0  0  0  0  0  0  0  0   0  0  0  0  0  1  0  0  
-//                    3                              0   0  0  0  0  0  0  0  0   0  0  0  0  0  0  1  0  
-//                    4 Outside                      0   0  0  0  0  0  0  0  0   0  0  0  0  0  0  0  1  
-//                    A All                          0   0  0  0  0  0  0  0  0   0  0  0  0  1  1  1  1  
-//                    I Inner                        0   0  0  0  0  0  0  0  0   0  0  0  0  0  1  1  0  
-//                    O Outer                        0   0  0  0  0  0  0  0  0   0  0  0  0  1  0  0  1  
+#include "assert.h"
 
 
 const par_bits_t PAR_R4 = 1 << 0;
@@ -490,7 +443,7 @@ void CommandParser::SetDelay(step_time_t delay)
 		if ((_parBits & (1 << parNumber)) > 0)
 		{
 			Par& par = LightSetup.GetPar(parNumber);
-			par.SetStepDuration(delay);
+			par.SetStepDuration((step_duration_t) delay);
 			par.SetStepTime(millis() + delay);
 		}
 	}
@@ -504,30 +457,39 @@ void CommandParser::SetIrgbw(Par::EActiveColor color, Irgbw& irgbw)
 		if ((_parBits & (1 << parNumber)) > 0)
 		{
 			Par& par = LightSetup.GetPar(parNumber);
-			Irgbw* irgbwTarget = NULL;
+			Irgbw irgbwTarget;
+
 			switch (color)
 			{
 			case Par::EActiveColor::Default:
-				irgbwTarget = &(par.GetDefaultColor());
+				par.GetDefaultColor(irgbwTarget);
+				SetColor(irgbw, irgbwTarget);
+				par.SetDefaultColor(irgbwTarget);
 				break;
 
 			case Par::EActiveColor::Alternate:
-				irgbwTarget = &(par.GetAlternateColor());
+				par.GetAlternateColor(irgbwTarget);
+				SetColor(irgbw, irgbwTarget);
+				par.SetAlternateColor(irgbwTarget);
 				break;
 
 			default:
-				//TODO: error
+				assert(false);
 				break;
 			}
-
-			if (irgbw.GetWhite() == 0)
-			{
-				irgbwTarget->SetIrgb(irgbw);
-			}
-			else
-			{
-				irgbwTarget->SetIrgbw(irgbw);
-			}
 		}
+	}
+}
+
+
+void CommandParser::SetColor(Irgbw& irgbw, Irgbw& irgbwTarget)
+{
+	if (irgbw.GetWhite() == 0)
+	{
+		irgbwTarget.SetIrgb(irgbw);
+	}
+	else
+	{
+		irgbwTarget.SetIrgbw(irgbw);
 	}
 }

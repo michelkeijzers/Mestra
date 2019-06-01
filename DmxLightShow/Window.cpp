@@ -53,7 +53,6 @@ WCHAR szWindowClass[MAX_LOADSTRING];            // the main window class name
 
 CommandBuffer _commandBuffer;
 ProgramExecuter _programExecuter;
-Fixture _fixtures[NR_OF_PARS];
 
 int _refreshCounter;
 bool _backgroundPainted = false;
@@ -64,6 +63,7 @@ void HandleMestraMessages(MSG& msg);
 void InjectCommands();
 void InitMestra();
 void CalcCenter(int degrees, int centerX, int centerY, int distance, int* outputX, int* outputY);
+void PrintFixtures();
 
 
 ATOM                MyRegisterClass(HINSTANCE hInstance);
@@ -428,10 +428,10 @@ void CalcCenter(int degrees, int centerX, int centerY, int distance, int* output
 void InitMestra()
 {
 	LightSetup.CreateFixtures();
-	LightSetup.SetPlatformLightSetup(new WinLightSetup());
-	LightSetup.GetPlatform()->SetProperties();
-
-	LightSetup.GetPlatform()->Print();
+	PlatformLightSetup& setup = *(new WinLightSetup());
+	LightSetup.SetPlatformLightSetup(&setup);
+	setup.SetProperties();
+	PrintFixtures();
 }
 
 
@@ -442,9 +442,10 @@ void HandleMestraMessages(MSG& msg)
 	InjectCommands();
 
 	// Reset par increase states (debug only).
-	for (fixture_number_t par = 0; par < NR_OF_PARS; par++)
+	for (fixture_number_t parNumber = 0; parNumber < NR_OF_PARS; parNumber++)
 	{
-		LightSetup.GetPar(par).GetPlatformFixture().ResetAtLeastOneStepIncreased();
+		Par& par = LightSetup.GetPar(parNumber);
+		par.GetPlatformFixture().ResetAtLeastOneStepIncreased();
 	}
 
 	// Run program executer.
@@ -458,7 +459,7 @@ void HandleMestraMessages(MSG& msg)
 
 	if (atLeasOneParIncreased)
 	{
-		LightSetup.GetPlatform()->Print();
+		PrintFixtures();
 	}
 
 	InvalidateRect(msg.hwnd, NULL, FALSE);
@@ -486,7 +487,22 @@ void InjectString(const char* command)
 	swprintf_s(message, L"\nCommand: %s\n", wCommandText);
 
 	OutputDebugString(message);
-	LightSetup.GetPlatform()->Print();
+	PrintFixtures();
+}
+
+
+void PrintFixtures()
+{
+	PlatformLightSetup& setup = *LightSetup.GetPlatform();
+	setup.PrintHeader();
+
+	for (int parNumber = 0; parNumber < NR_OF_PARS; parNumber++)
+	{
+		Par& par = LightSetup.GetPar(parNumber);
+		setup.PrintFixture(parNumber);
+	}
+
+	setup.PrintFooter();
 }
 
 
@@ -498,22 +514,22 @@ void InjectCommands()
 	  InjectString("t AA 4000");
 		//InjectString("t fr 1000");
 
-		InjectString("d EA irbw");
-		InjectString("p EA 10");
+		//InjectString("d EA irbw");
+		//InjectString("p EA 20");
 
-		InjectString("d AL ir");
-		InjectString("d AR ib");
-		InjectString("d AC ig");
-		//InjectString("a fl ib");
-		InjectString("p AA 10");
+		//InjectString("d AL ir");
+		//InjectString("d AR ib");
+		//InjectString("d AC ig");
+		//InjectString("d AA irb");
+		//InjectString("p AA 30");
 		//InjectString("p AA 73");
 
 		//InjectString("t BA 4000");
 		//InjectString("p BA 72");
 
-		//InjectString("d fr irb");
-		//InjectString("a fr ib");
-		//InjectString("p fr 63");
+		InjectString("d ra irb");
+		InjectString("a ra ib");
+		InjectString("p ra 72");
 		/*
 		InjectString("t d 1000");
 		InjectString("d d ib");

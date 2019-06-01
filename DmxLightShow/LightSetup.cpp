@@ -11,13 +11,18 @@
 
 
 // Singleton instance.
-LightSetupClass LightSetup;
+SpiRAM          SpiRam(0, SPI_RAM_SS_PIN);
+LightSetupClass LightSetup(SpiRam);
 
 
-LightSetupClass::LightSetupClass()
-	:
-	_platformLightSetup(0)
+LightSetupClass::LightSetupClass(SpiRAM& spiRam)
+:
+	_pars { NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL },
+	_platformLightSetup(),
+	_spiRam(spiRam),
+	_fixtureDataNumber(-1)
 {
+	_fixtureData.ClearAll();
 }
 
 
@@ -49,12 +54,12 @@ void LightSetupClass::CreateFixtures()
 {
 	for (fixture_number_t fixtureNumber = 0; fixtureNumber < NR_OF_CHINESE_PARS; fixtureNumber++)
 	{
-		_pars[fixtureNumber] = new ChinesePar();
+		_pars[fixtureNumber] = new ChinesePar(fixtureNumber);
 	}
 
 	for (fixture_number_t fixtureNumber = NR_OF_CHINESE_PARS; fixtureNumber < NR_OF_PARS; fixtureNumber++)
 	{
-		_pars[fixtureNumber] = new LedBarSegment();
+		_pars[fixtureNumber] = new LedBarSegment(fixtureNumber);
 		((LedBarSegment&)(_pars[fixtureNumber])).SetSegmentNumber((fixtureNumber - NR_OF_CHINESE_PARS) % 3);
 	}
 
@@ -64,7 +69,8 @@ void LightSetupClass::CreateFixtures()
 
 	for (fixture_number_t fixture_number = 0; fixture_number < NR_OF_PARS; fixture_number++)
 	{ 
-		GetPar(fixture_number).SetDmxOffsetChannel(dmxOffsetChannels[fixture_number]);
+		Par& par = LightSetup.GetPar(fixture_number);
+		par.SetDmxOffsetChannel(dmxOffsetChannels[fixture_number]);
 	}
 
 	((LedBarSegment&) GetPar(NR_OF_CHINESE_PARS + 0)).SetSegmentNumber(0);
@@ -76,5 +82,39 @@ void LightSetupClass::CreateFixtures()
 Par& LightSetupClass::GetPar(fixture_number_t parNumber)
 {
 	assert(parNumber < NR_OF_PARS);
+
+	if (_fixtureDataNumber != parNumber)
+	{
+		_fixtureData.Save(_fixtureDataNumber);
+		_fixtureData.Load(parNumber);
+		_fixtureDataNumber = parNumber;
+	}
+
 	return *_pars[parNumber];
+}
+
+
+SpiRAM& LightSetupClass::GetSpiRam()
+{
+	return _spiRam;
+}
+
+
+fixture_number_t LightSetupClass::GetFixtureNumber()
+{
+	return _fixtureDataNumber;
+}
+
+
+void LightSetupClass::SetFixtureNumber(fixture_number_t fixtureNumber)
+{
+	assert(DATA_SIZE_MAX == 64);
+
+	_fixtureData.WriteUint8(DATA_START_FIXTURE_NUMBER, fixtureNumber);
+}
+
+
+FixtureData& LightSetupClass::GetFixtureData()
+{
+	return _fixtureData;
 }

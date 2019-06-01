@@ -19,6 +19,17 @@ static const dmx_value_t _blue2Dmx[MAX_PAR_INTENSITIES] PROGMEM = { 0, 1,  1,  2
 static const dmx_value_t _white2Dmx[MAX_PAR_INTENSITIES] PROGMEM = { 0, 2,  2,  2,  3,  3,  3,  3,  4,  4,  4,  5,  5,  6,  6,  7,  8,  9, 10, 10, 10, 10, 10, 11, 11, 12, 12, 13, 13, 14, 15, 16, 17,  20,  25,  30,  35,  40,  50,  60,  80, 100, 120, 140, 160, 180, 200, 220, 255 };
 
 
+ChinesePar::ChinesePar(fixture_number_t fixtureNumber)
+	: 
+	Par(fixtureNumber)
+{
+}
+
+
+ChinesePar::~ChinesePar()
+{
+}
+
 
 /* override */ void ChinesePar::GetActualColor(Irgbw &actualColor)
 {

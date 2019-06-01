@@ -5,6 +5,11 @@
 class ChinesePar :
 	public Par
 {
+public:
+	ChinesePar(fixture_number_t fixtureNumber);
+	~ChinesePar();
+
+private:
 	/* override */ void GetActualColor(Irgbw& actualColor);
 
 	/* override */ dmx_value_t GetRed2Dmx(intensity_t red);

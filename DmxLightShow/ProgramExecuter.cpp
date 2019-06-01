@@ -10,6 +10,7 @@
 #include HEADER_FILE(ARDUINO_CLASS)
 #include "LightSetup.h"
 #include "ProgramExecuter.h"
+#include "assert.h"
 
 
 ProgramExecuter::ProgramExecuter()
@@ -40,13 +41,20 @@ void ProgramExecuter::RunPars()
 
 		if (initialize)
 		{
-			par.SetStepTime(millis() + par.GetStepDuration());
+			if (par.GetStepDuration() > 0)
+			{
+				par.SetStepTime(millis() + par.GetStepDuration());
+			}
 			par.SetInitialize(false);
 		}
 
 		switch (par.GetProgram())
 		{
-		case 0:
+		case 0: 
+			// No action
+			break;
+
+		case 5:
 			FixedColorProgram(par, initialize);
 			break;
 
@@ -82,12 +90,16 @@ void ProgramExecuter::FixedColorProgram(Par& par, bool initialize)
 	if (initialize)
 	{
 		par.SetCurrentStep(0);
-		par.WriteIrgb(par.GetDefaultColor());
+		Irgbw defaultColor;
+		par.GetDefaultColor(defaultColor);
+		par.WriteIrgb(defaultColor);
 	}
 	else if (par.CheckIncreaseStep())
 	{
 		// If default color changed, update.
-		par.WriteIrgb(par.GetDefaultColor());
+		Irgbw defaultColor;
+		par.GetDefaultColor(defaultColor);
+		par.WriteIrgb(defaultColor);
 	}
 }
 
@@ -115,12 +127,18 @@ void ProgramExecuter::FadeInOutProgram(Par& par, bool initialize)
 {
 	if (initialize)
 	{
-		par.WriteIrgb(par.GetCurrentStep() < MAX_PAR_INTENSITIES
-			? par.GetDefaultColor()
-			: par.GetAlternateColor());
+		Irgbw defaultColor;
+		Irgbw alternateColor;
+		par.GetDefaultColor(defaultColor);
+		par.GetAlternateColor(alternateColor);
 
-		par.SetStepDuration(par.GetStepDuration() / (2 * (MAX_PAR_INTENSITY - 1)));
-		par.SetStepTime(millis() + par.GetStepDuration());
+		par.WriteIrgb(par.GetCurrentStep() < MAX_PAR_INTENSITIES ? defaultColor : alternateColor);
+
+		if (par.GetStepDuration() > 0)
+		{
+			par.SetStepDuration(par.GetStepDuration() / (2 * (MAX_PAR_INTENSITY - 1)));
+			par.SetStepTime(millis() + par.GetStepDuration());
+		}
 	}
 	else if (par.CheckIncreaseStep())
 	{
@@ -138,9 +156,14 @@ void ProgramExecuter::FadeOutProgram(Par& par, bool initialize)
 	{
 		if (initialize)
 		{
-			par.WriteIrgb(par.GetAlternateColor());
-			par.SetStepDuration(par.GetStepDuration() / (MAX_PAR_INTENSITY - 1));
-			par.SetStepTime(millis() + par.GetStepDuration());
+			Irgbw alternateColor;
+			par.GetAlternateColor(alternateColor);
+			par.WriteIrgb(alternateColor);
+			if (par.GetStepDuration() > 0)
+			{
+				par.SetStepDuration(par.GetStepDuration() / (MAX_PAR_INTENSITY - 1));
+				par.SetStepTime(millis() + par.GetStepDuration());
+			}
 		}
 		else if (par.CheckIncreaseStep())
 		{
@@ -155,15 +178,23 @@ void ProgramExecuter::DualColorFadeProgram(Par& par, bool initialize)
 {
 	if (initialize)
 	{
+		Irgbw defaultColor;
+		Irgbw alternateColor;
+		par.GetDefaultColor(defaultColor);
+		par.GetAlternateColor(alternateColor);
+
 		// Always exactly default color or alternate color, not an inbetween color
 		par.WriteIrgb(
 			((par.GetParameter1() * (MAX_PAR_INTENSITIES - 1) == par.GetCurrentStep()) ||
-		   (par.GetParameter2() * (MAX_PAR_INTENSITIES - 1) == par.GetCurrentStep()))
-			? par.GetDefaultColor()
-			: par.GetAlternateColor());
+			(par.GetParameter2() * (MAX_PAR_INTENSITIES - 1) == par.GetCurrentStep()))
+			? defaultColor
+			: alternateColor);
 
-		par.SetStepDuration(par.GetStepDuration() / (2 * (par.GetParameter3() - 1) * (MAX_PAR_INTENSITY - 1)));
-		par.SetStepTime(millis() + par.GetStepDuration());
+		if (par.GetStepDuration() > 0)
+		{
+			par.SetStepDuration(par.GetStepDuration() / (2 * (par.GetParameter3() - 1) * (MAX_PAR_INTENSITY - 1)));
+			par.SetStepTime(millis() + par.GetStepDuration());
+		}
 	}
 	else if (par.CheckIncreaseStep())
 	{
@@ -220,8 +251,13 @@ void ProgramExecuter::RainbowColorProgram(Par& par, bool initialize)
 	{
 		SetRainbowColor(par, par.GetCurrentStep());
 
-		par.SetStepDuration(par.GetStepDuration() / (RAINBOW_COLORS * MAX_PAR_INTENSITY / abs(par.GetParameter1())));
-		par.SetStepTime(millis() + par.GetStepDuration());
+		if (par.GetStepDuration() > 0)
+		{
+			par.SetStepDuration((step_duration_t) (par.GetStepDuration() / 
+				(RAINBOW_COLORS * MAX_PAR_INTENSITY / abs(par.GetParameter1()))));
+
+			par.SetStepTime(millis() + par.GetStepDuration());
+		}
 	}
 	else if (par.CheckIncreaseStep(par.GetParameter1()))
 	{
@@ -276,9 +312,12 @@ Step: 0=100% default color, step MAX_PAR_INTENSITY=100% alternate color
 */
 void ProgramExecuter::SetFadeColor(Par& par, step_t step)
 {
+	Irgbw defaultColor;
+	Irgbw alternateColor;
 	Irgbw targetColor;
-	Irgbw& defaultColor = par.GetDefaultColor();
-	Irgbw& alternateColor = par.GetAlternateColor();
+	
+	par.GetDefaultColor(defaultColor);
+	par.GetAlternateColor(alternateColor);
 
 	targetColor.SetIntensity((intensity_t)(defaultColor.GetIntensity() +
 		(alternateColor.GetIntensity() - defaultColor.GetIntensity()) * step / MAX_PAR_INTENSITY));
@@ -296,20 +335,24 @@ void ProgramExecuter::SetFadeColor(Par& par, step_t step)
 }
 
 
-void ProgramExecuter::SetDefaultOrAlternate(Par& par, Par::EActiveColor color)
+void ProgramExecuter::SetDefaultOrAlternate(Par& par, Par::EActiveColor activeColor)
 {
-	switch (color)
+	Irgbw color;
+
+	switch (activeColor)
 	{
 	case Par::EActiveColor::Default:
-		par.WriteIrgb(par.GetDefaultColor());
+		par.GetDefaultColor(color);
+		par.WriteIrgb(color);
 		break;
 
 	case Par::EActiveColor::Alternate:
-		par.WriteIrgb(par.GetAlternateColor());
+		par.GetAlternateColor(color);
+		par.WriteIrgb(color);
 		break;
 
 	default:
-		//TODO
+		assert(false);
 		break;
 	}
 }

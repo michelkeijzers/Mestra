@@ -38,56 +38,75 @@ void PresetCommand::Run(par_bits_t parBits, preset_t presetNumber)
 void PresetCommand::SetFixturePreset(preset_t presetNumber, fixture_number_t parNumber, fixture_number_t selectedParIndex, fixture_number_t nrOfPars)
 {
 	Par& par = LightSetup.GetPar(parNumber);
+	
 	step_t nrOfSteps = 1;
 	
 	switch (presetNumber)
 	{
 	case 10: 
 		// Default color -> Alternate color
-		par.GetAlternateColor() = par.GetDefaultColor();
+		{
+			Irgbw color;
+			par.GetDefaultColor(color);
+			par.SetAlternateColor(color);
+		}
 		break;
 
 	case 11:
 		// Alternate color -> Default color
-		par.GetDefaultColor() = par.GetAlternateColor();
+		{
+			Irgbw color;
+			par.GetAlternateColor(color);
+			par.SetDefaultColor(color);
+		}
 		break;
 
 	case 12:
+		// Default color <-> Alternate color
 		{
-			// Default color <-> Alternate color
-		  Irgbw& defaultColor = par.GetDefaultColor();
-			par.GetDefaultColor() = par.GetAlternateColor();
-			par.GetAlternateColor() = defaultColor;
+			Irgbw defaultColor;
+			Irgbw alternateColor;
+			par.GetDefaultColor(defaultColor); 
+			par.GetAlternateColor(alternateColor);
+			par.SetDefaultColor(alternateColor);
+			par.SetAlternateColor(defaultColor);
 		}
 		break;
 
 	case 13:
 		// Default color -> Actual color
-		par.WriteIrgb(par.GetDefaultColor());
+		{
+			Irgbw color;
+			par.GetDefaultColor(color);
+			par.WriteIrgb(color);
+		}
 		break;
 
 	case 14:
+		// Actual color -> Default color
 		{
-			// Actual color -> Default color
-			Irgbw actualColor;
-			par.GetActualColor(actualColor);
-			par.WriteIrgbw(actualColor);
+			Irgbw color;
+			par.GetActualColor(color);
+			par.SetDefaultColor(color);
 		}
 		break;
 
 	case 15:
 		// Default color <-> Actual color
 	  {
-			Irgbw actualColor;
-		  par.GetActualColor(actualColor);
-			par.WriteIrgb(par.GetDefaultColor());
-			par.GetDefaultColor() = actualColor;
+			Irgbw color;
+		  par.GetActualColor(color);
+			par.SetDefaultColor(color);
 		}
 		break;
 
 	case 16:
-		// Alternate color -> Actual color
-		par.WriteIrgb(par.GetAlternateColor());
+		{
+			// Alternate color -> Actual color
+			Irgbw color;
+			par.GetAlternateColor(color);
+			par.WriteIrgb(color);
+		}
 		break;
 
 	case 17:
@@ -95,7 +114,7 @@ void PresetCommand::SetFixturePreset(preset_t presetNumber, fixture_number_t par
 		{
 			Irgbw actualColor;
 			par.GetActualColor(actualColor);
-			par.GetAlternateColor() = actualColor;
+			par.SetAlternateColor(actualColor);
 		}
 		break;
 
@@ -103,15 +122,17 @@ void PresetCommand::SetFixturePreset(preset_t presetNumber, fixture_number_t par
 		// Alternate color <-> Actual color
 		{
 			Irgbw actualColor;
+			Irgbw alternateColor;
 			par.GetActualColor(actualColor);
-			par.WriteIrgb(par.GetAlternateColor());
-			par.GetAlternateColor() = actualColor;
+			par.GetAlternateColor(alternateColor);
+			par.WriteIrgb(alternateColor);
+			par.SetAlternateColor(actualColor);
 		}
 		break;
 		
 	case 20:
 		// Solid (default color)
-		par.InitializeProgram(0, nrOfSteps, 0); // Start with default color
+		par.InitializeProgram(5, nrOfSteps, 0); // Start with default color
 		break;
 
 	case 30:
@@ -233,9 +254,15 @@ void PresetCommand::SetFixturePreset(preset_t presetNumber, fixture_number_t par
 
 void PresetCommand::CommandAllOff(Par& par)
 {
-	SetFixedIrgb(par, par.GetDefaultColor(), MAX_INTENSITY, 0, 0, 0);
-	SetFixedIrgb(par, par.GetAlternateColor(), MAX_INTENSITY, 0, 0, 0);
-	
+	Irgbw color;
+	par.GetDefaultColor(color);
+	SetFixedIrgb(par, color, MAX_INTENSITY, 0, 0, 0);
+	par.SetDefaultColor(color);
+
+	par.GetAlternateColor(color);
+	SetFixedIrgb(par, color, MAX_INTENSITY, 0, 0, 0);
+	par.SetAlternateColor(color);
+		
 	LightSetup.GetStrobo().AllOff();
 }
 

@@ -11,10 +11,12 @@
 
 #define ARDUINO_CLASS			        	ArduinoStub
 #define DMX_SIMPLE_CLASS	        	DmxSimpleStub
+#define SPI_RAM_CLASS               SpiRAMStub
 
 #else
 
 #define ARDUINO_CLASS								Arduino
 #define DMX_SIMPLE_CLASS						DmxSimple
+#define SPI_RAM_CLASS               SpiRAM
 
 #endif

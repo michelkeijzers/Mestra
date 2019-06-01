@@ -15,8 +15,10 @@ public:
 
 	/* override */ void SetProperties();
 
-	/* override */ void Print();
-
+	/* override */ void PrintHeader();
+	/* override */ void PrintFixture(fixture_number_t fixtureNumber);
+	/* override */ void PrintFooter();
+	
 	bool ArePropertiesSet();
 
 private:

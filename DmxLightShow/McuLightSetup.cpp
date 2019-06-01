@@ -24,10 +24,23 @@ McuLightSetup::~McuLightSetup()
 }
 
 
-/* override */ void McuLightSetup::Print()
+/* override */ void McuLightSetup::PrintHeader()
 {
 	//TODO
+}
+
+
+/* override */ void McuLightSetup::PrintFixture(fixture_number_t fixtureNumber)
+{
+	(void) fixtureNumber;
+	//TODO
 	// Serial.print...
+}
+
+
+/* override */ void McuLightSetup::PrintFooter()
+{
+	//TODO
 }
 
 

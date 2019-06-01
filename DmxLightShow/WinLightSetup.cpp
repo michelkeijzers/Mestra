@@ -73,56 +73,74 @@ void WinLightSetup::SetProperties()
 }
 
 
-void WinLightSetup::Print()
-{
 #define OUTPUT_LIGHT_SETUP 1
+
+void WinLightSetup::PrintHeader()
+{
 #ifdef OUTPUT_LIGHT_SETUP
 
-  WCHAR message[256];
+	WCHAR message[256];
 
 	swprintf_s(message, L"Time: %u\n", millis() - ((uint32_t)(_programStartTime.time * 1000 + _programStartTime.millitm)));
 	OutputDebugString(message);
 
 	OutputDebugString(L"┌▬▬▬┬▬▬▬▬┬▬▬▬┬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬┬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬┬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬┬▬▬▬▬▬▬▬▬▬▬▬▬┬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬┬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬┐\n");
-	OutputDebugString(L"│Fix│Abbr│DMX│   Current Color   │   Default Color   │  Altarnate Color  │  Program   │Program Params   │       Steps        │\n");
+	OutputDebugString(L"│Fix│Abbr│DMX│   Current Color   │   Default Color   │  Alternate Color  │  Program   │Program Params   │       Steps        │\n");
 	OutputDebugString(L"│   │    │   ├▬▬▬┬▬▬▬┬▬▬▬┬▬▬▬┬▬▬▬┼▬▬▬┬▬▬▬┬▬▬▬┬▬▬▬┬▬▬▬┼▬▬▬┬▬▬▬┬▬▬▬┬▬▬▬┬▬▬▬┼▬▬▬▬┬▬▬▬▬▬▬▬┼▬▬▬▬▬┬▬▬▬▬▬┬▬▬▬▬▬┼▬▬▬▬▬┬▬▬▬▬▬┬▬▬▬▬▬▬▬▬┼\n");
 	OutputDebugString(L"│   │    │Off│Int│Red│Gre│Bl │Whi│Int│Red│Gre│Bl │Whi│Int│Red│Gre│Bl │Whi│Init│Program│Param│Param│Param│Curr │Nr of│ Step   │\n");
 	OutputDebugString(L"│   │    │Cha│ens│   │ en│ ue│ te│ens│   │ en│ ue│ te│ens│   │ en│ ue│ te│    │Number │  1  │  2  │  3  │Step │Steps│Duration│\n");
 	OutputDebugString(L"┼▬▬▬┼▬▬▬▬┼▬▬▬┼▬▬▬┼▬▬▬┼▬▬▬┼▬▬▬┼▬▬▬┼▬▬▬┬▬▬▬┼▬▬▬┼▬▬▬┼▬▬▬┼▬▬▬┼▬▬▬┼▬▬▬┼▬▬▬┼▬▬▬┼▬▬▬▬┼▬▬▬▬▬▬▬┼▬▬▬▬▬┼▬▬▬▬▬┼▬▬▬▬▬┼▬▬▬▬▬┼▬▬▬▬▬┼▬▬▬▬▬▬▬▬┼\n");
 
+#endif // OUTPUT_LIGHT_SETUP
+}
 
-	for (fixture_number_t parNumber = 0; parNumber < NR_OF_PARS; parNumber++)
-	{
-		Par& par = GetPar(parNumber);
-		Irgbw actualColor;
-		par.GetActualColor(actualColor);
-		Irgbw& defaultColor = par.GetDefaultColor();
-		Irgbw& alternateColor = par.GetAlternateColor();
-		
-		const char* abbr = par.GetPlatformFixture().GetAbbr();
+
+void WinLightSetup::PrintFixture(fixture_number_t fixtureNumber)
+{
+#ifdef OUTPUT_LIGHT_SETUP
+
+	WCHAR message[256];
+
+	Par& par = GetPar(fixtureNumber);
+	Irgbw actualColor;
+	par.GetActualColor(actualColor);
+
+	Irgbw defaultColor;
+	par.GetDefaultColor(defaultColor);
+	Irgbw alternateColor;
+	par.GetAlternateColor(alternateColor);
+
+	const char* abbr = par.GetPlatformFixture().GetAbbr();
 				
-	  //                   Par Number                                                        Init Program               Current Step
-		//                      |  Abbreviation                                                           \ Program              |    Number of Steps
-		//                      |     |  DMX Channel                                                       \ Number              |    / 
-		//                      |     |      |    --Actual Color--   --Default Color--   -Alternate Color-  \    |   Parameters  |   /  Step Duration
-		//                      |     |      |   /                \ /                 \ /                 \  |   |  /         |  |   |   |
-		swprintf_s(message, L"│%2u │%c%c%c │%3u│%3u:%3u:%3u:%3u:%3u│%3u:%3u:%3u:%3u:%3u│%3u:%3u:%3u:%3u:%3u│%4u│%7u│%5u:%5u:%5u│%5u│%5u│%6u  │\n",
-			parNumber,
-			wchar_t(abbr[0] == '\0' ? ' ' : abbr[0]),
-			wchar_t(abbr[1] == '\0' ? ' ' : abbr[1]),
-			wchar_t(abbr[2] == '\0' ? ' ' : abbr[2]),
-			par.GetDmxOffsetChannel(),
-		  actualColor.GetIntensity(), actualColor.GetRed(), actualColor.GetGreen(), actualColor.GetBlue(), actualColor.GetWhite(),
-			defaultColor.GetIntensity(), defaultColor.GetRed(), defaultColor.GetGreen(), defaultColor.GetBlue(), defaultColor.GetWhite(),
-			alternateColor.GetIntensity(), alternateColor.GetRed(), alternateColor.GetGreen(), alternateColor.GetBlue(), alternateColor.GetWhite(),
-			par.GetInitialize(), par.GetProgram(), par.GetParameter1(), par.GetParameter2(), par.GetParameter3(),
-			par.GetCurrentStep(), par.GetNrOfSteps(), par.GetStepDuration());
-		OutputDebugString(message);
-	}
+	//                   Par Number                                                        Init Program               Current Step
+	//                      |  Abbreviation                                                           \ Program              |    Number of Steps
+	//                      |     |  DMX Channel                                                       \ Number              |    / 
+	//                      |     |      |    --Actual Color--   --Default Color--   -Alternate Color-  \    |   Parameters  |   /  Step Duration
+	//                      |     |      |   /                \ /                 \ /                 \  |   |  /         |  |   |   |
+	swprintf_s(message, L"│%2u │%c%c%c │%3u│%3u:%3u:%3u:%3u:%3u│%3u:%3u:%3u:%3u:%3u│%3u:%3u:%3u:%3u:%3u│%4u│%7u│%5u:%5u:%5u│%5u│%5u│%6u  │\n",
+		fixtureNumber,
+		wchar_t(abbr[0] == '\0' ? ' ' : abbr[0]),
+		wchar_t(abbr[1] == '\0' ? ' ' : abbr[1]),
+		wchar_t(abbr[2] == '\0' ? ' ' : abbr[2]),
+		par.GetDmxOffsetChannel(),
+		actualColor.GetIntensity(), actualColor.GetRed(), actualColor.GetGreen(), actualColor.GetBlue(), actualColor.GetWhite(),
+		defaultColor.GetIntensity(), defaultColor.GetRed(), defaultColor.GetGreen(), defaultColor.GetBlue(), defaultColor.GetWhite(),
+		alternateColor.GetIntensity(), alternateColor.GetRed(), alternateColor.GetGreen(), alternateColor.GetBlue(), alternateColor.GetWhite(),
+		par.GetInitialize(), par.GetProgram(), par.GetParameter1(), par.GetParameter2(), par.GetParameter3(),
+		par.GetCurrentStep(), par.GetNrOfSteps(), par.GetStepDuration());
+	OutputDebugString(message);
+
+#endif // OUTPUT_LIGHT_SETUP
+}
+
+
+void WinLightSetup::PrintFooter()
+{
+#ifdef OUTPUT_LIGHT_SETUP
 
 	OutputDebugString(L"└▬▬▬┴▬▬▬▬┴▬▬▬┴▬▬▬┴▬▬▬┴▬▬▬┴▬▬▬┴▬▬▬┴▬▬▬┴▬▬▬┴▬▬▬┴▬▬▬┴▬▬▬┴▬▬▬┴▬▬▬┴▬▬▬┴▬▬▬┴▬▬▬┴▬▬▬▬┴▬▬▬▬▬▬▬┴▬▬▬▬▬┴▬▬▬▬▬┴▬▬▬▬▬┴▬▬▬▬▬┴▬▬▬▬▬┴▬▬▬▬▬▬▬▬┼\n");
 
-#endif
+#endif // OUTPUT_LIGHT_SETUP
 }
 
 #endif // _WINDOWS

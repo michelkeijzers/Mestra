@@ -15,10 +15,14 @@
 #define MAX_INTENSITY               (intensity_t)  255 // For intensity, assumed linear
 
 
+#define DATA_START_DEFAULT_COLOR     DATA_SIZE_FIXTURE
+#define DATA_START_ALTERNATE_COLOR  (DATA_START_DEFAULT_COLOR   + 5)
+#define DATA_SIZE_PAR               (DATA_START_ALTERNATE_COLOR + 5)
+
 class Par : public Fixture
 {
 public:
-	Par();
+	Par(fixture_number_t fixtureNumber);
 	~Par();
 
 	void SetPlatform(PlatformFixture* platformFixture, PlatformPar* platformPar);
@@ -36,9 +40,13 @@ public:
 	virtual void WriteIrgb(Irgbw& irgbw) = 0;
 	virtual void WriteIrgbw(Irgbw& irgbw) = 0;
 
-	Irgbw& GetDefaultColor();
+	void GetDefaultColor(Irgbw& color);
 
-	Irgbw& GetAlternateColor();
+	void SetDefaultColor(Irgbw& color);
+
+	void GetAlternateColor(Irgbw& color);
+
+	void SetAlternateColor(Irgbw& color);
 
 protected:
 	virtual dmx_value_t GetRed2Dmx(intensity_t red) = 0;
@@ -48,12 +56,4 @@ protected:
 
 private:
 	PlatformPar* _platformPar;
-
-	Irgbw _defaultColor;
-
-	// Used for cross/multicolor programs
-	Irgbw _alternateColor;
-
-	// True when going towards or already default color active, false if going towards or alternate color is active.
-	bool _activeColor;
 };

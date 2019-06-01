@@ -111,16 +111,7 @@
     <ClInclude Include="WinPar.h">
       <Filter>Header Files\Win32</Filter>
     </ClInclude>
-    <ClInclude Include="PlatformFixture.h">
-      <Filter>Header Files\Win32</Filter>
-    </ClInclude>
-    <ClInclude Include="PlatformPar.h">
-      <Filter>Header Files\Win32</Filter>
-    </ClInclude>
     <ClInclude Include="WinLightSetup.h">
-      <Filter>Header Files\Win32</Filter>
-    </ClInclude>
-    <ClInclude Include="PlatformLightSetup.h">
       <Filter>Header Files\Win32</Filter>
     </ClInclude>
     <ClInclude Include="McuFixture.h">
@@ -143,6 +134,21 @@
     </ClInclude>
     <ClInclude Include="LedBarSegment.h">
       <Filter>Header Files\LightSetup\FixtureTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="SpiRAMStub.h">
+      <Filter>Header Files\Win32</Filter>
+    </ClInclude>
+    <ClInclude Include="PlatformFixture.h">
+      <Filter>Header Files\LightSetup</Filter>
+    </ClInclude>
+    <ClInclude Include="PlatformLightSetup.h">
+      <Filter>Header Files\LightSetup</Filter>
+    </ClInclude>
+    <ClInclude Include="PlatformPar.h">
+      <Filter>Header Files\LightSetup</Filter>
+    </ClInclude>
+    <ClInclude Include="FixtureData.h">
+      <Filter>Header Files\LightSetup</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -207,16 +213,7 @@
     <ClCompile Include="WinPar.cpp">
       <Filter>Source Files\WIN32</Filter>
     </ClCompile>
-    <ClCompile Include="PlatformFixture.cpp">
-      <Filter>Source Files\WIN32</Filter>
-    </ClCompile>
-    <ClCompile Include="PlatformPar.cpp">
-      <Filter>Source Files\WIN32</Filter>
-    </ClCompile>
     <ClCompile Include="WinLightSetup.cpp">
-      <Filter>Source Files\WIN32</Filter>
-    </ClCompile>
-    <ClCompile Include="PlatformLightSetup.cpp">
       <Filter>Source Files\WIN32</Filter>
     </ClCompile>
     <ClCompile Include="McuFixture.cpp">
@@ -239,6 +236,21 @@
     </ClCompile>
     <ClCompile Include="LedBarSegment.cpp">
       <Filter>Source Files\LightSetup\FixtureTypes</Filter>
+    </ClCompile>
+    <ClCompile Include="SpiRAMStub.cpp">
+      <Filter>Source Files\WIN32</Filter>
+    </ClCompile>
+    <ClCompile Include="PlatformFixture.cpp">
+      <Filter>Source Files\LightSetup</Filter>
+    </ClCompile>
+    <ClCompile Include="PlatformLightSetup.cpp">
+      <Filter>Source Files\LightSetup</Filter>
+    </ClCompile>
+    <ClCompile Include="PlatformPar.cpp">
+      <Filter>Source Files\LightSetup</Filter>
+    </ClCompile>
+    <ClCompile Include="FixtureData.cpp">
+      <Filter>Source Files\LightSetup</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -2,12 +2,18 @@
 
 #include "Par.h"
 
+#define DATA_START_SEGMENT_NUMBER  DATA_SIZE_PAR
+
 class LedBarSegment :
 	public Par
 {
 public:
+	LedBarSegment(fixture_number_t fixtureNumber);
+	~LedBarSegment();
+
 	void SetSegmentNumber(uint8_t segmentNumber);
 
+private:
 	/* override */ void GetActualColor(Irgbw& actualColor);
 
 	/* override */ dmx_value_t GetRed2Dmx(intensity_t red);
@@ -18,7 +24,6 @@ public:
 	/* override */ void WriteIrgb(Irgbw& irgbw);
 	/* override */ void WriteIrgbw(Irgbw& irgbw);
 
-private:
-	uint8_t _segmentNumber;
+	uint8_t GetSegmentNumber();
 };
 

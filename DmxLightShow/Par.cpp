@@ -11,14 +11,13 @@
 #include "Fixture.h"
 #include "Par.h"
 #include "MestraTypes.h"
+#include "LightSetup.h"
 
 
-Par::Par()
-	:  
-	_platformPar(0),
-	_defaultColor(),
-	_alternateColor(),
-	_activeColor(true)
+Par::Par(fixture_number_t fixtureNumber)
+	: 
+	Fixture(fixtureNumber),
+	_platformPar(0)
 {
 }
 
@@ -41,15 +40,25 @@ void Par::SetPlatform(PlatformFixture* platformFixture, PlatformPar* platformPar
 }
 
 
-Irgbw& Par::GetDefaultColor()
+void Par::GetDefaultColor(Irgbw& color)
 {
-	return _defaultColor;
+	return LightSetup.GetFixtureData().ReadIrgbw(DATA_START_DEFAULT_COLOR, color);
 }
 
 
-Irgbw& Par::GetAlternateColor()
+void Par::SetDefaultColor(Irgbw& color)
 {
-	return _alternateColor;
+	LightSetup.GetFixtureData().WriteIrgbw(DATA_START_DEFAULT_COLOR, color);
 }
 
 
+void Par::GetAlternateColor(Irgbw& color)
+{
+	return LightSetup.GetFixtureData().ReadIrgbw(DATA_START_ALTERNATE_COLOR, color);
+}
+
+
+void Par::SetAlternateColor(Irgbw& color)
+{
+	LightSetup.GetFixtureData().WriteIrgbw(DATA_START_ALTERNATE_COLOR, color);
+}

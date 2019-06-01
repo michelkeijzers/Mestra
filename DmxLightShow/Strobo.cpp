@@ -79,6 +79,7 @@ void Strobo::Start(par_bits_t parBits, step_time_t duration)
 		if ((_parBits & (1 << parNumber)) > 0)
 		{
 			Par& par = LightSetup.GetPar(parNumber);
+
 			Irgbw irgbw;
 			par.GetActualColor(irgbw);
 			// Intensity cannot be restored.
@@ -99,6 +100,7 @@ void Strobo::Start(par_bits_t parBits, step_time_t duration)
 		if ((_parBits & (1 << parNumber)) > 0)
 		{
 			Par& par = LightSetup.GetPar(parNumber);
+
 			Irgbw irgbw;
 			par.GetActualColor(irgbw);
 			irgbw.SetIntensity(MAX_INTENSITY);
@@ -143,6 +145,7 @@ void Strobo::AllOff()
 	{
 		Irgbw irgbw;
 		Par& par = LightSetup.GetPar(parNumber);
+
 		par.GetActualColor(irgbw);
 		irgbw.SetWhite(0);
 		par.WriteIrgbw(irgbw);
