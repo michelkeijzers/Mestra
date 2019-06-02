@@ -85,12 +85,12 @@ Program List
 Prg Name       Par1 Par2 Par3 Description
 --- ---------- ---- ---- ---- ------------------------------------------------------------------------
   0 NoProgram   -    -    -   No program
-  5 FixedColor	 -    -    -   Single/Fixed color
+  5 FixedColor	-    -    -   Single/Fixed color
  10 DualColor  Yes  Yes   -   Use default color if step = par1 or par2, else alternate color
- 20 FadeInOut  Yes  Yes   -   Fade in using default color for fade in, alt color for fade out
- 21 FadeOut    Yes  Yes   -   Like FadeInOut, but only FadeOut
- 30 FaceChase  Yes  Yes  Yes  Fade + chase combined (par 3 = Nr of pars in group)
- 40 Rainbow    Yes   -    -   Step increase
+ 20 FadeInOut   -    -    -   Fade in using default color for fade in, alt color for fade out
+ 21 FadeOut     -    -    -   Like FadeInOut, but only FadeOut
+ 30 FaceChase  Yes  Yes  Yes  Fade + chase combined (par1/2 = active steps, par 3 = Nr of pars in group)
+ 40 Rainbow    Yes   -    -   Par 1 = Step increase
 
 
 
@@ -140,4 +140,40 @@ dx Fixture Group      Fixture Part                   Set
 74                    A All                          0   0  0  0  0  0  0  0  0   0  0  0  0  1  1  1  1  
 75                    I Inner                        0   0  0  0  0  0  0  0  0   0  0  0  0  0  1  1  0  
 76                    O Outer                        0   0  0  0  0  0  0  0  0   0  0  0  0  1  0  0  1  
+
+
+
+
+// _data
+// Byte(s) From Class Type     Property           Meaning
+// ------- ---------- -------- ------------------ ------------------------------------------------
+//   0     Fixture    uint8_t  _fixtureNumber     Fixture number (always fixed)
+//   1     Fixture    uint16_t _dmxOffsetChannel  DMX offset channel
+//   3.0   Fixture    bool     _initialize        True until it has been processed for first time  
+//   3.1   Fixture    bool     _oneShotProgram    True if one shot program
+//   4     Fixture    uint8_t  _program           Program number
+//   5- 7  Fixture    uint16_t _currentStep       Current step within program
+//   7- 8  Fixture    uint16_t _nrOfSteps         Number of steps within program
+//   9-12  Fixture    uint32_t _stepTime          Next time the current step changes
+//  13-14  Fixture    uint32_t _stepDuration      Duration of one/the current step)
+//  15-16  Fixture    int16_t  _parameter1        Parameter 1, depends on program
+//  17-18  Fixture    int16_t  _parameter2		  Parameter 2, depends on program
+//  19-20  Fixture    int16_t  _parameter3		  Parameter 3, depends on program
+//  21-25  Par        Irgbw    _defaultcolor      Default color
+//  26-30  Par        Irgbw    _alternateColor    Used for cross/multicolor programs
+//
+// Total 64 bytes, data is stored in LightSetup.
+//
+// Memory consumption
+//
+// SRAM Memory: Global variables:                                       1282 bytes
+//              Dynamic memory:    17 fixtures * 2 ptrs * 2 bytes/ptr =   68 bytes
+//              Stack size:         (rough estimate)                  =  200 bytes
+//              Interrupt           (rough estimate)                  =   20 bytes
+//                                                                      ---- 
+//              Total used SRAM:                                        1570 bytes / max: 2048 bytes
+// 
+// SD Memory:    17 fixtures * 64 bytes                               = 1088 bytes / max: 32768 bytes
+//
+//                
 

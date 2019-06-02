@@ -432,7 +432,7 @@ void CalcCenter(int degrees, int centerX, int centerY, int distance, int* output
 
 void InitMestra()
 {
-	LightSetup.CreateFixtures();
+	//LightSetup.CreateFixtures();
 	PlatformLightSetup& setup = *(new WinLightSetup());
 	LightSetup.SetPlatformLightSetup(&setup);
 	setup.SetProperties();
@@ -537,8 +537,8 @@ void InjectCommands()
 		//InjectString("t BA 4000");
 		//InjectString("p BA 72");
 
-		InjectString("fa t 1000 d irb a ib p 72");
-		InjectString("ba t 1000 d ig a ib p 70");
+		//InjectString("fa t 5000 d ir a irb p 52");
+		InjectString("ba t 7000 d ir a irb p 52");
 
 		//InjectString("ra a ib");
 		//InjectString("ra p 72");

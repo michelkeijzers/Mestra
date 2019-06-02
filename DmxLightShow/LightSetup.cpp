@@ -60,7 +60,7 @@ void LightSetupClass::CreateFixtures()
 	for (fixture_number_t fixtureNumber = NR_OF_CHINESE_PARS; fixtureNumber < NR_OF_PARS; fixtureNumber++)
 	{
 		_pars[fixtureNumber] = new LedBarSegment(fixtureNumber);
-		((LedBarSegment*)(_pars[fixtureNumber]))->SetSegmentNumber((fixtureNumber - NR_OF_CHINESE_PARS) % 3U);
+		((LedBarSegment&) (GetPar(fixtureNumber))).SetSegmentNumber((fixtureNumber - NR_OF_CHINESE_PARS) % 3U);
 	}
 
 	// Do not use PROGMEM, this results in segmentation faults in Arduino IDE when unrelated code changes
@@ -72,10 +72,6 @@ void LightSetupClass::CreateFixtures()
 		Par& par = LightSetup.GetPar(fixture_number);
 		par.SetDmxOffsetChannel(dmxOffsetChannels[fixture_number]);
 	}
-
-	((LedBarSegment&) GetPar(NR_OF_CHINESE_PARS + 0)).SetSegmentNumber(0);
-	((LedBarSegment&) GetPar(NR_OF_CHINESE_PARS + 1)).SetSegmentNumber(1);
-	((LedBarSegment&) GetPar(NR_OF_CHINESE_PARS + 2)).SetSegmentNumber(2);
 }
 
 

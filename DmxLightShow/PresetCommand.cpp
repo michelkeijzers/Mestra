@@ -184,13 +184,12 @@ void PresetCommand::SetFixturePreset(preset_t presetNumber, fixture_number_t par
 		// Fade alternate color -> default color
 		// Use only last half the steps (like program 20, but start halfway).
 		par.InitializeProgram((program_t)21, (step_t)(MAX_PAR_INTENSITIES - 1U), (step_t)0U,
-			(parameter_t)(MAX_PAR_INTENSITIES - 1U), 
-			(parameter_t)0U);
+			(parameter_t)(MAX_PAR_INTENSITIES - 1U));
 		break;
 
 	case 52U:
 		// Fade default color -> alternate color -> default color
-		par.InitializeProgram((program_t)20U, (step_t)(2U * (MAX_PAR_INTENSITIES * 1U)), (step_t) 0U);
+		par.InitializeProgram((program_t)20U, (step_t)(MAX_PAR_INTENSITIES - 1U), (step_t) 0U);
 		break;
 
 	case 53U:

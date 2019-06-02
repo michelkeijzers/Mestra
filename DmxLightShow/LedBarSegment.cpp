@@ -38,7 +38,7 @@ void LedBarSegment::SetSegmentNumber(uint8_t segmentNumber)
 
 /* override */ void LedBarSegment::GetActualColor(Irgbw& actualColor)
 {
-	actualColor.SetIntensity(DmxSimple.read(GetBaseDmxChannel()));
+	actualColor.SetIntensity(DmxSimple.read(GetDmxOffsetChannel()));
 	actualColor.SetRed(DmxSimple.read(GetRedDmxChannel()));
 	actualColor.SetGreen(DmxSimple.read(GetGreenDmxChannel()));
 	actualColor.SetBlue(DmxSimple.read(GetBlueDmxChannel()));
@@ -83,7 +83,7 @@ void LedBarSegment::WriteIrgb(Irgbw& irgbw)
 	GetPlatformPar().CheckColorChanged(*this, dmxOffsetChannel, irgbw);
 #endif // COLOR_CHANGE_CHECKING
 
-	DmxSimple.write(GetBaseDmxChannel(), irgbw.GetIntensity());
+	DmxSimple.write(GetDmxOffsetChannel(), irgbw.GetIntensity());
 	DmxSimple.write(GetRedDmxChannel(), GetRed2Dmx(irgbw.GetRed()));
 	DmxSimple.write(GetGreenDmxChannel(), GetGreen2Dmx(irgbw.GetGreen()));
 	DmxSimple.write(GetBlueDmxChannel(), GetBlue2Dmx(irgbw.GetBlue()));
@@ -98,7 +98,7 @@ void LedBarSegment::WriteIrgbw(Irgbw& irgbw)
 
 	intensity_t white = irgbw.GetWhite();
 
-	DmxSimple.write(GetBaseDmxChannel(), irgbw.GetIntensity());
+	DmxSimple.write(GetDmxOffsetChannel(), irgbw.GetIntensity());
 
 	DmxSimple.write(GetRedDmxChannel(), GetRed2Dmx(
 		(intensity_t) MathUtils::Max(white, irgbw.GetRed())));

@@ -189,7 +189,7 @@ void ProgramExecuter::DualColorFadeProgram(Par& par, bool initialize)
 		// Always exactly default color or alternate color, not an inbetween color
 		par.WriteIrgb(
 			((par.GetParameter1() * (MAX_PAR_INTENSITIES - 1U) == par.GetCurrentStep()) ||
-			(par.GetParameter2() * (MAX_PAR_INTENSITIES - 1U) == par.GetCurrentStep()))
+		   (par.GetParameter2() * (MAX_PAR_INTENSITIES - 1U) == par.GetCurrentStep()))
 			? defaultColor
 			: alternateColor);
 

@@ -281,7 +281,6 @@
     <None Include="..\Documentation.docx" />
     <None Include="..\Documentation\Mestra.eap" />
     <None Include="..\Documentation\Mestra.xlsx" />
-    <None Include="..\Improvements.txt" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\Tables.txt" />
