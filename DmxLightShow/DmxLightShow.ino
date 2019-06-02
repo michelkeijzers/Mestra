@@ -5,8 +5,8 @@
 //            N A N O       U N O       M E G A        
 //           Flash SRAM   Flash SRAM   Flash SRAM      
 // Maximum:  30720 2048   32256 2048  253952 8192
-// Current:  11054 1075   12855 1303    5736 1153
-//       %:    35   52     39   63
+// Current:  12408 1093   12855 1303    5736 1153
+//       %:    40   53     39   63
 //
 // Stack:
 //
@@ -49,7 +49,7 @@ void setup()
   pinMode(LED_BUILTIN, OUTPUT);
   
   Serial.begin(115200);
-  PRINTLN("DmxLightShow 0.1");
+  Serial.println("DmxLightShow 0.1");
   
   DmxSimple.usePin(DMX_SEND_PIN);
   DmxSimple.maxChannel(DMX_MAX_CHANNELS);
@@ -84,4 +84,3 @@ void PrintFixtures()
 
   setup.PrintFooter();
 }
-

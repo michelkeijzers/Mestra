@@ -1,7 +1,7 @@
 #ifdef _WINDOWS
 
 #include "SpiRAMStub.h"
-#include "assert.h"
+#include "AssertUtils.h"
 #include "string.h"
 
 
@@ -42,7 +42,7 @@ char SpiRAM::read_byte(int address)
 	assert(address >= 0);
 	assert(address < SRAM_SIZE);
 
-	return _sram[address];
+	return (((address >= 0) && (address < SRAM_SIZE)) ? _sram[address] : '\0');
 }
 
 
@@ -52,7 +52,10 @@ char SpiRAM::write_byte(int address, char data_byte)
 	assert(address >= 0);
 	assert(address < SRAM_SIZE);
 
-	_sram[address] = data_byte;
+	if ((address >= 0) && (address < SRAM_SIZE))
+	{
+		_sram[address] = data_byte;
+	}
 
 	return data_byte;
 }

@@ -69,9 +69,6 @@
     <ClInclude Include="ClassNames.h">
       <Filter>Header Files\Framework</Filter>
     </ClInclude>
-    <ClInclude Include="SerialPrint.h">
-      <Filter>Header Files\Utilities</Filter>
-    </ClInclude>
     <ClInclude Include="ArduinoStub.h">
       <Filter>Header Files\Win32</Filter>
     </ClInclude>
@@ -154,6 +151,12 @@
       <Filter>Header Files\Commands</Filter>
     </ClInclude>
     <ClInclude Include="CommandBuffer.h">
+      <Filter>Header Files\Win32</Filter>
+    </ClInclude>
+    <ClInclude Include="AssertUtils.h">
+      <Filter>Header Files\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="SerialStub.h">
       <Filter>Header Files\Win32</Filter>
     </ClInclude>
   </ItemGroup>
@@ -262,6 +265,12 @@
       <Filter>Source Files\Commands</Filter>
     </ClCompile>
     <ClCompile Include="CommandBuffer.cpp">
+      <Filter>Source Files\WIN32</Filter>
+    </ClCompile>
+    <ClCompile Include="AssertUtils.cpp">
+      <Filter>Source Files\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="SerialStub.cpp">
       <Filter>Source Files\WIN32</Filter>
     </ClCompile>
   </ItemGroup>

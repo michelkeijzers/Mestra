@@ -10,7 +10,7 @@
 #include HEADER_FILE(ARDUINO_CLASS)
 #include "LightSetup.h"
 #include "ProgramExecuter.h"
-#include "assert.h"
+#include "AssertUtils.h"
 
 
 ProgramExecuter::ProgramExecuter()
@@ -218,12 +218,12 @@ void ProgramExecuter::DualColorFadeProgram(Par& par, bool initialize)
 			if (par.GetCurrentStep() < activeStep1)
 			{
 				// Towards active step 1.
-				SetFadeColor(par, activeStep1 - par.GetCurrentStep());
+				SetFadeColor(par, (step_t) (activeStep1 - par.GetCurrentStep()));
 			}
 			else
 			{
 				// Away from step 1.
-				SetFadeColor(par, par.GetCurrentStep() - activeStep1);
+				SetFadeColor(par, (step_t) (par.GetCurrentStep() - activeStep1));
 			}
 		}
 		else if (abs(par.GetCurrentStep() - activeStep2) < MAX_PAR_INTENSITIES)
@@ -231,12 +231,12 @@ void ProgramExecuter::DualColorFadeProgram(Par& par, bool initialize)
 			if (par.GetCurrentStep() < activeStep2)
 			{
 				// Towards active step 2.
-				SetFadeColor(par, activeStep2 - par.GetCurrentStep());
+				SetFadeColor(par, (step_t) (activeStep2 - par.GetCurrentStep()));
 			}
 			else
 			{
 				// Away from step 2.
-				SetFadeColor(par, par.GetCurrentStep() - activeStep2);
+				SetFadeColor(par, (step_t) (par.GetCurrentStep() - activeStep2));
 			}
 		}
 	}

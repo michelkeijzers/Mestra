@@ -93,11 +93,12 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>C:\Users\mkeijzers\Source\Repos\LightShow2\DmxLightShowArduino;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <TreatWarningAsError>true</TreatWarningAsError>
+      <TreatWarningAsError>false</TreatWarningAsError>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <Profile>true</Profile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -109,11 +110,12 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <TreatWarningAsError>true</TreatWarningAsError>
+      <TreatWarningAsError>false</TreatWarningAsError>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <Profile>true</Profile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -158,6 +160,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="ArduinoStub.h" />
+    <ClInclude Include="AssertUtils.h" />
     <ClInclude Include="BitsUtils.h" />
     <ClInclude Include="CharUtils.h" />
     <ClInclude Include="ClassNames.h" />
@@ -183,9 +186,9 @@
     <ClInclude Include="PresetCommand.h" />
     <ClInclude Include="ProgramExecuter.h" />
     <ClInclude Include="CommandBuffer.h" />
-    <ClInclude Include="SerialPrint.h" />
     <ClInclude Include="Par.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="SerialStub.h" />
     <ClInclude Include="SpiRAMStub.h" />
     <ClInclude Include="StringUtils.h" />
     <ClInclude Include="Strobo.h" />
@@ -196,13 +199,17 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ArduinoStub.cpp" />
+    <ClCompile Include="AssertUtils.cpp" />
     <ClCompile Include="BitsUtils.cpp" />
     <ClCompile Include="CharUtils.cpp" />
     <ClCompile Include="AsciiCommandParser.cpp" />
     <ClCompile Include="Command.cpp" />
     <ClCompile Include="CommandParser.cpp" />
     <ClCompile Include="DmxSimpleStub.cpp" />
-    <ClCompile Include="Fixture.cpp" />
+    <ClCompile Include="Fixture.cpp">
+      <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">EnableAllWarnings</WarningLevel>
+      <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">EnableAllWarnings</WarningLevel>
+    </ClCompile>
     <ClCompile Include="FixtureData.cpp" />
     <ClCompile Include="Irgbw.cpp" />
     <ClCompile Include="LedBarSegment.cpp" />
@@ -219,6 +226,7 @@
     <ClCompile Include="ProgramExecuter.cpp" />
     <ClCompile Include="CommandBuffer.cpp" />
     <ClCompile Include="Par.cpp" />
+    <ClCompile Include="SerialStub.cpp" />
     <ClCompile Include="SpiRAMStub.cpp" />
     <ClCompile Include="StringUtils.cpp" />
     <ClCompile Include="Strobo.cpp" />

@@ -486,7 +486,7 @@ void InjectString(const char* commandString)
 	_commandParser.Parse(command);
 	
 	// Print command.
-	wchar_t wCommandText[20];
+	wchar_t wCommandText[256];
 	size_t sizet;
 	mbstowcs_s(&sizet, wCommandText, commandString, strlen(commandString) + 1); //Plus null
 
@@ -537,7 +537,9 @@ void InjectCommands()
 		//InjectString("t BA 4000");
 		//InjectString("p BA 72");
 
-		InjectString("ra d irb a ib p 72");
+		InjectString("fa t 1000 d irb a ib p 72");
+		InjectString("ba t 1000 d ig a ib p 70");
+
 		//InjectString("ra a ib");
 		//InjectString("ra p 72");
 		/*

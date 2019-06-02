@@ -30,7 +30,7 @@ void Fixture::StroboChanged()
 
 dmx_channel_t Fixture::GetDmxOffsetChannel()
 {
-	return LightSetup.GetFixtureData().ReadUint16(DATA_START_DMX_OFFSET_CHANNEL);
+	return (dmx_channel_t) LightSetup.GetFixtureData().ReadUint16(DATA_START_DMX_OFFSET_CHANNEL);
 }
 
 
@@ -66,7 +66,7 @@ void Fixture::SetOneShotProgram(bool oneShotProgram)
 
 program_t Fixture::GetProgram()
 {
-	return LightSetup.GetFixtureData().ReadUint8(DATA_START_PROGRAM);
+	return (program_t) LightSetup.GetFixtureData().ReadUint8(DATA_START_PROGRAM);
 }
 
 void Fixture::SetProgram(program_t program)
@@ -77,7 +77,7 @@ void Fixture::SetProgram(program_t program)
 
 step_t Fixture::GetNrOfSteps()
 {
-	return LightSetup.GetFixtureData().ReadUint16(DATA_START_NR_OF_STEPS);
+	return (step_t) LightSetup.GetFixtureData().ReadUint16(DATA_START_NR_OF_STEPS);
 }
 
 void Fixture::SetNrOfSteps(step_t nrOfSteps)
@@ -88,7 +88,7 @@ void Fixture::SetNrOfSteps(step_t nrOfSteps)
 
 step_time_t Fixture::GetStepTime()
 {
-	return LightSetup.GetFixtureData().ReadUint32(DATA_START_STEP_TIME);
+	return (step_time_t) LightSetup.GetFixtureData().ReadUint32(DATA_START_STEP_TIME);
 }
 
 
@@ -100,7 +100,7 @@ void Fixture::SetStepTime(step_time_t stepTime)
 
 step_duration_t Fixture::GetStepDuration()
 {
-	return LightSetup.GetFixtureData().ReadUint16(DATA_START_STEP_DURATION);
+	return (step_duration_t) LightSetup.GetFixtureData().ReadUint16(DATA_START_STEP_DURATION);
 }
 
 
@@ -112,7 +112,7 @@ void Fixture::SetStepDuration(step_duration_t stepDuration)
 
 step_t Fixture::GetCurrentStep()
 {
-	return LightSetup.GetFixtureData().ReadUint16(DATA_START_CURRENT_STEP);
+	return (step_t) LightSetup.GetFixtureData().ReadUint16(DATA_START_CURRENT_STEP);
 }
 
 void Fixture::SetCurrentStep(step_t currentStep)
@@ -123,7 +123,7 @@ void Fixture::SetCurrentStep(step_t currentStep)
 
 parameter_t Fixture::GetParameter1()
 {
-	return LightSetup.GetFixtureData().ReadInt16(DATA_START_PARAMETER_1);
+	return (parameter_t) LightSetup.GetFixtureData().ReadInt16(DATA_START_PARAMETER_1);
 }
 
 
@@ -135,7 +135,7 @@ void Fixture::SetParameter1(parameter_t parameter1)
 
 parameter_t Fixture::GetParameter2()
 {
-	return LightSetup.GetFixtureData().ReadInt16(DATA_START_PARAMETER_2);
+	return (parameter_t) LightSetup.GetFixtureData().ReadInt16(DATA_START_PARAMETER_2);
 }
 
 
@@ -147,7 +147,7 @@ void Fixture::SetParameter2(parameter_t parameter2)
 
 parameter_t Fixture::GetParameter3()
 {
-	return LightSetup.GetFixtureData().ReadInt16(DATA_START_PARAMETER_3);
+	return (parameter_t) LightSetup.GetFixtureData().ReadInt16(DATA_START_PARAMETER_3);
 }
 
 
@@ -194,7 +194,7 @@ bool Fixture::CheckIncreaseStep(step_t stepsToIncrease /* = 1 */)
 
 		if (currentMillis >= GetStepTime())
 		{
-			SetCurrentStep((GetCurrentStep() + stepsToIncrease) % GetNrOfSteps());
+			SetCurrentStep((step_t) ((GetCurrentStep() + stepsToIncrease) % GetNrOfSteps()));
 			SetStepTime(GetStepTime() + GetStepDuration());
 			isIncreased = true;
 		}

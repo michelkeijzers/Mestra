@@ -175,33 +175,37 @@ preset_t Command::GetPresetNumber()
 
 void Command::SetPresetNumber(preset_t presetNumber)
 {
-	_data[COMMAND_START_PRESET_NUMBER] = presetNumber;
+	_data[COMMAND_START_PRESET_NUMBER] = (uint8_t) presetNumber;
 }
 
 
 step_duration_t Command::GetDelayTime()
 {
-	return _data[COMMAND_START_DELAY_TIME + 1] * 256 + _data[COMMAND_START_DELAY_TIME];
+	return (step_duration_t) 
+		(_data[COMMAND_START_DELAY_TIME + 1] * 256 + 
+		 _data[COMMAND_START_DELAY_TIME]);
 }
 
 
 void Command::SetDelayTime(step_duration_t time)
 {
 	_data[COMMAND_START_DELAY_TIME + 1] = (uint8_t) (time / 256);
-	_data[COMMAND_START_DELAY_TIME] = time % 256;
+	_data[COMMAND_START_DELAY_TIME] = (uint8_t)(time % 256);
 }
 
 
 step_duration_t Command::GetStroboTime()
 {
-	return _data[COMMAND_START_STROBO_TIME + 1] * 256 + _data[COMMAND_START_STROBO_TIME];
+	return (step_duration_t) 
+		(_data[COMMAND_START_STROBO_TIME + 1] * 256 + 
+		 _data[COMMAND_START_STROBO_TIME]);
 }
 
 
 void Command::SetStroboTime(step_duration_t time)
 {
 	_data[COMMAND_START_STROBO_TIME + 1] = (uint8_t) (time / 256);
-	_data[COMMAND_START_STROBO_TIME] = time % 256;
+	_data[COMMAND_START_STROBO_TIME] = (uint8_t)(time % 256);
 }
 
 

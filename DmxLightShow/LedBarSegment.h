@@ -25,5 +25,10 @@ private:
 	/* override */ void WriteIrgbw(Irgbw& irgbw);
 
 	uint8_t GetSegmentNumber();
+
+	int GetBaseDmxChannel();
+	int GetRedDmxChannel();
+	int GetGreenDmxChannel();
+	int GetBlueDmxChannel();
 };
 

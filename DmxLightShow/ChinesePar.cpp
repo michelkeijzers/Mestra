@@ -1,4 +1,4 @@
-#include "assert.h"
+#include "AssertUtils.h"
 #include "ChinesePar.h"
 #include "Irgbw.h"
 #include "ClassNames.h"
@@ -45,26 +45,30 @@ ChinesePar::~ChinesePar()
 /* virtual */ dmx_value_t ChinesePar::GetRed2Dmx(intensity_t red)
 {
 	assert(red < MAX_PAR_INTENSITIES);
-	return GetPlatformPar().GetRed2GammaCorrectedDmx(_red2Dmx[red]);
+
+	return ((red < MAX_PAR_INTENSITIES) ? GetPlatformPar().GetRed2GammaCorrectedDmx(_red2Dmx[red]) : UINT8_MAX);
 }
 
 
 /* virtual */ dmx_value_t ChinesePar::GetGreen2Dmx(intensity_t green)
 {
 	assert(green < MAX_PAR_INTENSITIES);
-	return GetPlatformPar().GetGreen2GammaCorrectedDmx(_green2Dmx[green]);
+	return ((green < MAX_PAR_INTENSITIES) ? GetPlatformPar().GetGreen2GammaCorrectedDmx(_green2Dmx[green]) : UINT8_MAX);
 }
 
 
 /* virtual */ dmx_value_t ChinesePar::GetBlue2Dmx(intensity_t blue)
 {
-	return GetPlatformPar().GetBlue2GammaCorrectedDmx(_blue2Dmx[blue]);
+	assert(blue < MAX_PAR_INTENSITIES);
+
+	return ((blue < MAX_PAR_INTENSITIES) ? GetPlatformPar().GetBlue2GammaCorrectedDmx(_blue2Dmx[blue]) : UINT8_MAX);
 }
 
 
 /* virtual */ dmx_value_t ChinesePar::GetWhite2Dmx(intensity_t white)
 {
-	return GetPlatformPar().GetWhite2GammaCorrectedDmx(_white2Dmx[white]);
+	assert(white < MAX_PAR_INTENSITIES);
+	return ((white < MAX_PAR_INTENSITIES) ? GetPlatformPar().GetWhite2GammaCorrectedDmx(_white2Dmx[white]) : UINT8_MAX);
 }
 
 

@@ -12,7 +12,7 @@
 #include "CharUtils.h"
 #include "LightSetup.h"
 #include HEADER_FILE(ARDUINO_CLASS)
-#include "assert.h"
+#include "AssertUtils.h"
 
 
 struct Chars2ParBits

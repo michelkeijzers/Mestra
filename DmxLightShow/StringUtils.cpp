@@ -68,7 +68,7 @@ StringUtils::~StringUtils()
 {
 	while (*str) 
 	{
-		*str = CharUtils::ToUpper((unsigned char) str[0U]);
+		*str = CharUtils::ToUpper((char) str[0U]);
 		str++;
 	}
 }
@@ -78,7 +78,7 @@ StringUtils::~StringUtils()
 {
 	while (*str)
 	{
-		*str = CharUtils::ToLower((unsigned char)str[0U]);
+		*str = CharUtils::ToLower((char)str[0U]);
 		str++;
 	}
 }

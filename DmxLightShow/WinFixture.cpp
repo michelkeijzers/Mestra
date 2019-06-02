@@ -16,8 +16,8 @@ WinFixture::WinFixture()
 	:
 	_x(0),
 	_y(0),
-  _atLeastOneStepIncreased(false),
-	_colorHasChanged(false)
+	_colorHasChanged(false),
+	_atLeastOneStepIncreased(false)
 {
 	_name1[0] = '\0';
 	_name2[0] = '\0';
