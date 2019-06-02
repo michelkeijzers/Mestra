@@ -7,17 +7,17 @@ class McuFixture : public PlatformFixture
 {
 public:
 	McuFixture();
-	~McuFixture();
+	virtual ~McuFixture();
 
 	/* override */ const char* GetName1();
 	/* override */ const char* GetName2();
 	/* override */ const char* GetAbbr();
 
-	/* override */ int GetX();
-  /* override */ int GetY();
+	/* override */ uint16_t GetX();
+  /* override */ uint16_t GetY();
 
 	/* override */ void SetProperties(
-		const char* name1, const char* name2, const char* abbr, int x, int y);
+		const char* name1, const char* name2, const char* abbr, uint16_t x, uint16_t y);
 
 	/* override */ bool HasColorChanged();
 	/* override */ void SetColorChanged(bool changed);

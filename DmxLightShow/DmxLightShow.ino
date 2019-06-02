@@ -5,8 +5,8 @@
 //            N A N O       U N O       M E G A        
 //           Flash SRAM   Flash SRAM   Flash SRAM      
 // Maximum:  30720 2048   32256 2048  253952 8192
-// Current:  13510 1282   12855 1303    5736 1153
-//       %:    44   62     39   63
+// Current:  11054 1075   12855 1303    5736 1153
+//       %:    35   52     39   63
 //
 // Stack:
 //
@@ -19,7 +19,7 @@
 // ChinesePar     ::GetBlue2Dmx					    1                  0
 // McuPar         ::GetBlue2GammaCorrectedDmx       1                  0
 // Or alternative: DmxSimple.write()
-// Total                                            11                16      + 2 per level (7) = 11+16+14=41
+// Total                                           11                 16      + 2 per level (7) = 11+16+14=41
 
 // Interrupt
 
@@ -27,15 +27,16 @@
 #include <DmxSimple.h>
 #include "McuLightSetup.h"
 #include "LightSetup.h"
-#include "CommandBuffer.h"
+#include "Command.h"
+#include "CommandParser.h"
 #include "ProgramExecuter.h"
 
 
 const uint8_t  DMX_SEND_PIN     =   2;
 const uint16_t DMX_MAX_CHANNELS = 140;
 
-
-CommandBuffer   _commandBuffer;
+Command         _command;
+CommandParser   _commandParser;
 ProgramExecuter _programExecuter;
 McuLightSetup   _mcuLightSetup;
 
@@ -59,8 +60,7 @@ void setup()
   LightSetup.GetPlatform()->SetProperties();
   PrintFixtures();
 
-  _commandBuffer.AddChar('c');
-  _commandBuffer.Process();
+  _commandParser.Parse(_command);
 
   _programExecuter.Run();
 }
@@ -76,9 +76,9 @@ void PrintFixtures()
   PlatformLightSetup& setup = *LightSetup.GetPlatform();
   setup.PrintHeader();
 
-  for (int parNumber = 0; parNumber < NR_OF_PARS; parNumber++)
+  for (fixture_number_t parNumber = 0; parNumber < NR_OF_PARS; parNumber++)
   {
-	Par& par = LightSetup.GetPar(parNumber);
+	(void) LightSetup.GetPar(parNumber);
     setup.PrintFixture(parNumber);
   }
 

@@ -6,7 +6,7 @@
 #include "LightSetup.h"
 
 // R -> G -> B
-#define RAINBOW_COLORS 3
+#define RAINBOW_COLORS 3U
 
 class ProgramExecuter
 {
@@ -15,7 +15,7 @@ public:
 	~ProgramExecuter();
 
 	void Run();
-	void RunPars();
+	void RunFixtures();
 
 	void FadeInOutProgram(Par& par, bool initialize);
 	void FadeOutProgram(Par& par, bool initialize);

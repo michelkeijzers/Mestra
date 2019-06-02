@@ -14,7 +14,7 @@
 public:
 	Fixture(fixture_number_t fixture_number);
 
-	~Fixture();
+	virtual ~Fixture();
 
 	void InitializeProgram(program_t programNumber, step_t nrOfSteps, step_t startStep,
 		parameter_t parameter1 = 0, parameter_t parameter2 = 0, parameter_t parameter3 = 0);
@@ -31,6 +31,9 @@ public:
 
 	bool GetInitialize();
 	void SetInitialize(bool initialize);
+
+	bool GetOneShotProgram();
+  void SetOneShotProgram(bool oneShotProgram);
 
 	program_t GetProgram();
 	void SetProgram(program_t program);

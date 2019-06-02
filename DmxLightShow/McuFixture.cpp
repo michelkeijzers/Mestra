@@ -30,20 +30,20 @@ McuFixture::~McuFixture()
 }
 
 
-/* override */ int McuFixture::GetX()
+/* override */ uint16_t McuFixture::GetX()
 {
 	return 0;
 }
 
 
-/* override */ int McuFixture::GetY()
+/* override */ uint16_t McuFixture::GetY()
 {
 	return 0;
 }
 
 
 /* override */ void McuFixture::SetProperties(
-	const char* name1, const char* name2, const char* abbr, int x, int y)
+	const char* name1, const char* name2, const char* abbr, uint16_t x, uint16_t y)
 {
 	(void)name1;
 	(void)name2;

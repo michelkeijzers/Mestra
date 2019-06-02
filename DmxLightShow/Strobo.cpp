@@ -10,7 +10,7 @@
 
 
 Strobo::Strobo() :
-	_parBits(0),
+	_fixtureBits(0),
 	_state(false),
 	_duration(0),
 	_nextTime(0)
@@ -25,13 +25,13 @@ Strobo::~Strobo()
 
 par_bits_t Strobo::GetParBits()
 {
-	return _parBits;
+	return _fixtureBits;
 }
 
 
 void Strobo::SetParBits(par_bits_t parBits)
 {
-	_parBits = parBits;
+	_fixtureBits = parBits;
 }
 
 
@@ -76,7 +76,7 @@ void Strobo::Start(par_bits_t parBits, step_time_t duration)
 	// Stop all current strobo (white).
 	for (fixture_number_t parNumber = 0; parNumber < NR_OF_PARS; parNumber++)
 	{
-		if ((_parBits & (1 << parNumber)) > 0)
+		if ((_fixtureBits & (1 << parNumber)) > 0)
 		{
 			Par& par = LightSetup.GetPar(parNumber);
 
@@ -89,7 +89,7 @@ void Strobo::Start(par_bits_t parBits, step_time_t duration)
 	}
 
 	// Set properties
-	_parBits = parBits;
+	_fixtureBits = parBits;
 	_state = true;
 	_duration = duration;
 	_nextTime = millis() + _duration; // Execute next time
@@ -97,7 +97,7 @@ void Strobo::Start(par_bits_t parBits, step_time_t duration)
 	// Initialize generic parbits intensity.
 	for (fixture_number_t parNumber = 0; parNumber < NR_OF_PARS; parNumber++)
 	{
-		if ((_parBits & (1 << parNumber)) > 0)
+		if ((_fixtureBits & (1 << parNumber)) > 0)
 		{
 			Par& par = LightSetup.GetPar(parNumber);
 
@@ -117,31 +117,31 @@ void Strobo::Run()
 	if (millis() > _nextTime)
 	{
 		_state = !_state;
-
-		for (fixture_number_t parNumber = 0; parNumber < NR_OF_PARS; parNumber++)
-		{
-			if ((_parBits & (1 << parNumber)) > 0)
-			{
-				Par& par = LightSetup.GetPar(parNumber);
-				Irgbw irgbw;
-
-				par.GetActualColor(irgbw);
-				irgbw.SetIntensity(_state ? MAX_INTENSITY     : 0);
-				irgbw.SetWhite    (_state ? MAX_PAR_INTENSITY : 0);
-				par.WriteIrgbw(irgbw);
-
-				par.StroboChanged();
-			}
-		}
-
 		_nextTime = millis() + _duration;
+	}
+}
+
+
+void Strobo::RunFixture(fixture_number_t fixtureNumber)
+{
+	if ((_fixtureBits & (1U << fixtureNumber)) > 0U)
+	{
+		Par& par = LightSetup.GetPar(fixtureNumber);
+		Irgbw irgbw;
+
+		par.GetActualColor(irgbw);
+		irgbw.SetIntensity(_state ? MAX_INTENSITY : 0U);
+		irgbw.SetWhite(_state ? MAX_PAR_INTENSITY : 0U);
+		par.WriteIrgbw(irgbw);
+
+		par.StroboChanged();
 	}
 }
 
 
 void Strobo::AllOff()
 {
-	for (fixture_number_t parNumber = 0; parNumber < NR_OF_PARS; parNumber++)
+	for (fixture_number_t parNumber = 0U; parNumber < NR_OF_PARS; parNumber++)
 	{
 		Irgbw irgbw;
 		Par& par = LightSetup.GetPar(parNumber);

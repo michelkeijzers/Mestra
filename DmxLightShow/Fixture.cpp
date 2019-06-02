@@ -42,13 +42,25 @@ void Fixture::SetDmxOffsetChannel(dmx_channel_t dmxOffsetChannel)
 
 bool Fixture::GetInitialize()
 {
-  return LightSetup.GetFixtureData().ReadBool(DATA_START_INITIALIZE);
+  return LightSetup.GetFixtureData().ReadBool(DATA_START_INITIALIZE, DATA_START_INITIALIZE_BIT);
 }
 
 
 void Fixture::SetInitialize(bool initialize)
 {
-	LightSetup.GetFixtureData().WriteBool(DATA_START_INITIALIZE, initialize);
+	LightSetup.GetFixtureData().WriteBool(DATA_START_INITIALIZE, DATA_START_INITIALIZE_BIT, initialize);
+}
+
+
+bool Fixture::GetOneShotProgram()
+{
+	return LightSetup.GetFixtureData().ReadBool(DATA_START_ONE_SHOT_PROGRAM, DATA_START_ONE_SHOT_PROGRAM_BIT);
+}
+
+
+void Fixture::SetOneShotProgram(bool oneShotProgram)
+{
+	LightSetup.GetFixtureData().WriteBool(DATA_START_ONE_SHOT_PROGRAM, DATA_START_ONE_SHOT_PROGRAM_BIT, oneShotProgram);
 }
 
 

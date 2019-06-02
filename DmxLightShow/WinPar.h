@@ -12,7 +12,7 @@ class WinPar : public PlatformPar
 {
 public:
 	WinPar();
-	~WinPar();
+	virtual ~WinPar();
 
 	/* override */ dmx_value_t GetRed2GammaCorrectedDmx(dmx_value_t red);
 	/* override */ dmx_value_t GetGreen2GammaCorrectedDmx(dmx_value_t green);

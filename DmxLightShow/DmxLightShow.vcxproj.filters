@@ -72,9 +72,6 @@
     <ClInclude Include="SerialPrint.h">
       <Filter>Header Files\Utilities</Filter>
     </ClInclude>
-    <ClInclude Include="CommandParser.h">
-      <Filter>Header Files\Commands</Filter>
-    </ClInclude>
     <ClInclude Include="ArduinoStub.h">
       <Filter>Header Files\Win32</Filter>
     </ClInclude>
@@ -95,9 +92,6 @@
     </ClInclude>
     <ClInclude Include="DmxLightShow.h">
       <Filter>Header Files\Win32</Filter>
-    </ClInclude>
-    <ClInclude Include="CommandBuffer.h">
-      <Filter>Header Files\Commands</Filter>
     </ClInclude>
     <ClInclude Include="MathUtils.h">
       <Filter>Header Files\Utilities</Filter>
@@ -150,6 +144,18 @@
     <ClInclude Include="FixtureData.h">
       <Filter>Header Files\LightSetup</Filter>
     </ClInclude>
+    <ClInclude Include="AsciiCommandParser.h">
+      <Filter>Header Files\Win32</Filter>
+    </ClInclude>
+    <ClInclude Include="Command.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="CommandParser.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="CommandBuffer.h">
+      <Filter>Header Files\Win32</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DmxLightShow.rc">
@@ -183,9 +189,6 @@
     <ClCompile Include="Strobo.cpp">
       <Filter>Source Files\LightSetup</Filter>
     </ClCompile>
-    <ClCompile Include="CommandParser.cpp">
-      <Filter>Source Files\Commands</Filter>
-    </ClCompile>
     <ClCompile Include="PresetCommand.cpp">
       <Filter>Source Files\Commands</Filter>
     </ClCompile>
@@ -200,9 +203,6 @@
     </ClCompile>
     <ClCompile Include="Window.cpp">
       <Filter>Source Files\WIN32</Filter>
-    </ClCompile>
-    <ClCompile Include="CommandBuffer.cpp">
-      <Filter>Source Files\Commands</Filter>
     </ClCompile>
     <ClCompile Include="MathUtils.cpp">
       <Filter>Source Files\Utilities</Filter>
@@ -252,6 +252,18 @@
     <ClCompile Include="FixtureData.cpp">
       <Filter>Source Files\LightSetup</Filter>
     </ClCompile>
+    <ClCompile Include="AsciiCommandParser.cpp">
+      <Filter>Source Files\WIN32</Filter>
+    </ClCompile>
+    <ClCompile Include="Command.cpp">
+      <Filter>Source Files\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="CommandParser.cpp">
+      <Filter>Source Files\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="CommandBuffer.cpp">
+      <Filter>Source Files\WIN32</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="DmxLightShow.ino">
@@ -260,5 +272,9 @@
     <None Include="..\Documentation.docx" />
     <None Include="..\Documentation\Mestra.eap" />
     <None Include="..\Documentation\Mestra.xlsx" />
+    <None Include="..\Improvements.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\Tables.txt" />
   </ItemGroup>
 </Project>

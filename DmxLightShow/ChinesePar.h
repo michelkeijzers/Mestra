@@ -7,7 +7,7 @@ class ChinesePar :
 {
 public:
 	ChinesePar(fixture_number_t fixtureNumber);
-	~ChinesePar();
+	virtual ~ChinesePar();
 
 private:
 	/* override */ void GetActualColor(Irgbw& actualColor);

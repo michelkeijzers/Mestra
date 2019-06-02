@@ -9,7 +9,7 @@ class LedBarSegment :
 {
 public:
 	LedBarSegment(fixture_number_t fixtureNumber);
-	~LedBarSegment();
+	virtual ~LedBarSegment();
 
 	void SetSegmentNumber(uint8_t segmentNumber);
 

@@ -38,9 +38,6 @@ public:
 
 	SpiRAM& GetSpiRam();
 
-	//fixture_number_t GetFixtureDataNumber();
-	//FixtureData& GetFixtureData();
-	
 	fixture_number_t GetFixtureNumber();
 	void SetFixtureNumber(fixture_number_t fixtureNumber);
 
@@ -58,7 +55,6 @@ protected:
 	fixture_number_t _fixtureDataNumber;
 	FixtureData _fixtureData;
 };
-
 
 
 extern LightSetupClass LightSetup;

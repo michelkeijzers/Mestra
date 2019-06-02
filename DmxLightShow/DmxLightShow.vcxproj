@@ -87,12 +87,13 @@
     <ClCompile>
       <PrecompiledHeader>
       </PrecompiledHeader>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>C:\Users\mkeijzers\Source\Repos\LightShow2\DmxLightShowArduino;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -108,7 +109,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <TreatWarningAsError>false</TreatWarningAsError>
+      <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -160,6 +161,8 @@
     <ClInclude Include="BitsUtils.h" />
     <ClInclude Include="CharUtils.h" />
     <ClInclude Include="ClassNames.h" />
+    <ClInclude Include="AsciiCommandParser.h" />
+    <ClInclude Include="Command.h" />
     <ClInclude Include="CommandParser.h" />
     <ClInclude Include="DmxSimpleStub.h" />
     <ClInclude Include="FixtureData.h" />
@@ -195,6 +198,8 @@
     <ClCompile Include="ArduinoStub.cpp" />
     <ClCompile Include="BitsUtils.cpp" />
     <ClCompile Include="CharUtils.cpp" />
+    <ClCompile Include="AsciiCommandParser.cpp" />
+    <ClCompile Include="Command.cpp" />
     <ClCompile Include="CommandParser.cpp" />
     <ClCompile Include="DmxSimpleStub.cpp" />
     <ClCompile Include="Fixture.cpp" />
@@ -233,7 +238,11 @@
     <None Include="..\Documentation.docx" />
     <None Include="..\Documentation\Mestra.eap" />
     <None Include="..\Documentation\Mestra.xlsx" />
+    <None Include="..\Improvements.txt" />
     <None Include="DmxLightShow.ino" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\Tables.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

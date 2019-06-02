@@ -7,7 +7,7 @@
 {
 public:
 	PlatformLightSetup();
-	~PlatformLightSetup();
+	virtual ~PlatformLightSetup();
 
 	virtual void SetProperties() = 0;
 	

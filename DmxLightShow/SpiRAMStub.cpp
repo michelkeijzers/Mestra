@@ -80,7 +80,7 @@ void SpiRAM::read_stream(int address, char* buffer, int length)
 	assert(address >= 0);
 	assert(address < SRAM_SIZE - length);
 
-	memcpy(buffer, &(_sram[address]), length);
+	memcpy(buffer, &(_sram[address]), (size_t) length);
 }
 
 
@@ -89,7 +89,7 @@ void SpiRAM::write_stream(int address, char* buffer, int length)
 	assert(address >= 0);
 	assert(address < SRAM_SIZE - length);
 
-	memcpy(&(_sram[address]), buffer, length);
+	memcpy(&(_sram[address]), buffer, (size_t) length);
 }
 
 #endif // WINDOWS

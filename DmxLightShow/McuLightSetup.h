@@ -8,7 +8,7 @@ class McuLightSetup :
 {
 public:
 	McuLightSetup();
-	~McuLightSetup();
+	virtual ~McuLightSetup();
 
 	/* override */ void SetProperties();
 

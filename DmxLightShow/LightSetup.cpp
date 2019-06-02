@@ -20,7 +20,7 @@ LightSetupClass::LightSetupClass(SpiRAM& spiRam)
 	_pars { NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL },
 	_platformLightSetup(),
 	_spiRam(spiRam),
-	_fixtureDataNumber(-1)
+	_fixtureDataNumber(255) // uninitialized
 {
 	_fixtureData.ClearAll();
 }
@@ -60,7 +60,7 @@ void LightSetupClass::CreateFixtures()
 	for (fixture_number_t fixtureNumber = NR_OF_CHINESE_PARS; fixtureNumber < NR_OF_PARS; fixtureNumber++)
 	{
 		_pars[fixtureNumber] = new LedBarSegment(fixtureNumber);
-		((LedBarSegment&)(_pars[fixtureNumber])).SetSegmentNumber((fixtureNumber - NR_OF_CHINESE_PARS) % 3);
+		((LedBarSegment*)(_pars[fixtureNumber]))->SetSegmentNumber((fixtureNumber - NR_OF_CHINESE_PARS) % 3U);
 	}
 
 	// Do not use PROGMEM, this results in segmentation faults in Arduino IDE when unrelated code changes

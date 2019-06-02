@@ -12,7 +12,7 @@ class Par;
 {
 public:
 	PlatformPar();
-	~PlatformPar();
+	virtual ~PlatformPar();
 
 	virtual dmx_value_t GetRed2GammaCorrectedDmx(dmx_value_t red) = 0;
 	virtual dmx_value_t GetGreen2GammaCorrectedDmx(dmx_value_t green) = 0;

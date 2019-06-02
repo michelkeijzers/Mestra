@@ -23,7 +23,7 @@ class Par : public Fixture
 {
 public:
 	Par(fixture_number_t fixtureNumber);
-	~Par();
+	virtual ~Par();
 
 	void SetPlatform(PlatformFixture* platformFixture, PlatformPar* platformPar);
 
@@ -42,11 +42,13 @@ public:
 
 	void GetDefaultColor(Irgbw& color);
 
-	void SetDefaultColor(Irgbw& color);
+	void SetDefaultColorIrgb(Irgbw& color);
+	void SetDefaultColorIrgbw(Irgbw& color);
 
 	void GetAlternateColor(Irgbw& color);
 
-	void SetAlternateColor(Irgbw& color);
+	void SetAlternateColorIrgb(Irgbw& color);
+	void SetAlternateColorIrgbw(Irgbw& color);
 
 protected:
 	virtual dmx_value_t GetRed2Dmx(intensity_t red) = 0;

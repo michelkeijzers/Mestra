@@ -17,7 +17,8 @@ public:
 	void Start(par_bits_t parBits, step_time_t duration);
 	
 	void Run();
-	
+	void RunFixture(fixture_number_t parNumber);
+
 	void AllOff();
 
 	par_bits_t GetParBits();
@@ -33,7 +34,7 @@ public:
 	void SetNextTime(step_time_t nextTime);
 
 private:
-	par_bits_t _parBits;
+	par_bits_t _fixtureBits;
 
 	bool _state;
 

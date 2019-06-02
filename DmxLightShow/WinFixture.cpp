@@ -48,20 +48,20 @@ const char* WinFixture::GetAbbr()
 }
 
 
-int WinFixture::GetX()
+uint16_t WinFixture::GetX()
 {
 	return _x; 
 }
 
 
-int WinFixture::GetY() 
+uint16_t WinFixture::GetY()
 {
 	return _y; 
 }
 
 
 /* override */ void WinFixture::SetProperties(
-	const char* name1, const char* name2, const char* abbr, int x, int y)
+	const char* name1, const char* name2, const char* abbr, uint16_t x, uint16_t y)
 {
 	strcpy_s(_name1, name1);
 	strcpy_s(_name2, name2);

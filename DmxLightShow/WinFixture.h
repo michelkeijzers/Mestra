@@ -12,17 +12,17 @@ class WinFixture : public PlatformFixture
 public:
 	WinFixture();
 
-	~WinFixture();
+	virtual ~WinFixture();
 	
 	const char* GetName1();
 	const char* GetName2();
 	const char* GetAbbr();
 
-	/* override */ int GetX();
-	/* override */ int GetY();
+	/* override */ uint16_t GetX();
+	/* override */ uint16_t GetY();
 
 	/* override */ void SetProperties(const char* name1, const char* name2, const char* abbr,
-		int x, int y);
+		uint16_t x, uint16_t y);
 
 	/* override */ bool HasColorChanged();
 	/* override */ void SetColorChanged(bool changed);
@@ -40,8 +40,8 @@ protected:
 	char _abbr[MAX_NAME_LENGTH];
 
 	// Coordinates on screen.
-	int _x;
-	int _y;
+	uint16_t _x;
+	uint16_t _y;
 
 	bool _colorHasChanged;
 

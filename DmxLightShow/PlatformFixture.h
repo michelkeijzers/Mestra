@@ -1,19 +1,23 @@
 #pragma once
+
+#include "MestraTypes.h"
+
+
 /* abstract */ class PlatformFixture
 {
 public:
 	PlatformFixture();
-	~PlatformFixture();
+	virtual ~PlatformFixture();
 
 	virtual const char* GetName1() = 0;
 	virtual const char* GetName2() = 0;
 	virtual const char* GetAbbr() = 0;
 
-	virtual int GetX() = 0;
-	virtual int GetY() = 0;
+	virtual uint16_t GetX() = 0;
+	virtual uint16_t GetY() = 0;
 
 	virtual void SetProperties(
-		const char* name1, const char* name2, const char* abbr, int x, int y) = 0;
+		const char* name1, const char* name2, const char* abbr, uint16_t x, uint16_t y) = 0;
 
 	virtual bool HasColorChanged() = 0;
 	virtual void SetColorChanged(bool changed) = 0;

@@ -46,7 +46,13 @@ void Par::GetDefaultColor(Irgbw& color)
 }
 
 
-void Par::SetDefaultColor(Irgbw& color)
+void Par::SetDefaultColorIrgb(Irgbw& color)
+{
+	LightSetup.GetFixtureData().WriteIrgb(DATA_START_DEFAULT_COLOR, color);
+}
+
+
+void Par::SetDefaultColorIrgbw(Irgbw& color)
 {
 	LightSetup.GetFixtureData().WriteIrgbw(DATA_START_DEFAULT_COLOR, color);
 }
@@ -58,7 +64,13 @@ void Par::GetAlternateColor(Irgbw& color)
 }
 
 
-void Par::SetAlternateColor(Irgbw& color)
+void Par::SetAlternateColorIrgb(Irgbw& color)
+{
+	LightSetup.GetFixtureData().WriteIrgb(DATA_START_ALTERNATE_COLOR, color);
+}
+
+
+void Par::SetAlternateColorIrgbw(Irgbw& color)
 {
 	LightSetup.GetFixtureData().WriteIrgbw(DATA_START_ALTERNATE_COLOR, color);
 }

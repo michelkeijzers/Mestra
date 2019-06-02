@@ -1,11 +1,13 @@
 // CommandBuffer.cpp
 // Contains buffer for one command.
 
+#ifdef _WINDOWS
+
 #include "CommandBuffer.h"
 #include "CharUtils.h"
 #include "StringUtils.h"
 #include <string.h>
-#include "CommandParser.h"
+#include "AsciiCommandParser.h"
 
 
 CommandBuffer::CommandBuffer()
@@ -29,7 +31,7 @@ void CommandBuffer::AddChar(char charToAdd)
 }
 
 
-void CommandBuffer::Process()
+void CommandBuffer::Process(AsciiCommandParser& asciiCommandParser)
 {
 	if ((_bufferLength > 0) && ((_buffer[_bufferLength - 1] == '\n') || (_buffer[_bufferLength - 1] == '\r')))
 	{
@@ -38,10 +40,11 @@ void CommandBuffer::Process()
 		StringUtils::TrimWhitespace(_buffer);
 		StringUtils::ToUpper(_buffer);
 
-		CommandParser parser;
-		parser.Parse(_buffer);
+		 asciiCommandParser.Parse(_buffer);
 
 		_buffer[0] = '\0';
 		_bufferLength = 0;
 	}
 }
+
+#endif // _WINDOWS

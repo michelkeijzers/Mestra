@@ -11,7 +11,7 @@ class WinLightSetup : public PlatformLightSetup
 {
 public:
 	WinLightSetup();
-	~WinLightSetup();
+	virtual ~WinLightSetup();
 
 	/* override */ void SetProperties();
 

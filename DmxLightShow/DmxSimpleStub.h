@@ -15,7 +15,7 @@ public:
 	DmxSimpleClass();
 	~DmxSimpleClass();
 
-	void usePin(uint8_t pin) { (void) pin; };
+	void usePin(uint8_t pin);
 	
 	uint8_t read(int address);
 	void write(int address, uint8_t value);

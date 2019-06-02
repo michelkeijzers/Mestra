@@ -23,6 +23,8 @@ using namespace std;
 #include "WinLightsetup.h"
 #include "ChinesePar.h"
 #include "LedBar.h"
+#include "AsciiCommandParser.h"
+#include "CommandParser.h"
 
 
 #define MAX_LOADSTRING 100
@@ -53,6 +55,9 @@ WCHAR szWindowClass[MAX_LOADSTRING];            // the main window class name
 
 CommandBuffer _commandBuffer;
 ProgramExecuter _programExecuter;
+AsciiCommandParser _asciiCommandParser;
+CommandParser _commandParser;
+
 
 int _refreshCounter;
 bool _backgroundPainted = false;
@@ -466,22 +471,24 @@ void HandleMestraMessages(MSG& msg)
 }
 
 
-void InjectString(const char* command)
+void InjectString(const char* commandString)
 {
-	for (int i = 0; i < strlen(command); i++)
+	for (uint16_t i = 0; i < strlen(commandString); i++)
 	{
-		_commandBuffer.AddChar(command[i]);
+		_commandBuffer.AddChar(commandString[i]);
 	}
 
 	_commandBuffer.AddChar('\n');
 	_commandBuffer.AddChar('\r');
 
-	_commandBuffer.Process();
-
+	_commandBuffer.Process(_asciiCommandParser);
+	Command& command = _asciiCommandParser.GetCommand();
+	_commandParser.Parse(command);
+	
 	// Print command.
 	wchar_t wCommandText[20];
 	size_t sizet;
-	mbstowcs_s(&sizet, wCommandText, command, strlen(command) + 1); //Plus null
+	mbstowcs_s(&sizet, wCommandText, commandString, strlen(commandString) + 1); //Plus null
 
 	wchar_t message[128];
 	swprintf_s(message, L"\nCommand: %s\n", wCommandText);
@@ -496,10 +503,10 @@ void PrintFixtures()
 	PlatformLightSetup& setup = *LightSetup.GetPlatform();
 	setup.PrintHeader();
 
-	for (int parNumber = 0; parNumber < NR_OF_PARS; parNumber++)
+	for (fixture_number_t fixtureNumber = 0; fixtureNumber < NR_OF_PARS; fixtureNumber++)
 	{
-		Par& par = LightSetup.GetPar(parNumber);
-		setup.PrintFixture(parNumber);
+		(void) LightSetup.GetPar(fixtureNumber);
+		setup.PrintFixture(fixtureNumber);
 	}
 
 	setup.PrintFooter();
@@ -511,7 +518,10 @@ void InjectCommands()
 	if (_refreshCounter == 100)
 	{
 
-	  InjectString("t AA 4000");
+	  InjectString("AA t 4000");
+
+
+
 		//InjectString("t fr 1000");
 
 		//InjectString("d EA irbw");
@@ -527,9 +537,9 @@ void InjectCommands()
 		//InjectString("t BA 4000");
 		//InjectString("p BA 72");
 
-		InjectString("d ra irb");
-		InjectString("a ra ib");
-		InjectString("p ra 72");
+		InjectString("ra d irb a ib p 72");
+		//InjectString("ra a ib");
+		//InjectString("ra p 72");
 		/*
 		InjectString("t d 1000");
 		InjectString("d d ib");

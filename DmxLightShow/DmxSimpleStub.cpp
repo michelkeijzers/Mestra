@@ -22,6 +22,12 @@ DmxSimpleClass::~DmxSimpleClass()
 }
 
 
+void DmxSimpleClass::usePin(uint8_t pin) 
+{
+	(void)pin; 
+}
+
+
 uint8_t DmxSimpleClass::read(int address)
 {
 	return _buffer[address];
