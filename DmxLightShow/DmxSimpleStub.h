@@ -7,7 +7,7 @@
 
 #include <stdint.h>
 
-#define MAX_DMX_CHANNELS 512
+#define DMX_SIMPLE_STUB_MAX_DMX_CHANNELS 512
 
 class DmxSimpleClass
 {
@@ -23,7 +23,7 @@ public:
 	void maxChannel(int maxChannels);
 
 private:
-	uint8_t _buffer[MAX_DMX_CHANNELS];
+	uint8_t _buffer[DMX_SIMPLE_STUB_MAX_DMX_CHANNELS];
 };
 
 

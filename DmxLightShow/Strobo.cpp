@@ -103,8 +103,8 @@ void Strobo::Start(par_bits_t parBits, step_time_t duration)
 
 			Irgbw irgbw;
 			par.GetActualColor(irgbw);
-			irgbw.SetIntensity(MAX_INTENSITY);
-			irgbw.SetWhite(MAX_PAR_INTENSITY);
+			irgbw.SetIntensity(PAR_MAX_INTENSITY);
+			irgbw.SetWhite(PAR_MAX_PAR_INTENSITY);
 			par.WriteIrgbw(irgbw);
 		}
 	}
@@ -130,8 +130,8 @@ void Strobo::RunFixture(fixture_number_t fixtureNumber)
 		Irgbw irgbw;
 
 		par.GetActualColor(irgbw);
-		irgbw.SetIntensity(_state ? MAX_INTENSITY : 0U);
-		irgbw.SetWhite(_state ? MAX_PAR_INTENSITY : 0U);
+		irgbw.SetIntensity(_state ? PAR_MAX_INTENSITY : 0U);
+		irgbw.SetWhite(_state ? PAR_MAX_PAR_INTENSITY : 0U);
 		par.WriteIrgbw(irgbw);
 
 		par.StroboChanged();

@@ -24,7 +24,7 @@ CommandBuffer::~CommandBuffer()
 
 void CommandBuffer::AddChar(char charToAdd)
 {
-	if (_bufferLength < MAX_BUFFER_LENGTH)
+	if (_bufferLength < COMMAND_BUFFER_MAX_LENGTH)
 	{
 		_buffer[_bufferLength++] = charToAdd;
 	}

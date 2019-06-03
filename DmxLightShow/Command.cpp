@@ -111,16 +111,16 @@ void Command::SetDelayTimeSet(bool set)
 }
 
 
-bool Command::GetStrobeTimeSet()
+bool Command::GetStroboTimeSet()
 {
-	return (bool)(_data[COMMAND_START_FLAGS] & (1 << COMMAND_BIT_STROBE_TIME_SET));
+	return (bool)(_data[COMMAND_START_FLAGS] & (1 << COMMAND_BIT_STROBO_TIME_SET));
 }
 
 
-void Command::SetStrobeTimeSet(bool set)
+void Command::SetStroboTimeSet(bool set)
 {
 	_data[COMMAND_START_FLAGS] = (uint8_t)
-		BitsUtils::ChangeBit(_data[COMMAND_START_FLAGS], COMMAND_BIT_STROBE_TIME_SET, set);
+		BitsUtils::ChangeBit(_data[COMMAND_START_FLAGS], COMMAND_BIT_STROBO_TIME_SET, set);
 }
 
 

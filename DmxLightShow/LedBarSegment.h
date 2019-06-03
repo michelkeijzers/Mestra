@@ -2,7 +2,9 @@
 
 #include "Par.h"
 
-#define DATA_START_SEGMENT_NUMBER  DATA_SIZE_PAR
+
+#define LED_BAR_SEGMENT_DATA_START  PAR_DATA_SIZE
+
 
 class LedBarSegment :
 	public Par
@@ -12,6 +14,7 @@ public:
 	virtual ~LedBarSegment();
 
 	void SetSegmentNumber(uint8_t segmentNumber);
+	void SetInitialMode();
 
 private:
 	/* override */ void GetActualColor(Irgbw& actualColor);
@@ -26,9 +29,10 @@ private:
 
 	uint8_t GetSegmentNumber();
 
-	int GetBaseDmxChannel();
-	int GetRedDmxChannel();
-	int GetGreenDmxChannel();
-	int GetBlueDmxChannel();
+	dmx_channel_t GetBaseDmxChannel();
+	dmx_channel_t GetIntensityDmxChannel();
+	dmx_channel_t GetRedDmxChannel();
+	dmx_channel_t GetGreenDmxChannel();
+	dmx_channel_t GetBlueDmxChannel();
 };
 

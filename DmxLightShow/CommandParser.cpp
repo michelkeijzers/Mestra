@@ -104,7 +104,7 @@ void CommandParser::SetPresetCommand(Command& command)
 
 void CommandParser::SetStroboTime(Command& command)
 {
-	if (command.GetStrobeTimeSet())
+	if (command.GetStroboTimeSet())
 	{
 		LightSetup.GetStrobo().Start(command.GetParBits(), command.GetStroboTime());
 	}

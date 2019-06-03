@@ -6,7 +6,7 @@
 #include "LightSetup.h"
 
 // R -> G -> B
-#define RAINBOW_COLORS 3U
+#define PROGRAM_EXECUTER_RAINBOW_COLORS 3U
 
 class ProgramExecuter
 {

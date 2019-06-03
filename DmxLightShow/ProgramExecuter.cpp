@@ -135,11 +135,11 @@ void ProgramExecuter::FadeInOutProgram(Par& par, bool initialize)
 		par.GetDefaultColor(defaultColor);
 		par.GetAlternateColor(alternateColor);
 
-		par.WriteIrgb(par.GetCurrentStep() < MAX_PAR_INTENSITIES ? defaultColor : alternateColor);
+		par.WriteIrgb(par.GetCurrentStep() < PAR_MAX_PAR_INTENSITIES ? defaultColor : alternateColor);
 
 		if (par.GetStepDuration() > 0U)
 		{
-			par.SetStepDuration(par.GetStepDuration() / (2U * (MAX_PAR_INTENSITY - 1U)));
+			par.SetStepDuration(par.GetStepDuration() / (2U * (PAR_MAX_PAR_INTENSITY - 1U)));
 			par.SetStepTime(millis() + par.GetStepDuration());
 		}
 	}
@@ -147,9 +147,9 @@ void ProgramExecuter::FadeInOutProgram(Par& par, bool initialize)
 	{
 		step_t currentStep = par.GetCurrentStep();
 		SetFadeColor(par,
-			currentStep < MAX_PAR_INTENSITIES
+			currentStep < PAR_MAX_PAR_INTENSITIES
 			? currentStep
-			: (2 * MAX_PAR_INTENSITY - currentStep - 1U) % MAX_PAR_INTENSITY);
+			: (2 * PAR_MAX_PAR_INTENSITY - currentStep - 1U) % PAR_MAX_PAR_INTENSITY);
 	}
 }
 
@@ -164,14 +164,14 @@ void ProgramExecuter::FadeOutProgram(Par& par, bool initialize)
 			par.WriteIrgb(alternateColor);
 			if (par.GetStepDuration() > 0U)
 			{
-				par.SetStepDuration(par.GetStepDuration() / (MAX_PAR_INTENSITY - 1U));
+				par.SetStepDuration(par.GetStepDuration() / (PAR_MAX_PAR_INTENSITY - 1U));
 				par.SetStepTime(millis() + par.GetStepDuration());
 			}
 		}
 		else if (par.CheckIncreaseStep())
 		{
 			step_t currentStep = par.GetCurrentStep();
-			SetFadeColor(par, MAX_PAR_INTENSITY - currentStep - 1U);
+			SetFadeColor(par, PAR_MAX_PAR_INTENSITY - currentStep - 1U);
 		}
 	}
 }
@@ -188,32 +188,32 @@ void ProgramExecuter::DualColorFadeProgram(Par& par, bool initialize)
 
 		// Always exactly default color or alternate color, not an inbetween color
 		par.WriteIrgb(
-			((par.GetParameter1() * (MAX_PAR_INTENSITIES - 1U) == par.GetCurrentStep()) ||
-		   (par.GetParameter2() * (MAX_PAR_INTENSITIES - 1U) == par.GetCurrentStep()))
+			((par.GetParameter1() * (PAR_MAX_PAR_INTENSITIES - 1U) == par.GetCurrentStep()) ||
+		   (par.GetParameter2() * (PAR_MAX_PAR_INTENSITIES - 1U) == par.GetCurrentStep()))
 			? defaultColor
 			: alternateColor);
 
 		if (par.GetStepDuration() > 0U)
 		{
-			par.SetStepDuration(par.GetStepDuration() / (2U * (par.GetParameter3() - 1U) * (MAX_PAR_INTENSITY - 1U)));
+			par.SetStepDuration(par.GetStepDuration() / (2U * (par.GetParameter3() - 1U) * (PAR_MAX_PAR_INTENSITY - 1U)));
 			par.SetStepTime(millis() + par.GetStepDuration());
 		}
 	}
 	else if (par.CheckIncreaseStep())
 	{
-		step_t activeStep1 = par.GetParameter1() * (MAX_PAR_INTENSITIES - 1U);
-		if ((activeStep1 == 0U) && (par.GetCurrentStep() >= MAX_PAR_INTENSITIES))
+		step_t activeStep1 = par.GetParameter1() * (PAR_MAX_PAR_INTENSITIES - 1U);
+		if ((activeStep1 == 0U) && (par.GetCurrentStep() >= PAR_MAX_PAR_INTENSITIES))
 		{
-			activeStep1 += par.GetParameter3() * (MAX_PAR_INTENSITIES - 1U);
+			activeStep1 += par.GetParameter3() * (PAR_MAX_PAR_INTENSITIES - 1U);
 		}
 
-		step_t activeStep2 = par.GetParameter2() * (MAX_PAR_INTENSITIES - 1U);
-		if ((activeStep2 == 0U) && (par.GetCurrentStep() >= MAX_PAR_INTENSITIES))
+		step_t activeStep2 = par.GetParameter2() * (PAR_MAX_PAR_INTENSITIES - 1U);
+		if ((activeStep2 == 0U) && (par.GetCurrentStep() >= PAR_MAX_PAR_INTENSITIES))
 		{
-			activeStep2 += par.GetParameter3() * (MAX_PAR_INTENSITIES - 1U);
+			activeStep2 += par.GetParameter3() * (PAR_MAX_PAR_INTENSITIES - 1U);
 		}
 
-		if (abs(par.GetCurrentStep() - activeStep1) < MAX_PAR_INTENSITIES)
+		if (abs(par.GetCurrentStep() - activeStep1) < PAR_MAX_PAR_INTENSITIES)
 		{
 			if (par.GetCurrentStep() < activeStep1)
 			{
@@ -226,7 +226,7 @@ void ProgramExecuter::DualColorFadeProgram(Par& par, bool initialize)
 				SetFadeColor(par, (step_t) (par.GetCurrentStep() - activeStep1));
 			}
 		}
-		else if (abs(par.GetCurrentStep() - activeStep2) < MAX_PAR_INTENSITIES)
+		else if (abs(par.GetCurrentStep() - activeStep2) < PAR_MAX_PAR_INTENSITIES)
 		{
 			if (par.GetCurrentStep() < activeStep2)
 			{
@@ -257,7 +257,7 @@ void ProgramExecuter::RainbowColorProgram(Par& par, bool initialize)
 		if (par.GetStepDuration() > 0U)
 		{
 			par.SetStepDuration((step_duration_t) (par.GetStepDuration() / 
-				(RAINBOW_COLORS * MAX_PAR_INTENSITY / abs(par.GetParameter1()))));
+				(PROGRAM_EXECUTER_RAINBOW_COLORS * PAR_MAX_PAR_INTENSITY / abs(par.GetParameter1()))));
 
 			par.SetStepTime(millis() + par.GetStepDuration());
 		}
@@ -280,21 +280,21 @@ void ProgramExecuter::SetRainbowColor(Par& par, step_t step)
 	Irgbw targetColor;
 	
 	targetColor.SetIrgb(
-		MAX_INTENSITY,
+		PAR_MAX_INTENSITY,
 		CalcRainbowColor(step, 
-		 (intensity_t) (MAX_PAR_INTENSITIES - 1U - step), 
+		 (intensity_t) (PAR_MAX_PAR_INTENSITIES - 1U - step), 
 		 0U, 
-		 (intensity_t)(step - 2U * MAX_PAR_INTENSITIES)),
+		 (intensity_t)(step - 2U * PAR_MAX_PAR_INTENSITIES)),
 
 		CalcRainbowColor(step, 
 		 (intensity_t)step,
-		 (intensity_t) (2U * MAX_PAR_INTENSITIES - 1U - step), 
+		 (intensity_t) (2U * PAR_MAX_PAR_INTENSITIES - 1U - step), 
 		 0U),
 		
 		CalcRainbowColor(step, 
 		 0U, 
-		 (intensity_t) (step - MAX_PAR_INTENSITIES), 
-		 (intensity_t) (3U * MAX_PAR_INTENSITIES - 1U - step)));
+		 (intensity_t) (step - PAR_MAX_PAR_INTENSITIES), 
+		 (intensity_t) (3U * PAR_MAX_PAR_INTENSITIES - 1U - step)));
 
 	par.WriteIrgb(targetColor);
 }
@@ -303,8 +303,8 @@ void ProgramExecuter::SetRainbowColor(Par& par, step_t step)
 intensity_t ProgramExecuter::CalcRainbowColor(step_t step, 
 	intensity_t firstRangeValue, intensity_t secondRangeValue, intensity_t thirdRangeValue)
 {
-	return step < MAX_PAR_INTENSITIES ? firstRangeValue
-		: (step < 2U * MAX_PAR_INTENSITIES
+	return step < PAR_MAX_PAR_INTENSITIES ? firstRangeValue
+		: (step < 2U * PAR_MAX_PAR_INTENSITIES
 			? secondRangeValue
 			: thirdRangeValue);
 }
@@ -323,16 +323,16 @@ void ProgramExecuter::SetFadeColor(Par& par, step_t step)
 	par.GetAlternateColor(alternateColor);
 
 	targetColor.SetIntensity((intensity_t)(defaultColor.GetIntensity() +
-		(alternateColor.GetIntensity() - defaultColor.GetIntensity()) * step / MAX_PAR_INTENSITY));
+		(alternateColor.GetIntensity() - defaultColor.GetIntensity()) * step / PAR_MAX_PAR_INTENSITY));
 
 	targetColor.SetRed((intensity_t)(defaultColor.GetRed() +
-		(alternateColor.GetRed() - defaultColor.GetRed()) * step / MAX_PAR_INTENSITY));
+		(alternateColor.GetRed() - defaultColor.GetRed()) * step / PAR_MAX_PAR_INTENSITY));
 
 	targetColor.SetGreen((intensity_t)(defaultColor.GetGreen() +
-		(alternateColor.GetGreen() - defaultColor.GetGreen()) * step / MAX_PAR_INTENSITY));
+		(alternateColor.GetGreen() - defaultColor.GetGreen()) * step / PAR_MAX_PAR_INTENSITY));
 
 	targetColor.SetBlue((intensity_t)(defaultColor.GetBlue() +
-		(alternateColor.GetBlue() - defaultColor.GetBlue()) * step / MAX_PAR_INTENSITY));
+		(alternateColor.GetBlue() - defaultColor.GetBlue()) * step / PAR_MAX_PAR_INTENSITY));
 
 	par.WriteIrgb(targetColor);
 }

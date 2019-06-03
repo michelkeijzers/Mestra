@@ -10,14 +10,15 @@
 #include "MestraTypes.h"
 #include "PlatformPar.h"
 
-#define MAX_PAR_INTENSITIES         (intensity_t)   49  // For red, green, blue, ...
-#define MAX_PAR_INTENSITY           (intensity_t)  (MAX_PAR_INTENSITIES - 1)
-#define MAX_INTENSITY               (intensity_t)  255 // For intensity, assumed linear
 
+#define PAR_MAX_PAR_INTENSITIES         (intensity_t)   49  // For red, green, blue, ...
+#define PAR_MAX_PAR_INTENSITY           (intensity_t)  (PAR_MAX_PAR_INTENSITIES - 1)
+#define PAR_MAX_INTENSITY               (intensity_t)  255 // For intensity, assumed linear
 
-#define DATA_START_DEFAULT_COLOR     DATA_SIZE_FIXTURE
-#define DATA_START_ALTERNATE_COLOR  (DATA_START_DEFAULT_COLOR   + 5)
-#define DATA_SIZE_PAR               (DATA_START_ALTERNATE_COLOR + 5)
+#define PAR_DATA_START_DEFAULT_COLOR     FIXTURE_DATA_SIZE_FIXTURE
+#define PAR_DATA_START_ALTERNATE_COLOR  (PAR_DATA_START_DEFAULT_COLOR   + 5)
+#define PAR_DATA_SIZE                   (PAR_DATA_START_ALTERNATE_COLOR + 5)
+
 
 class Par : public Fixture
 {

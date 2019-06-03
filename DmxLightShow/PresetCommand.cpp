@@ -177,31 +177,31 @@ void PresetCommand::SetFixturePreset(preset_t presetNumber, fixture_number_t par
 	case 50U: 
 		// Fade default color -> alternate color
 		// Use only half the steps
-		par.InitializeProgram((program_t)20U, (step_t)MAX_PAR_INTENSITIES, (step_t)0U);
+		par.InitializeProgram((program_t)20U, (step_t)PAR_MAX_PAR_INTENSITIES, (step_t)0U);
 		break;
 
 	case 51U:
 		// Fade alternate color -> default color
 		// Use only last half the steps (like program 20, but start halfway).
-		par.InitializeProgram((program_t)21, (step_t)(MAX_PAR_INTENSITIES - 1U), (step_t)0U,
-			(parameter_t)(MAX_PAR_INTENSITIES - 1U));
+		par.InitializeProgram((program_t)21, (step_t)(PAR_MAX_PAR_INTENSITIES - 1U), (step_t)0U,
+			(parameter_t)(PAR_MAX_PAR_INTENSITIES - 1U));
 		break;
 
 	case 52U:
 		// Fade default color -> alternate color -> default color
-		par.InitializeProgram((program_t)20U, (step_t)(MAX_PAR_INTENSITIES - 1U), (step_t) 0U);
+		par.InitializeProgram((program_t)20U, (step_t)(PAR_MAX_PAR_INTENSITIES - 1U), (step_t) 0U);
 		break;
 
 	case 53U:
 		// Fade alternate color -> default color -> alternate color
 		// Start halfway.
 		par.InitializeProgram((program_t)20, 
-			(step_t)(MAX_PAR_INTENSITIES * 2U - 2U), (step_t)(MAX_PAR_INTENSITIES - 1U));
+			(step_t)(PAR_MAX_PAR_INTENSITIES * 2U - 2U), (step_t)(PAR_MAX_PAR_INTENSITIES - 1U));
 		break;
 
 	case 60U:
 		// Fade chase left -> Right
-		par.InitializeProgram((program_t)30U, (step_t)(nrOfPars * (MAX_PAR_INTENSITIES - 1U)),
+		par.InitializeProgram((program_t)30U, (step_t)(nrOfPars * (PAR_MAX_PAR_INTENSITIES - 1U)),
 			(step_t) 0U, 
 			(parameter_t)selectedParIndex, (parameter_t)selectedParIndex, (parameter_t)nrOfPars);
 		break;
@@ -209,7 +209,7 @@ void PresetCommand::SetFixturePreset(preset_t presetNumber, fixture_number_t par
 	case 61U:
 	  // Fade chase right -> left
 		par.InitializeProgram((program_t)30U, 
-			(step_t)(nrOfPars * (MAX_PAR_INTENSITIES - 1U)), (step_t)0U,
+			(step_t)(nrOfPars * (PAR_MAX_PAR_INTENSITIES - 1U)), (step_t)0U,
 			(parameter_t)(nrOfPars - selectedParIndex - 1U), 
 			(parameter_t)(nrOfPars - selectedParIndex - 1U), 
 			(parameter_t)nrOfPars);
@@ -219,7 +219,7 @@ void PresetCommand::SetFixturePreset(preset_t presetNumber, fixture_number_t par
 		// Fade chase left -> right -> left
 		nrOfSteps = (nrOfPars - 1U) * 2U;
 		par.InitializeProgram((program_t)30U, 
-			(step_t)(nrOfSteps * (MAX_PAR_INTENSITIES - 1U)), (step_t) 0U,
+			(step_t)(nrOfSteps * (PAR_MAX_PAR_INTENSITIES - 1U)), (step_t) 0U,
 			(parameter_t) selectedParIndex, 
 			(parameter_t)(nrOfSteps - selectedParIndex) % nrOfSteps, 
 			(parameter_t)nrOfSteps);
@@ -229,7 +229,7 @@ void PresetCommand::SetFixturePreset(preset_t presetNumber, fixture_number_t par
 		// Fade chase right -> left -> right
 		nrOfSteps = (nrOfPars - 1U) * 2U;
 		par.InitializeProgram((program_t)30, 
-			(step_t)(nrOfSteps * (MAX_PAR_INTENSITIES - 1U)), (step_t) 0U,
+			(step_t)(nrOfSteps * (PAR_MAX_PAR_INTENSITIES - 1U)), (step_t) 0U,
 			(parameter_t)(nrOfPars - 1U - selectedParIndex), 
 			(parameter_t)(nrOfPars - 1U + selectedParIndex), 
 			(parameter_t)nrOfSteps);
@@ -238,36 +238,36 @@ void PresetCommand::SetFixturePreset(preset_t presetNumber, fixture_number_t par
 	case 70U:
 		// Rainbow colors, left -> right
 		par.InitializeProgram((program_t)40U, 
-			(step_t)(MAX_PAR_INTENSITIES * RAINBOW_COLORS),
-			(step_t)(MAX_PAR_INTENSITIES * (selectedParIndex % RAINBOW_COLORS)),
-			(parameter_t)-MAX_PAR_INTENSITIES); // -MAX_PAR_INTENSITIES means decreasing a full color
+			(step_t)(PAR_MAX_PAR_INTENSITIES * PROGRAM_EXECUTER_RAINBOW_COLORS),
+			(step_t)(PAR_MAX_PAR_INTENSITIES * (selectedParIndex % PROGRAM_EXECUTER_RAINBOW_COLORS)),
+			(parameter_t)-PAR_MAX_PAR_INTENSITIES); // -MAX_PAR_INTENSITIES means decreasing a full color
 																					// (no fade), left -> right
 		break;
 
 	case 71U:
 		// Rainbow colors, right -> left
 		par.InitializeProgram((program_t)40U, 
-			(step_t)(MAX_PAR_INTENSITIES * RAINBOW_COLORS),
-			(step_t)(MAX_PAR_INTENSITIES * 
-			 (RAINBOW_COLORS - 1U) - MAX_PAR_INTENSITIES * (selectedParIndex % RAINBOW_COLORS)),
-			(parameter_t)MAX_PAR_INTENSITIES); // MAX_PAR_INTENSITIES means increasing a full color (no 
+			(step_t)(PAR_MAX_PAR_INTENSITIES * PROGRAM_EXECUTER_RAINBOW_COLORS),
+			(step_t)(PAR_MAX_PAR_INTENSITIES * 
+			 (PROGRAM_EXECUTER_RAINBOW_COLORS - 1U) - PAR_MAX_PAR_INTENSITIES * (selectedParIndex % PROGRAM_EXECUTER_RAINBOW_COLORS)),
+			(parameter_t)PAR_MAX_PAR_INTENSITIES); // MAX_PAR_INTENSITIES means increasing a full color (no 
 																				 // fade), right -> left
 		break;
 
 	case 72U:
 		// Rainbow colors + Fade, left -> right
 		par.InitializeProgram((program_t)40U, 
-			(step_t)(MAX_PAR_INTENSITIES * RAINBOW_COLORS),
-			(step_t)(MAX_PAR_INTENSITIES * 
-			 (RAINBOW_COLORS) - 1U - MAX_PAR_INTENSITIES * (selectedParIndex % RAINBOW_COLORS)),
+			(step_t)(PAR_MAX_PAR_INTENSITIES * PROGRAM_EXECUTER_RAINBOW_COLORS),
+			(step_t)(PAR_MAX_PAR_INTENSITIES * 
+			 (PROGRAM_EXECUTER_RAINBOW_COLORS) - 1U - PAR_MAX_PAR_INTENSITIES * (selectedParIndex % PROGRAM_EXECUTER_RAINBOW_COLORS)),
 			(parameter_t)1U); // 1 means left -> right
 		break;
 
 	case 73U:
 		// Rainbow colors + Fade, right -> left (note left->right->left or vice versa is not needed)
 		par.InitializeProgram((program_t) 40U, 
-			(step_t)(MAX_PAR_INTENSITIES * RAINBOW_COLORS),
-			(step_t)(MAX_PAR_INTENSITIES * (selectedParIndex % RAINBOW_COLORS)),
+			(step_t)(PAR_MAX_PAR_INTENSITIES * PROGRAM_EXECUTER_RAINBOW_COLORS),
+			(step_t)(PAR_MAX_PAR_INTENSITIES * (selectedParIndex % PROGRAM_EXECUTER_RAINBOW_COLORS)),
 			(parameter_t)1U); // -1 means right -> left
 		break;
 

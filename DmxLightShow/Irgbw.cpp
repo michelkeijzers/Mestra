@@ -41,6 +41,7 @@ intensity_t Irgbw::GetIntensity()
 	return _intensity;
 }
 
+
 void Irgbw::SetIntensity(intensity_t intensity)
 {
 	_intensity = intensity;
@@ -52,6 +53,7 @@ intensity_t Irgbw::GetRed()
 	return _red;
 }
 
+
 void Irgbw::SetRed(intensity_t red)
 {
 	_red = red;
@@ -62,6 +64,7 @@ intensity_t Irgbw::GetGreen()
 {
 	return _green;
 }
+
 
 void Irgbw::SetGreen(intensity_t green)
 {
@@ -85,6 +88,7 @@ intensity_t Irgbw::GetWhite()
 	return _white;
 }
 
+
 void Irgbw::SetWhite(intensity_t white)
 {
 	_white = white;
@@ -106,9 +110,9 @@ void Irgbw::SetIrgbw(Irgbw& irgbw)
 
 void Irgbw::SetIrgb(intensity_t intensity, intensity_t red, intensity_t green, intensity_t blue)
 {
-	assert(red   <= MAX_PAR_INTENSITY);
-	assert(green <= MAX_PAR_INTENSITY);
-	assert(blue  <= MAX_PAR_INTENSITY);
+	assert(red   <= PAR_MAX_PAR_INTENSITY);
+	assert(green <= PAR_MAX_PAR_INTENSITY);
+	assert(blue  <= PAR_MAX_PAR_INTENSITY);
 
 	SetIntensity(intensity);
 	SetRed(red);
@@ -120,7 +124,7 @@ void Irgbw::SetIrgb(intensity_t intensity, intensity_t red, intensity_t green, i
 void Irgbw::SetIrgbw(intensity_t intensity, intensity_t red, intensity_t green, intensity_t blue, 
  intensity_t white)
 {
-	assert(white <= MAX_PAR_INTENSITY);
+	assert(white <= PAR_MAX_PAR_INTENSITY);
 
 	SetIrgb(intensity, red, green, blue);
 	SetWhite(white);

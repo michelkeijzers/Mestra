@@ -4,12 +4,12 @@
 #include <assert.h>
 #include <stdint.h>
 
+#include "Par.h"
 #include "MathUtils.h"
 #include "ClassNames.h"
 #include HEADER_FILE(ARDUINO_CLASS)
 #include HEADER_FILE(DMX_SIMPLE_CLASS)
 #include "Fixture.h"
-#include "Par.h"
 #include "MestraTypes.h"
 #include "LightSetup.h"
 
@@ -42,35 +42,35 @@ void Par::SetPlatform(PlatformFixture* platformFixture, PlatformPar* platformPar
 
 void Par::GetDefaultColor(Irgbw& color)
 {
-	return LightSetup.GetFixtureData().ReadIrgbw(DATA_START_DEFAULT_COLOR, color);
+	return LightSetup.GetFixtureData().ReadIrgbw(PAR_DATA_START_DEFAULT_COLOR, color);
 }
 
 
 void Par::SetDefaultColorIrgb(Irgbw& color)
 {
-	LightSetup.GetFixtureData().WriteIrgb(DATA_START_DEFAULT_COLOR, color);
+	LightSetup.GetFixtureData().WriteIrgb(PAR_DATA_START_DEFAULT_COLOR, color);
 }
 
 
 void Par::SetDefaultColorIrgbw(Irgbw& color)
 {
-	LightSetup.GetFixtureData().WriteIrgbw(DATA_START_DEFAULT_COLOR, color);
+	LightSetup.GetFixtureData().WriteIrgbw(PAR_DATA_START_DEFAULT_COLOR, color);
 }
 
 
 void Par::GetAlternateColor(Irgbw& color)
 {
-	return LightSetup.GetFixtureData().ReadIrgbw(DATA_START_ALTERNATE_COLOR, color);
+	return LightSetup.GetFixtureData().ReadIrgbw(PAR_DATA_START_ALTERNATE_COLOR, color);
 }
 
 
 void Par::SetAlternateColorIrgb(Irgbw& color)
 {
-	LightSetup.GetFixtureData().WriteIrgb(DATA_START_ALTERNATE_COLOR, color);
+	LightSetup.GetFixtureData().WriteIrgb(PAR_DATA_START_ALTERNATE_COLOR, color);
 }
 
 
 void Par::SetAlternateColorIrgbw(Irgbw& color)
 {
-	LightSetup.GetFixtureData().WriteIrgbw(DATA_START_ALTERNATE_COLOR, color);
+	LightSetup.GetFixtureData().WriteIrgbw(PAR_DATA_START_ALTERNATE_COLOR, color);
 }

@@ -10,7 +10,7 @@ DmxSimpleClass DmxSimple;
 DmxSimpleClass::DmxSimpleClass()
 	: _buffer()
 {
-	for (int i = 0; i < MAX_DMX_CHANNELS; i++)
+	for (int i = 0; i < DMX_SIMPLE_STUB_MAX_DMX_CHANNELS; i++)
 	{
 		_buffer[i] = 0;
 	}

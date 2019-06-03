@@ -8,7 +8,7 @@
 #include <stdint.h>
 #include "AsciiCommandParser.h"
 
-#define MAX_BUFFER_LENGTH   32
+#define COMMAND_BUFFER_MAX_LENGTH   32
 
 class CommandBuffer
 {
@@ -24,7 +24,7 @@ public:
 	void Process(AsciiCommandParser& asciiCommandParser);
 
 private:
-	char    _buffer[MAX_BUFFER_LENGTH];
+	char    _buffer[COMMAND_BUFFER_MAX_LENGTH];
 
 	// Length of buffer that is filled.
 	uint8_t _bufferLength = 0;

@@ -67,7 +67,7 @@ const uint8_t COMMAND_BIT_ALTERNATE_COLOR_SET						= COMMAND_BIT_DEFAULT_COLOR_W
 const uint8_t COMMAND_BIT_ALTERNATE_COLOR_WHITE_USED		= COMMAND_BIT_ALTERNATE_COLOR_SET						+ 1;
 const uint8_t COMMAND_BIT_PRESET_NUMBER_SET							= COMMAND_BIT_ALTERNATE_COLOR_WHITE_USED		+ 1;
 const uint8_t COMMAND_BIT_DELAY_TIME_SET								= COMMAND_BIT_PRESET_NUMBER_SET							+ 1;
-const uint8_t COMMAND_BIT_STROBE_TIME_SET								= COMMAND_BIT_DELAY_TIME_SET								+ 1;
+const uint8_t COMMAND_BIT_STROBO_TIME_SET								= COMMAND_BIT_DELAY_TIME_SET								+ 1;
 
 
 class Command
@@ -97,8 +97,8 @@ public:
 	bool GetDelayTimeSet();
 	void SetDelayTimeSet(bool set);
 
-	bool GetStrobeTimeSet();
-	void SetStrobeTimeSet(bool set);
+	bool GetStroboTimeSet();
+	void SetStroboTimeSet(bool set);
 
 	void GetDefaultColor(Irgbw& irgbw);
 	void SetDefaultColor(Irgbw& irgbw);

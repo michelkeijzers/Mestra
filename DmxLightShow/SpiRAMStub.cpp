@@ -5,7 +5,7 @@
 #include "string.h"
 
 
-#define SRAM_PAGE_SIZE                32
+#define FIXTURE_DATA_SRAM_PAGE_SIZE                32
 
 
 SpiRAM::SpiRAM(int8_t clock, int8_t ssPin)
@@ -64,17 +64,17 @@ char SpiRAM::write_byte(int address, char data_byte)
 void SpiRAM::read_page(int address, char* buffer)
 {
 	assert(address >= 0);
-	assert(address < SRAM_SIZE - SRAM_PAGE_SIZE);
+	assert(address < SRAM_SIZE - FIXTURE_DATA_SRAM_PAGE_SIZE);
 
-	memcpy(buffer, &(_sram[address]), SRAM_PAGE_SIZE);
+	memcpy(buffer, &(_sram[address]), FIXTURE_DATA_SRAM_PAGE_SIZE);
 }
 
 void SpiRAM::write_page(int address, char* buffer)
 {
 	assert(address >= 0);
-	assert(address < SRAM_SIZE - SRAM_PAGE_SIZE);
+	assert(address < SRAM_SIZE - FIXTURE_DATA_SRAM_PAGE_SIZE);
 
-	memcpy(&(_sram[address]), buffer, SRAM_PAGE_SIZE);
+	memcpy(&(_sram[address]), buffer, FIXTURE_DATA_SRAM_PAGE_SIZE);
 }
 
 

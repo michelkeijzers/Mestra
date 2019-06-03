@@ -41,7 +41,7 @@ private:
 
 	void ParsePresetCommand();
 
-	void ParseStrobeCommand();
+	void ParseStroboCommand();
 
 	void ParseDelayTimeCommand();
 

@@ -5,7 +5,7 @@
 //            N A N O       U N O       M E G A        
 //           Flash SRAM   Flash SRAM   Flash SRAM      
 // Maximum:  30720 2048   32256 2048  253952 8192
-// Current:  12408 1093   12855 1303    5736 1153
+// Current:  12308 1093   12855 1303    5736 1153
 //       %:    40   53     39   63
 //
 // Stack:

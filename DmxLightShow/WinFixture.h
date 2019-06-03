@@ -5,7 +5,7 @@
 
 #include "PlatformFixture.h"
 
-#define MAX_NAME_LENGTH 128
+#define WIN_FIXTURE_MAX_NAME_LENGTH 128
 
 class WinFixture : public PlatformFixture
 {
@@ -35,9 +35,9 @@ public:
 
 protected:
 	// Name (2 lines) and abbreviation.
-	char _name1[MAX_NAME_LENGTH];
-	char _name2[MAX_NAME_LENGTH];
-	char _abbr[MAX_NAME_LENGTH];
+	char _name1[WIN_FIXTURE_MAX_NAME_LENGTH];
+	char _name2[WIN_FIXTURE_MAX_NAME_LENGTH];
+	char _abbr[WIN_FIXTURE_MAX_NAME_LENGTH];
 
 	// Coordinates on screen.
 	uint16_t _x;

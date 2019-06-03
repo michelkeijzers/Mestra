@@ -125,9 +125,9 @@ void AsciiCommandParser::Parse(char* command)
 				break;
 
 			case 'S':
-				_command.SetStrobeTimeSet(true);
+				_command.SetStroboTimeSet(true);
 				_currentIndex++;
-				ParseStrobeCommand();
+				ParseStroboCommand();
 				break;
 
 			case 'T':
@@ -198,15 +198,15 @@ bool AsciiCommandParser::ParseIrgbwAsNumbers(Irgbw& irgbw)
 	}
 	
 	// Read red.
-	irgbw.SetRed((intensity_t) (strtoul(&(_userCommand[_currentIndex]), NULL, 0) * MAX_PAR_INTENSITY / 255));
+	irgbw.SetRed((intensity_t) (strtoul(&(_userCommand[_currentIndex]), NULL, 0) * PAR_MAX_PAR_INTENSITY / 255));
 	SkipUntilComma();
 
 	// Read green.
-	irgbw.SetGreen((intensity_t) (strtoul(&(_userCommand[_currentIndex]), NULL, 0) * MAX_PAR_INTENSITY / 255));
+	irgbw.SetGreen((intensity_t) (strtoul(&(_userCommand[_currentIndex]), NULL, 0) * PAR_MAX_PAR_INTENSITY / 255));
 	SkipUntilComma();
 
 	// Read blue.
-	irgbw.SetBlue((intensity_t) (strtoul(&(_userCommand[_currentIndex]), NULL, 0) * MAX_PAR_INTENSITY / 255));
+	irgbw.SetBlue((intensity_t) (strtoul(&(_userCommand[_currentIndex]), NULL, 0) * PAR_MAX_PAR_INTENSITY / 255));
 	
 	// Read white (optionally).
 	if ((strcspn(&(_userCommand[_currentIndex]), ",")) < strlen(&(_userCommand[_currentIndex])))
@@ -214,7 +214,7 @@ bool AsciiCommandParser::ParseIrgbwAsNumbers(Irgbw& irgbw)
 		// White is present
 		whiteIsPresent = true;
 		SkipUntilComma();
-		irgbw.SetWhite((intensity_t) (strtoul(&(_userCommand[_currentIndex]), NULL, 0) * MAX_PAR_INTENSITY / 255));
+		irgbw.SetWhite((intensity_t) (strtoul(&(_userCommand[_currentIndex]), NULL, 0) * PAR_MAX_PAR_INTENSITY / 255));
 	}
 	else
 	{
@@ -238,23 +238,23 @@ bool AsciiCommandParser::ParseIrgbwAsCharacters(Irgbw& irgbw)
 		switch (CharUtils::ToUpper(_userCommand[_currentIndex]))
 		{
 		case 'I':
-			irgbw.SetIntensity(MAX_INTENSITY);
+			irgbw.SetIntensity(PAR_MAX_INTENSITY);
 			break;
 
 		case 'R':
-			irgbw.SetRed(MAX_PAR_INTENSITY);
+			irgbw.SetRed(PAR_MAX_PAR_INTENSITY);
 			break;
 
 		case 'G':
-			irgbw.SetGreen(MAX_PAR_INTENSITY);
+			irgbw.SetGreen(PAR_MAX_PAR_INTENSITY);
 			break;
 
 		case 'B':
-			irgbw.SetBlue(MAX_PAR_INTENSITY);
+			irgbw.SetBlue(PAR_MAX_PAR_INTENSITY);
 			break;
 
 		case 'W':
-			irgbw.SetWhite(MAX_PAR_INTENSITY);
+			irgbw.SetWhite(PAR_MAX_PAR_INTENSITY);
 			whiteIsPresent = true;
 			break;
 
@@ -282,7 +282,7 @@ void AsciiCommandParser::ParsePresetCommand()
 }
 
 
-void AsciiCommandParser::ParseStrobeCommand()
+void AsciiCommandParser::ParseStroboCommand()
 {
 	ParseWhitespace();
 	if (!_parseError)

@@ -71,6 +71,7 @@ void LightSetupClass::CreateFixtures()
 	{ 
 		Par& par = LightSetup.GetPar(fixture_number);
 		par.SetDmxOffsetChannel(dmxOffsetChannels[fixture_number]);
+		((LedBarSegment&)(par)).SetInitialMode();
 	}
 }
 
@@ -104,9 +105,9 @@ fixture_number_t LightSetupClass::GetFixtureNumber()
 
 void LightSetupClass::SetFixtureNumber(fixture_number_t fixtureNumber)
 {
-	assert(DATA_SIZE_MAX == 64);
+	assert(FIXTURE_DATA_SIZE_MAX == 64);
 
-	_fixtureData.WriteUint8(DATA_START_FIXTURE_NUMBER, fixtureNumber);
+	_fixtureData.WriteUint8(FIXTURE_DATA_START_FIXTURE_NUMBER, fixtureNumber);
 }
 
 
