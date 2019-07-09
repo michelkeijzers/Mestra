@@ -1,7 +1,6 @@
 #include "PlatformFixture.h"
 
 
-
 PlatformFixture::PlatformFixture()
 {
 }

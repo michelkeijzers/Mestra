@@ -3,7 +3,6 @@
 
 #pragma once
 
-#include <stdint.h>
 #include "MestraTypes.h"
 
 class Irgbw
@@ -26,19 +25,19 @@ public:
 
 	void operator=(Irgbw& irgbw);
 
-	intensity_t GetIntensity();
+	intensity_t GetIntensity() const;
 	void SetIntensity(intensity_t intensity);
 
-	intensity_t GetRed();
+	intensity_t GetRed() const;
 	void SetRed(intensity_t red);
 
-	intensity_t GetGreen();
+	intensity_t GetGreen() const;
 	void SetGreen(intensity_t green);
 
-	intensity_t GetBlue();
+	intensity_t GetBlue() const;
 	void SetBlue(intensity_t blue);
 
-	intensity_t GetWhite();
+	intensity_t GetWhite() const;
 	void SetWhite(intensity_t white);
 
 private:

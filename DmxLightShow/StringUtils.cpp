@@ -25,7 +25,7 @@ StringUtils::~StringUtils()
 	for (int8_t index = length - 1; index >= 0; index--)
 	{
 		char character = CharUtils::ToLower(text[index]);
-		if ((character >= 'a') && (character <= 'z'))
+		if (character >= 'a' && character <= 'z')
 		{
 			return index;
 		}
@@ -40,7 +40,7 @@ StringUtils::~StringUtils()
 	char* end;
 
 	// Trim leading space
-	while (isspace((unsigned char)* str))
+	while (isspace(static_cast<unsigned char>(* str)))
 	{
 		str++;
 	}
@@ -52,7 +52,7 @@ StringUtils::~StringUtils()
 
 	// Trim trailing space
 	end = str + strlen(str) - 1;
-	while (end > str && isspace((unsigned char)* end))
+	while (end > str && isspace(static_cast<unsigned char>(* end)))
 	{
 		end--;
 	}
@@ -68,7 +68,7 @@ StringUtils::~StringUtils()
 {
 	while (*str) 
 	{
-		*str = CharUtils::ToUpper((char) str[0U]);
+		*str = CharUtils::ToUpper(char(str[0U]));
 		str++;
 	}
 }
@@ -78,7 +78,7 @@ StringUtils::~StringUtils()
 {
 	while (*str)
 	{
-		*str = CharUtils::ToLower((char)str[0U]);
+		*str = CharUtils::ToLower(char(str[0U]));
 		str++;
 	}
 }

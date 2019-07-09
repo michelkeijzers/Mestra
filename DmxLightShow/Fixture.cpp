@@ -5,15 +5,24 @@
 #include "Fixture.h"
 #include "ClassNames.h"
 #include HEADER_FILE(ARDUINO_CLASS)
-#include HEADER_FILE(SPI_RAM_CLASS)
-#include "LightSetup.h"
-#include "FixtureData.h"
 
 
-Fixture::Fixture(fixture_number_t fixture_number)
-	: _platformFixture()
+Fixture::Fixture(fixture_number_t fixtureNumber)
+	: 
+	_platformFixture(), 
+	_initialize(false), 
+	_dmxOffsetChannel(0), 
+	_triggerState(Off), 
+	_program(0), 
+	_nrOfSteps(0), 
+	_stepTime(0),
+	_stepDuration(0),
+	_currentStep(0),
+	_parameter1(0),
+	_parameter2(0),
+	_parameter3(0)
 {
-	LightSetup.SetFixtureNumber(fixture_number);
+	_fixtureNumber = fixtureNumber;
 }
 
 
@@ -28,136 +37,159 @@ void Fixture::StroboChanged()
 }
 
 
-dmx_channel_t Fixture::GetDmxOffsetChannel()
+dmx_channel_t Fixture::GetDmxOffsetChannel() const
 {
-	return (dmx_channel_t) LightSetup.GetFixtureData().ReadUint16(FIXTURE_DATA_START_DMX_OFFSET_CHANNEL);
+	return _dmxOffsetChannel;
 }
 
 
 void Fixture::SetDmxOffsetChannel(dmx_channel_t dmxOffsetChannel)
 {
-	LightSetup.GetFixtureData().WriteUint16(FIXTURE_DATA_START_DMX_OFFSET_CHANNEL, dmxOffsetChannel);
+	_dmxOffsetChannel = dmxOffsetChannel;
 }
 
 
-bool Fixture::GetInitialize()
+bool Fixture::GetInitialize() const
 {
-  return LightSetup.GetFixtureData().ReadBool(FIXTURE_DATA_START_INITIALIZE, FIXTURE_DATA_START_INITIALIZE_BIT);
+	return _initialize;
 }
 
 
 void Fixture::SetInitialize(bool initialize)
 {
-	LightSetup.GetFixtureData().WriteBool(FIXTURE_DATA_START_INITIALIZE, FIXTURE_DATA_START_INITIALIZE_BIT, initialize);
+	_initialize = initialize;
 }
 
 
-bool Fixture::GetOneShotProgram()
+Fixture::ETriggerState Fixture::GetTriggerState() const
 {
-	return LightSetup.GetFixtureData().ReadBool(FIXTURE_DATA_START_ONE_SHOT_PROGRAM, FIXTURE_DATA_START_ONE_SHOT_PROGRAM_BIT);
+	return _triggerState;;
 }
 
 
-void Fixture::SetOneShotProgram(bool oneShotProgram)
+void Fixture::SetTriggerState(ETriggerState triggerState)
 {
-	LightSetup.GetFixtureData().WriteBool(FIXTURE_DATA_START_ONE_SHOT_PROGRAM, FIXTURE_DATA_START_ONE_SHOT_PROGRAM_BIT, oneShotProgram);
+	_triggerState = triggerState;
 }
 
 
-program_t Fixture::GetProgram()
+void Fixture::ActivateTrigger()
 {
-	return (program_t) LightSetup.GetFixtureData().ReadUint8(FIXTURE_DATA_START_PROGRAM);
+	switch (GetTriggerState())
+	{
+	case Off:
+		// Ignore
+		break;
+
+	case Active:
+		// Reactivate
+		SetCurrentStep(0);
+		break;
+
+	case Waiting:
+		SetTriggerState(Active);
+		break;
+
+	default:
+		assert(false);
+	}
+}
+
+
+program_t Fixture::GetProgram() const
+{
+	return _program;
 }
 
 void Fixture::SetProgram(program_t program)
 {
-	LightSetup.GetFixtureData().WriteUint8(FIXTURE_DATA_START_PROGRAM, program);
+	_program = program;
 }
 
 
-step_t Fixture::GetNrOfSteps()
+step_t Fixture::GetNrOfSteps() const
 {
-	return (step_t) LightSetup.GetFixtureData().ReadUint16(FIXTURE_DATA_START_NR_OF_STEPS);
+	return _nrOfSteps;
 }
 
 void Fixture::SetNrOfSteps(step_t nrOfSteps)
 {
-	LightSetup.GetFixtureData().WriteUint16(FIXTURE_DATA_START_NR_OF_STEPS, nrOfSteps);
+	_nrOfSteps = nrOfSteps;
 }
 
 
-step_time_t Fixture::GetStepTime()
+step_time_t Fixture::GetStepTime() const
 {
-	return (step_time_t) LightSetup.GetFixtureData().ReadUint32(FIXTURE_DATA_START_STEP_TIME);
+	return _stepTime;
 }
 
 
 void Fixture::SetStepTime(step_time_t stepTime)
 {
-	LightSetup.GetFixtureData().WriteUint32(FIXTURE_DATA_START_STEP_TIME, stepTime);
+	_stepTime = stepTime;
 }
 
 
-step_duration_t Fixture::GetStepDuration()
+step_duration_t Fixture::GetStepDuration() const
 {
-	return (step_duration_t) LightSetup.GetFixtureData().ReadUint16(FIXTURE_DATA_START_STEP_DURATION);
+	return _stepDuration;
 }
 
 
 void Fixture::SetStepDuration(step_duration_t stepDuration)
 {
-	LightSetup.GetFixtureData().WriteUint16(FIXTURE_DATA_START_STEP_DURATION, stepDuration);
+	_stepDuration = stepDuration;
 }
 
 
-step_t Fixture::GetCurrentStep()
+step_t Fixture::GetCurrentStep() const
 {
-	return (step_t) LightSetup.GetFixtureData().ReadUint16(FIXTURE_DATA_START_CURRENT_STEP);
+	return _currentStep;
 }
 
 void Fixture::SetCurrentStep(step_t currentStep)
 {
-	LightSetup.GetFixtureData().WriteUint16(FIXTURE_DATA_START_CURRENT_STEP, currentStep);
+	_currentStep = currentStep;
 }
 
 
-parameter_t Fixture::GetParameter1()
+parameter_t Fixture::GetParameter1() const
 {
-	return (parameter_t) LightSetup.GetFixtureData().ReadInt16(FIXTURE_DATA_START_PARAMETER_1);
+	return _parameter1;
 }
 
 
 void Fixture::SetParameter1(parameter_t parameter1)
 {
-	LightSetup.GetFixtureData().WriteInt16(FIXTURE_DATA_START_PARAMETER_1, parameter1);
+	_parameter1 = parameter1;
 }
 
 
-parameter_t Fixture::GetParameter2()
+parameter_t Fixture::GetParameter2() const
 {
-	return (parameter_t) LightSetup.GetFixtureData().ReadInt16(FIXTURE_DATA_START_PARAMETER_2);
+	return _parameter2;
 }
 
 
 void Fixture::SetParameter2(parameter_t parameter2)
 {
-	LightSetup.GetFixtureData().WriteInt16(FIXTURE_DATA_START_PARAMETER_2, parameter2);
+	_parameter2 = parameter2;
 }
 
 
-parameter_t Fixture::GetParameter3()
+parameter_t Fixture::GetParameter3() const
 {
-	return (parameter_t) LightSetup.GetFixtureData().ReadInt16(FIXTURE_DATA_START_PARAMETER_3);
+	return _parameter3;
 }
 
 
 void Fixture::SetParameter3(parameter_t parameter3)
 {
-	LightSetup.GetFixtureData().WriteInt16(FIXTURE_DATA_START_PARAMETER_3, parameter3);
+	_parameter3 = parameter3;
 }
 
 
-PlatformFixture& Fixture::GetPlatformFixture()
+PlatformFixture& Fixture::GetPlatformFixture() const
 {
 	return *_platformFixture;
 }
@@ -188,19 +220,61 @@ bool Fixture::CheckIncreaseStep(step_t stepsToIncrease /* = 1 */)
 {
 	bool isIncreased = false;
 
-	if (GetStepDuration() > 0)
+	switch (GetTriggerState())
 	{
-		uint32_t currentMillis = millis();
-
-		if (currentMillis >= GetStepTime())
+	case Off:
 		{
-			SetCurrentStep((step_t) ((GetCurrentStep() + stepsToIncrease) % GetNrOfSteps()));
-			SetStepTime(GetStepTime() + GetStepDuration());
-			isIncreased = true;
+			uint32_t currentMillis = millis();
+
+			if (GetStepDuration() > 0)
+			{
+				if (currentMillis >= GetStepTime())
+				{
+					SetCurrentStep(static_cast<step_t>((GetCurrentStep() + stepsToIncrease) % GetNrOfSteps()));
+					SetStepTime(GetStepTime() + GetStepDuration());
+					isIncreased = true;
+				}
+			}
+			break;
 		}
 
-		_platformFixture->PostProcessCheckIncreaseStep(isIncreased);
+	case Waiting:
+		// Do nothing
+		break;
+
+	case Active:
+		{
+			uint32_t currentMillis = millis();
+
+			if (GetStepDuration() > 0)
+			{
+				if (currentMillis >= GetStepTime())
+				{
+					step_t nextStep = GetCurrentStep() + stepsToIncrease;
+					
+					if (nextStep >= GetNrOfSteps())
+					{
+						SetTriggerState(Waiting);
+						SetCurrentStep(0);
+						SetStepTime(0);
+					}
+					else
+					{
+						SetCurrentStep(static_cast<step_t>((GetCurrentStep() + stepsToIncrease) % GetNrOfSteps()));
+						SetStepTime(GetStepTime() + GetStepDuration());
+					}
+
+					isIncreased = true;
+				}
+			}
+			break;
+		}
+
+	default:
+		assert(false);
 	}
+
+	_platformFixture->PostProcessCheckIncreaseStep(isIncreased);
 
 	return isIncreased;
 }

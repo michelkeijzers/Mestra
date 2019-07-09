@@ -12,7 +12,5 @@ private:
 public:
 	static char ToUpper(char ch);
 	static char ToLower(char ch);
-
-	static char* TrimWhitespace(char* str);
 };
 

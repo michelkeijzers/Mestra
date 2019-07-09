@@ -1,7 +1,7 @@
 // LightSetup.cpp
 // Set of pars/LED bars.
 
-#include <assert.h>
+#include "AssertUtils.h"
 #include "ClassNames.h"
 #include HEADER_FILE(ARDUINO_CLASS)
 #include "LightSetup.h"
@@ -11,18 +11,14 @@
 
 
 // Singleton instance.
-SpiRAM          SpiRam(0, SPI_RAM_SS_PIN);
-LightSetupClass LightSetup(SpiRam);
+LightSetupClass LightSetup;
 
 
-LightSetupClass::LightSetupClass(SpiRAM& spiRam)
+LightSetupClass::LightSetupClass()
 :
-	_pars { NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL },
-	_platformLightSetup(),
-	_spiRam(spiRam),
-	_fixtureDataNumber(255) // uninitialized
+	_pars {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr },
+	_platformLightSetup()
 {
-	_fixtureData.ClearAll();
 }
 
 
@@ -31,7 +27,7 @@ LightSetupClass::~LightSetupClass()
 }
 
 
-PlatformLightSetup* LightSetupClass::GetPlatform() 
+PlatformLightSetup* LightSetupClass::GetPlatform() const
 {
 	return _platformLightSetup; 
 }
@@ -60,7 +56,7 @@ void LightSetupClass::CreateFixtures()
 	for (fixture_number_t fixtureNumber = NR_OF_CHINESE_PARS; fixtureNumber < NR_OF_PARS; fixtureNumber++)
 	{
 		_pars[fixtureNumber] = new LedBarSegment(fixtureNumber);
-		((LedBarSegment&) (GetPar(fixtureNumber))).SetSegmentNumber((fixtureNumber - NR_OF_CHINESE_PARS) % 3U);
+		static_cast<LedBarSegment&>(GetPar(fixtureNumber)).SetSegmentNumber((fixtureNumber - NR_OF_CHINESE_PARS) % 3U);
 	}
 
 	// Do not use PROGMEM, this results in segmentation faults in Arduino IDE when unrelated code changes
@@ -71,47 +67,28 @@ void LightSetupClass::CreateFixtures()
 	{ 
 		Par& par = LightSetup.GetPar(fixture_number);
 		par.SetDmxOffsetChannel(dmxOffsetChannels[fixture_number]);
-		((LedBarSegment&)(par)).SetInitialMode();
+		static_cast<LedBarSegment&>(par).SetInitialMode();
 	}
 }
 
 
-Par& LightSetupClass::GetPar(fixture_number_t parNumber)
+Par& LightSetupClass::GetPar(fixture_number_t parNumber) const
 {
 	assert(parNumber < NR_OF_PARS);
-
-	if (_fixtureDataNumber != parNumber)
-	{
-		_fixtureData.Save(_fixtureDataNumber);
-		_fixtureData.Load(parNumber);
-		_fixtureDataNumber = parNumber;
-	}
-
 	return *_pars[parNumber];
 }
 
 
-SpiRAM& LightSetupClass::GetSpiRam()
+/* static */ void LightSetupClass::AllOff()
 {
-	return _spiRam;
-}
+	for (fixture_number_t parNumber = 0U; parNumber < NR_OF_PARS; parNumber++)
+	{
+		Par& par = LightSetup.GetPar(parNumber);
 
-
-fixture_number_t LightSetupClass::GetFixtureNumber()
-{
-	return _fixtureDataNumber;
-}
-
-
-void LightSetupClass::SetFixtureNumber(fixture_number_t fixtureNumber)
-{
-	assert(FIXTURE_DATA_SIZE_MAX == 64);
-
-	_fixtureData.WriteUint8(FIXTURE_DATA_START_FIXTURE_NUMBER, fixtureNumber);
-}
-
-
-FixtureData& LightSetupClass::GetFixtureData()
-{
-	return _fixtureData;
+		Irgbw actualColor;
+		par.GetActualColor(actualColor);
+		actualColor.SetWhite(0);
+		par.WriteIrgbw(actualColor);
+		par.StroboChanged();
+	}
 }

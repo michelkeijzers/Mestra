@@ -4,7 +4,6 @@
 
 #pragma once
 
-#include <stdint.h>
 #include "MestraTypes.h"
 
 class Strobo
@@ -17,20 +16,18 @@ public:
 	void Start(par_bits_t parBits, step_time_t duration);
 	
 	void Run();
-	void RunFixture(fixture_number_t parNumber);
+	void RunFixture(fixture_number_t parNumber) const;
 
-	void AllOff();
-
-	par_bits_t GetParBits();
+	par_bits_t GetParBits() const;
 	void SetParBits(par_bits_t parBits);
 
-	bool GetState();
+	bool GetState() const;
 	void SetState(bool state);
 
-	step_time_t GetDuration();
+	step_time_t GetDuration() const;
 	void SetDuration(step_time_t duration);
 
-	step_time_t GetNextTime();
+	step_time_t GetNextTime() const;
 	void SetNextTime(step_time_t nextTime);
 
 private:

@@ -3,8 +3,6 @@
 #include "ClassNames.h"
 #include HEADER_FILE(DMX_SIMPLE_CLASS)
 #include "MathUtils.h"
-#include "FixtureData.h"
-#include "LightSetup.h"
 
 
 #define DMX_OFFSET_CHANNEL_MODE      (dmx_channel_t)   0U
@@ -26,7 +24,8 @@
 
 LedBarSegment::LedBarSegment(fixture_number_t fixtureNumber)
 :
-	Par(fixtureNumber)
+	Par(fixtureNumber), 
+	_segmentNumber(0)
 {
 }
 
@@ -36,25 +35,25 @@ LedBarSegment::~LedBarSegment()
 }
 
 
-uint8_t LedBarSegment::GetSegmentNumber()
+led_bar_segment_number_t LedBarSegment::GetSegmentNumber() const
 {
-	return LightSetup.GetFixtureData().ReadUint8(LED_BAR_SEGMENT_DATA_START);
+	return _segmentNumber;
 }
 
 
-void LedBarSegment::SetSegmentNumber(uint8_t segmentNumber)
+void LedBarSegment::SetSegmentNumber(led_bar_segment_number_t segmentNumber)
 {
-	LightSetup.GetFixtureData().WriteUint8(LED_BAR_SEGMENT_DATA_START, segmentNumber);
+	_segmentNumber = segmentNumber;
 }
 
 
-void LedBarSegment::SetInitialMode()
+void LedBarSegment::SetInitialMode() const
 {
 	DmxSimple.write(GetDmxOffsetChannel() + DMX_OFFSET_CHANNEL_MODE, DMX_MODE_3_SEGMENT_MODE);
 }
 
 
-/* override */ void LedBarSegment::GetActualColor(Irgbw& actualColor)
+/* override */ void LedBarSegment::GetActualColor(Irgbw& actualColor) const
 {
 	actualColor.SetIntensity(DmxSimple.read(GetIntensityDmxChannel()));
 	actualColor.SetRed(DmxSimple.read(GetRedDmxChannel()));
@@ -62,36 +61,60 @@ void LedBarSegment::SetInitialMode()
 	actualColor.SetBlue(DmxSimple.read(GetBlueDmxChannel()));
 
 	// White is calculated.
-	actualColor.SetWhite((intensity_t) MathUtils::Min(
-		actualColor.GetRed(), actualColor.GetGreen(), actualColor.GetBlue()));
+	actualColor.SetWhite(intensity_t(MathUtils::Min(
+		actualColor.GetRed(), actualColor.GetGreen(), actualColor.GetBlue())));
 }
 
 
-/* virtual */ dmx_value_t LedBarSegment::GetRed2Dmx(intensity_t red)
+/* override */ intensity_t LedBarSegment::GetClosestRed(dmx_value_t value) const
+{
+	return value * PAR_MAX_PAR_INTENSITY / UINT8_MAX;
+}
+
+
+/* override */ intensity_t LedBarSegment::GetClosestGreen(dmx_value_t value) const
+{
+	return value * PAR_MAX_PAR_INTENSITY / UINT8_MAX;
+}
+
+
+/* override */ intensity_t LedBarSegment::GetClosestBlue(dmx_value_t value) const
+{
+	return value * PAR_MAX_PAR_INTENSITY / UINT8_MAX;
+}
+
+
+/* override */ intensity_t LedBarSegment::GetClosestWhite(dmx_value_t value) const
+{
+	return value * PAR_MAX_PAR_INTENSITY / UINT8_MAX;
+}
+
+
+/* virtual */ dmx_value_t LedBarSegment::GetRed2Dmx(intensity_t red) const
 {
 	assert(red < PAR_MAX_PAR_INTENSITIES);
-	return red * 255U / PAR_MAX_PAR_INTENSITY;
+	return red * UINT8_MAX / PAR_MAX_PAR_INTENSITY;
 }
 
 
-/* virtual */ dmx_value_t LedBarSegment::GetGreen2Dmx(intensity_t green)
+/* virtual */ dmx_value_t LedBarSegment::GetGreen2Dmx(intensity_t green) const
 {
 	assert(green < PAR_MAX_PAR_INTENSITIES);
-	return green * 255U / PAR_MAX_PAR_INTENSITY;
+	return green * UINT8_MAX / PAR_MAX_PAR_INTENSITY;
 }
 
 
-/* virtual */ dmx_value_t LedBarSegment::GetBlue2Dmx(intensity_t blue)
+/* virtual */ dmx_value_t LedBarSegment::GetBlue2Dmx(intensity_t blue) const
 {
 	assert(blue < PAR_MAX_PAR_INTENSITIES);
-	return blue * 255U / PAR_MAX_PAR_INTENSITY;
+	return blue * UINT8_MAX / PAR_MAX_PAR_INTENSITY;
 }
 
 
-/* virtual */ dmx_value_t LedBarSegment::GetWhite2Dmx(intensity_t white)
+/* virtual */ dmx_value_t LedBarSegment::GetWhite2Dmx(intensity_t white) const
 {
 	assert(white < PAR_MAX_PAR_INTENSITIES);
-	return white * 255U / PAR_MAX_PAR_INTENSITY;
+	return white * UINT8_MAX / PAR_MAX_PAR_INTENSITY;
 }
 
 
@@ -119,42 +142,43 @@ void LedBarSegment::WriteIrgbw(Irgbw& irgbw)
 	DmxSimple.write(GetIntensityDmxChannel(), irgbw.GetIntensity());
 
 	DmxSimple.write(GetRedDmxChannel(), GetRed2Dmx(
-		(intensity_t) MathUtils::Max(white, irgbw.GetRed())));
+		intensity_t(MathUtils::Max(white, irgbw.GetRed()))));
 
 	DmxSimple.write(GetGreenDmxChannel(), GetGreen2Dmx(
-		(intensity_t) MathUtils::Max(white, irgbw.GetGreen())));
+		intensity_t(MathUtils::Max(white, irgbw.GetGreen()))));
 
 	DmxSimple.write(GetBlueDmxChannel(), GetBlue2Dmx(
-		(intensity_t) MathUtils::Max(white, irgbw.GetBlue())));
+		intensity_t(MathUtils::Max(white, irgbw.GetBlue()))));
 }
 
 
-dmx_channel_t LedBarSegment::GetBaseDmxChannel()
+dmx_channel_t LedBarSegment::GetBaseDmxChannel() const
 {
-	return (int) (GetDmxOffsetChannel() + GetSegmentNumber() * 3U);
+	return int(GetDmxOffsetChannel() + GetSegmentNumber() * 3);
 }
 
 
-dmx_channel_t LedBarSegment::GetIntensityDmxChannel()
+dmx_channel_t LedBarSegment::GetIntensityDmxChannel() const
 {
 	return GetDmxOffsetChannel() + DMX_OFFSET_CHANNEL_INTENSITY;
 }
 
 
-dmx_channel_t LedBarSegment::GetRedDmxChannel()
+dmx_channel_t LedBarSegment::GetRedDmxChannel() const
 {
 	return GetBaseDmxChannel() + DMX_OFFSET_CHANNEL_RED;
 }
 
 
-dmx_channel_t LedBarSegment::GetGreenDmxChannel()
+dmx_channel_t LedBarSegment::GetGreenDmxChannel() const
 {
 	return GetBaseDmxChannel() + DMX_OFFSET_CHANNEL_GREEN;
 }
 
 
-dmx_channel_t LedBarSegment::GetBlueDmxChannel()
+dmx_channel_t LedBarSegment::GetBlueDmxChannel() const
 {
 	return GetBaseDmxChannel() + DMX_OFFSET_CHANNEL_BLUE;
 }
+
 

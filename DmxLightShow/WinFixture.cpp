@@ -2,14 +2,12 @@
 // Generic properties for a fixture.
 // Only for Windows.
 
+#include <string.h>
 #ifdef _WINDOWS
 
 
 #include <string>
-#include "ClassNames.h"
-#include "LightSetup.h"
 #include "WinFixture.h"
-#include "Par.h"
 
 
 WinFixture::WinFixture()
@@ -30,31 +28,31 @@ WinFixture::~WinFixture()
 }
 
 
-const char* WinFixture::GetName1() 
+/* override */ const char* WinFixture::GetName1() const
 {
 	return _name1; 
 }
 
 
-const char* WinFixture::GetName2() 
+/* override */ const char* WinFixture::GetName2() const
 {
 	return _name2; 
 }
 
 
-const char* WinFixture::GetAbbr()
+/* override */ const char* WinFixture::GetAbbr() const
 {
 	return _abbr; 
 }
 
 
-uint16_t WinFixture::GetX()
+/* override */ uint16_t WinFixture::GetX() const
 {
 	return _x; 
 }
 
 
-uint16_t WinFixture::GetY()
+/* override */ uint16_t WinFixture::GetY() const
 {
 	return _y; 
 }
@@ -73,7 +71,7 @@ uint16_t WinFixture::GetY()
 }
 
 
-/* override */ bool WinFixture::HasColorChanged() 
+/* override */ bool WinFixture::HasColorChanged() const
 {
 	return _colorHasChanged;
 }
@@ -91,19 +89,19 @@ uint16_t WinFixture::GetY()
 }
 
 
-bool WinFixture::GetAtLeastOneStepIncreased()
+/* override */ bool WinFixture::GetAtLeastOneStepIncreased() const
 {
 	return _atLeastOneStepIncreased;
 }
 
 
-void WinFixture::ResetAtLeastOneStepIncreased()
+/* override */ void WinFixture::ResetAtLeastOneStepIncreased()
 {
 	_atLeastOneStepIncreased = false;
 }
 
 
-void WinFixture::PostProcessCheckIncreaseStep(bool increased)
+/* override */ void WinFixture::PostProcessCheckIncreaseStep(bool increased)
 {
 	if (increased)
 	{

@@ -12,31 +12,31 @@ McuFixture::~McuFixture()
 }
 
 
-/* override */ const char* McuFixture::GetName1()
+/* override */ const char* McuFixture::GetName1() const
+{
+	return nullptr;
+}
+
+
+/* override */ const char* McuFixture::GetName2() const
+{
+	return nullptr;
+}
+
+
+/* override */ const char* McuFixture::GetAbbr() const
+{
+	return nullptr;
+}
+
+
+/* override */ uint16_t McuFixture::GetX() const
 {
 	return 0;
 }
 
 
-/* override */ const char* McuFixture::GetName2()
-{
-	return 0;
-}
-
-
-/* override */ const char* McuFixture::GetAbbr()
-{
-	return 0;
-}
-
-
-/* override */ uint16_t McuFixture::GetX()
-{
-	return 0;
-}
-
-
-/* override */ uint16_t McuFixture::GetY()
+/* override */ uint16_t McuFixture::GetY() const
 {
 	return 0;
 }
@@ -53,7 +53,7 @@ McuFixture::~McuFixture()
 }
 
 
-/* override */ bool McuFixture::HasColorChanged()
+/* override */ bool McuFixture::HasColorChanged() const
 {
 	return true;
 }
@@ -70,7 +70,7 @@ McuFixture::~McuFixture()
 }
 
 
-/* override */ bool McuFixture::GetAtLeastOneStepIncreased()
+/* override */ bool McuFixture::GetAtLeastOneStepIncreased() const
 {
 	return false;
 }

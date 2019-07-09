@@ -3,36 +3,41 @@
 #include "Par.h"
 
 
-#define LED_BAR_SEGMENT_DATA_START  PAR_DATA_SIZE
-
-
 class LedBarSegment :
 	public Par
 {
 public:
 	LedBarSegment(fixture_number_t fixtureNumber);
-	virtual ~LedBarSegment();
+	~LedBarSegment();
 
-	void SetSegmentNumber(uint8_t segmentNumber);
-	void SetInitialMode();
+	void SetSegmentNumber(led_bar_segment_number_t segmentNumber);
+
+	void SetInitialMode() const;
 
 private:
-	/* override */ void GetActualColor(Irgbw& actualColor);
+	void GetActualColor(Irgbw& actualColor) const override;
 
-	/* override */ dmx_value_t GetRed2Dmx(intensity_t red);
-	/* override */ dmx_value_t GetGreen2Dmx(intensity_t green);
-	/* override */ dmx_value_t GetBlue2Dmx(intensity_t blue);
-	/* override */ dmx_value_t GetWhite2Dmx(intensity_t white);
+	intensity_t GetClosestRed(dmx_value_t value) const override;
+	intensity_t GetClosestGreen(dmx_value_t value) const override;
+	intensity_t GetClosestBlue(dmx_value_t value) const override;
+	intensity_t GetClosestWhite(dmx_value_t value) const override;
 
-	/* override */ void WriteIrgb(Irgbw& irgbw);
-	/* override */ void WriteIrgbw(Irgbw& irgbw);
+	dmx_value_t GetRed2Dmx(intensity_t red) const override;
+	dmx_value_t GetGreen2Dmx(intensity_t green) const override;
+	dmx_value_t GetBlue2Dmx(intensity_t blue) const override;
+	dmx_value_t GetWhite2Dmx(intensity_t white) const override;
 
-	uint8_t GetSegmentNumber();
+	void WriteIrgb(Irgbw& irgbw) override;
+	void WriteIrgbw(Irgbw& irgbw) override;
 
-	dmx_channel_t GetBaseDmxChannel();
-	dmx_channel_t GetIntensityDmxChannel();
-	dmx_channel_t GetRedDmxChannel();
-	dmx_channel_t GetGreenDmxChannel();
-	dmx_channel_t GetBlueDmxChannel();
+	led_bar_segment_number_t GetSegmentNumber() const;
+
+	dmx_channel_t GetBaseDmxChannel() const;
+	dmx_channel_t GetIntensityDmxChannel() const;
+	dmx_channel_t GetRedDmxChannel() const;
+	dmx_channel_t GetGreenDmxChannel() const;
+	dmx_channel_t GetBlueDmxChannel() const;
+
+	led_bar_segment_number_t _segmentNumber;
 };
 

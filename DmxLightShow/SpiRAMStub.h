@@ -21,8 +21,6 @@ public:
 	void write_stream(int address, char* buffer, int length);
 
 private:
-
-	// Win only
 	char _sram[SRAM_SIZE];
 	bool _enabled;
 };

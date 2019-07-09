@@ -1,8 +1,8 @@
 #include "McuLightSetup.h"
 #include "LightSetup.h"
-
 #include "McuFixture.h"
 #include "McuPar.h"
+
 
 McuLightSetup::McuLightSetup()
 	: PlatformLightSetup()
@@ -24,13 +24,13 @@ McuLightSetup::~McuLightSetup()
 }
 
 
-/* override */ void McuLightSetup::PrintHeader()
+/* override */ void McuLightSetup::PrintHeader() const
 {
 	//TODO
 }
 
 
-/* override */ void McuLightSetup::PrintFixture(fixture_number_t fixtureNumber)
+/* override */ void McuLightSetup::PrintFixture(fixture_number_t fixtureNumber) const
 {
 	(void) fixtureNumber;
 	//TODO
@@ -38,13 +38,13 @@ McuLightSetup::~McuLightSetup()
 }
 
 
-/* override */ void McuLightSetup::PrintFooter()
+/* override */ void McuLightSetup::PrintFooter() const
 {
 	//TODO
 }
 
 
-/* override */ bool McuLightSetup::ArePropertiesSet()
+/* override */ bool McuLightSetup::ArePropertiesSet() const
 {
 	return true;
 }

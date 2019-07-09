@@ -15,12 +15,12 @@ public:
 	DmxSimpleClass();
 	~DmxSimpleClass();
 
-	void usePin(uint8_t pin);
+	static void usePin(uint8_t pin);
 	
 	uint8_t read(int address);
 	void write(int address, uint8_t value);
 
-	void maxChannel(int maxChannels);
+	static void maxChannel(int maxChannels);
 
 private:
 	uint8_t _buffer[DMX_SIMPLE_STUB_MAX_DMX_CHANNELS];

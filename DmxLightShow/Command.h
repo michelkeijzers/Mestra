@@ -3,6 +3,7 @@
 #include "MestraTypes.h"
 #include "Irgbw.h"
 
+
 const par_bits_t PAR_R4 = 1UL << 0;
 const par_bits_t PAR_R3 = 1UL << 1;
 const par_bits_t PAR_R2 = 1UL << 2;
@@ -51,23 +52,26 @@ const par_bits_t PAR_AR = PAR_RA + PAR_DR + PAR_NR + PAR_BR;
 
 
 const uint8_t COMMAND_START_PAR_BITS										= 0;
-const uint8_t COMMAND_START_FLAGS                     	= (COMMAND_START_PAR_BITS                   + 4);
-const uint8_t COMMAND_START_DEFAULT_COLOR								= (COMMAND_START_FLAGS                      + 1);
-const uint8_t COMMAND_START_ALTERNATE_COLOR							= (COMMAND_START_DEFAULT_COLOR							+ 5);
-const uint8_t COMMAND_START_PRESET_NUMBER								= (COMMAND_START_ALTERNATE_COLOR						+ 5);
-const uint8_t COMMAND_START_DELAY_TIME									= (COMMAND_START_PRESET_NUMBER							+ 1);
-const uint8_t COMMAND_START_STROBO_TIME									= (COMMAND_START_DELAY_TIME									+ 2);
-const uint8_t COMMAND_START_CRC													= (COMMAND_START_STROBO_TIME								+ 2);
+const uint8_t COMMAND_START_FLAGS_1                   	= COMMAND_START_PAR_BITS                    + 4;
+const uint8_t COMMAND_START_FLAGS_2                     = COMMAND_START_FLAGS_1                     + 1;
+const uint8_t COMMAND_START_DEFAULT_COLOR								= COMMAND_START_FLAGS_2                     + 1;
+const uint8_t COMMAND_START_ALTERNATE_COLOR							= COMMAND_START_DEFAULT_COLOR							  + 5;
+const uint8_t COMMAND_START_PRESET_NUMBER								= COMMAND_START_ALTERNATE_COLOR						  + 5;
+const uint8_t COMMAND_START_DELAY_TIME									= COMMAND_START_PRESET_NUMBER							  + 1;
+const uint8_t COMMAND_START_STROBO_TIME									= COMMAND_START_DELAY_TIME									+ 2;
 
-const uint8_t COMMAND_LENGTH														= (COMMAND_START_CRC												+ 1);
+const uint8_t COMMAND_LENGTH														= COMMAND_START_STROBO_TIME								  + 1;
 
 const uint8_t COMMAND_BIT_DEFAULT_COLOR_SET							= 0;
-const uint8_t COMMAND_BIT_DEFAULT_COLOR_WHITE_USED			= COMMAND_BIT_DEFAULT_COLOR_SET							+ 1;
-const uint8_t COMMAND_BIT_ALTERNATE_COLOR_SET						= COMMAND_BIT_DEFAULT_COLOR_WHITE_USED			+ 1;
-const uint8_t COMMAND_BIT_ALTERNATE_COLOR_WHITE_USED		= COMMAND_BIT_ALTERNATE_COLOR_SET						+ 1;
-const uint8_t COMMAND_BIT_PRESET_NUMBER_SET							= COMMAND_BIT_ALTERNATE_COLOR_WHITE_USED		+ 1;
-const uint8_t COMMAND_BIT_DELAY_TIME_SET								= COMMAND_BIT_PRESET_NUMBER_SET							+ 1;
-const uint8_t COMMAND_BIT_STROBO_TIME_SET								= COMMAND_BIT_DELAY_TIME_SET								+ 1;
+const uint8_t COMMAND_BIT_DEFAULT_COLOR_WHITE_USED			= 1;
+const uint8_t COMMAND_BIT_ALTERNATE_COLOR_SET						= 2;
+const uint8_t COMMAND_BIT_ALTERNATE_COLOR_WHITE_USED		= 3;
+const uint8_t COMMAND_BIT_PRESET_NUMBER_SET							= 4;
+const uint8_t COMMAND_BIT_DELAY_TIME_SET								= 5;
+const uint8_t COMMAND_BIT_STROBO_TIME_SET								= 6;
+
+const uint8_t COMMAND_BIT_TRIGGER_STATE_SET							= 0;
+const uint8_t COMMAND_BIT_ACTIVATE_TRIGGER							= 1;
 
 
 class Command
@@ -76,48 +80,52 @@ public:
 	Command();
 	~Command();
 
-	par_bits_t GetParBits();
+	par_bits_t GetParBits() const;
 	void SetParBits(par_bits_t parBits);
 
-	bool GetDefaultColorSet();
+	bool GetDefaultColorSet() const;
 	void SetDefaultColorSet(bool set);
 
-	bool GetDefaultColorWhiteUsed();
+	bool GetDefaultColorWhiteUsed() const;
 	void SetDefaultColorWhiteUsed(bool set);
 
-	bool GetAlternateColorSet();
+	bool GetAlternateColorSet() const;
 	void SetAlternateColorSet(bool set);
 
-	bool GetAlternateColorWhiteUsed();
+	bool GetAlternateColorWhiteUsed() const;
 	void SetAlternateColorWhiteUsed(bool set);
 
-	bool GetPresetNumberSet();
+	bool GetPresetNumberSet() const;
 	void SetPresetNumberSet(bool set);
 
-	bool GetDelayTimeSet();
+	bool GetDelayTimeSet() const;
 	void SetDelayTimeSet(bool set);
 
-	bool GetStroboTimeSet();
+	bool GetStroboTimeSet() const;
 	void SetStroboTimeSet(bool set);
 
-	void GetDefaultColor(Irgbw& irgbw);
+	bool GetTriggerState() const;
+	void SetTriggerState(bool set);
+
+	bool GetActivateTrigger() const;
+	void SetActivateTrigger(bool set);
+
+	void GetDefaultColor(Irgbw& irgbw) const;
 	void SetDefaultColor(Irgbw& irgbw);
 
-	void GetAlternateColor(Irgbw& irgbw);
+	void GetAlternateColor(Irgbw& irgbw) const;
 	void SetAlternateColor(Irgbw& irgbw);
 
-	preset_t GetPresetNumber();
+	preset_t GetPresetNumber() const;
 	void SetPresetNumber(preset_t presetNumber);
 
-	step_duration_t GetDelayTime();
+	step_duration_t GetDelayTime() const;
 	void SetDelayTime(step_duration_t time);
 
-	step_duration_t GetStroboTime();
+	step_duration_t GetStroboTime() const;
 	void SetStroboTime(step_duration_t time);
 
-	uint8_t GetCrc();
-	void CalculateCrc();
-	
+
 private:
 	uint8_t _data[COMMAND_LENGTH];
 };

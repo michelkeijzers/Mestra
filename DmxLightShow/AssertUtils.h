@@ -1,5 +1,6 @@
 #pragma once
 
+#include "stdlib.h"
 #include "ClassNames.h"
 #include HEADER_FILE(ARDUINO_CLASS)
 

@@ -3,8 +3,6 @@
 
 #pragma once
 
-#include <stdint.h>
-#include "ClassNames.h"
 #include "Irgbw.h"
 #include "Fixture.h"
 #include "MestraTypes.h"
@@ -23,7 +21,7 @@
 class Par : public Fixture
 {
 public:
-	Par(fixture_number_t fixtureNumber);
+	explicit Par(fixture_number_t fixtureNumber);
 	virtual ~Par();
 
 	void SetPlatform(PlatformFixture* platformFixture, PlatformPar* platformPar);
@@ -34,29 +32,37 @@ public:
 		Alternate
 	};
 
-	PlatformPar& GetPlatformPar();
+	PlatformPar& GetPlatformPar() const;
 
-	virtual void GetActualColor(Irgbw& actualColor) = 0;
+	virtual void GetActualColor(Irgbw& color) const = 0;
 
 	virtual void WriteIrgb(Irgbw& irgbw) = 0;
 	virtual void WriteIrgbw(Irgbw& irgbw) = 0;
 
-	void GetDefaultColor(Irgbw& color);
+	Irgbw& GetDefaultColor();
 
 	void SetDefaultColorIrgb(Irgbw& color);
 	void SetDefaultColorIrgbw(Irgbw& color);
 
-	void GetAlternateColor(Irgbw& color);
+  Irgbw& GetAlternateColor();
 
 	void SetAlternateColorIrgb(Irgbw& color);
 	void SetAlternateColorIrgbw(Irgbw& color);
 
-protected:
-	virtual dmx_value_t GetRed2Dmx(intensity_t red) = 0;
-	virtual dmx_value_t GetGreen2Dmx(intensity_t green) = 0;
-	virtual dmx_value_t GetBlue2Dmx(intensity_t blue) = 0;
-	virtual dmx_value_t GetWhite2Dmx(intensity_t white) = 0;
+	virtual intensity_t GetClosestRed(dmx_value_t value) const = 0;
+	virtual intensity_t GetClosestGreen(dmx_value_t value) const = 0;
+	virtual intensity_t GetClosestBlue(dmx_value_t value) const = 0;
+	virtual intensity_t GetClosestWhite(dmx_value_t value) const = 0;
+
+public:
+	virtual dmx_value_t GetRed2Dmx(intensity_t red) const = 0;
+	virtual dmx_value_t GetGreen2Dmx(intensity_t green) const = 0;
+	virtual dmx_value_t GetBlue2Dmx(intensity_t blue) const = 0;
+	virtual dmx_value_t GetWhite2Dmx(intensity_t white) const = 0;
 
 private:
 	PlatformPar* _platformPar;
+
+	Irgbw _defaultColor;
+	Irgbw _alternateColor;
 };

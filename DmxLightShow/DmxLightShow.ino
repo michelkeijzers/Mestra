@@ -1,12 +1,12 @@
 
 // DmxLightShow.ino
 //
-//           PRO MINI
-//            N A N O       U N O       M E G A        
-//           Flash SRAM   Flash SRAM   Flash SRAM      
-// Maximum:  30720 2048   32256 2048  253952 8192
-// Current:  12308 1093   12855 1303    5736 1153
-//       %:    40   53     39   63
+//           
+//             M E G A        
+//            Flash SRAM   SRAMnew
+// Maximum:  253952 8192
+// Current:   12806 1044       663
+//       %:       5   12         8
 //
 // Stack:
 //
@@ -22,27 +22,23 @@
 // Total                                           11                 16      + 2 per level (7) = 11+16+14=41
 
 // Interrupt
-
-#include "SerialPrint.h"
 #include <DmxSimple.h>
+#include "SerialPrint.h"
 #include "McuLightSetup.h"
 #include "LightSetup.h"
 #include "Command.h"
 #include "CommandParser.h"
 #include "ProgramExecuter.h"
 
-
 const uint8_t  DMX_SEND_PIN     =   2;
 const uint16_t DMX_MAX_CHANNELS = 140;
 
 Command         _command;
-CommandParser   _commandParser;
-ProgramExecuter _programExecuter;
 McuLightSetup   _mcuLightSetup;
 
 
+//void onReceive(int packetSize);
 void PrintFixtures();
-
 
 void setup() 
 {
@@ -60,14 +56,15 @@ void setup()
   LightSetup.GetPlatform()->SetProperties();
   PrintFixtures();
 
-  _commandParser.Parse(_command);
+  CommandParser::Parse(_command);
 
-  _programExecuter.Run();
+  ProgramExecuter::Run();
 }
 
 
 void loop() 
 {
+
 }
 
 

@@ -10,12 +10,12 @@ public:
 	McuLightSetup();
 	virtual ~McuLightSetup();
 
-	/* override */ void SetProperties();
+	void SetProperties() override;
 
-	/* override */ void PrintHeader();
-	/* override */ void PrintFixture(fixture_number_t fixtureNumber);
-	/* override */ void PrintFooter();
+	void PrintHeader() const override;
+	void PrintFixture(fixture_number_t fixtureNumber) const override;
+	void PrintFooter() const override;
 
-	bool ArePropertiesSet();
+	bool ArePropertiesSet() const override;
 };
 

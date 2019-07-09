@@ -1,30 +1,27 @@
 // Window.cpp
 // Only for Windows.
 
+#include "ProgramExecuter.h"
 #ifdef _WINDOWS
 
 // DmxLightShow.cpp : Defines the entry point for the application.
 //
 
 #include <cmath>
+#include <string>
 #include "math.h"
 #include "framework.h"
-#include "PlatformPar.h"
-#include "DmxLightShow.h"
-#include "LightSetup.h"
-#include "Irgbw.h"
-#include "TestProgramExecuter.h"
-#include <string>
+
+#include "AsciiCommandParser.h"
 #include "CommandBuffer.h"
-using namespace std;
-#include HEADER_FILE(ARDUINO_CLASS)
-#include HEADER_FILE(DMX_SIMPLE_CLASS)
+#include "CommandParser.h"
+#include "DmxLightShow.h"
+#include "Irgbw.h"
+#include "LightSetup.h"
 #include "MestraTypes.h"
 #include "WinLightsetup.h"
-#include "ChinesePar.h"
-#include "LedBar.h"
-#include "AsciiCommandParser.h"
-#include "CommandParser.h"
+
+using namespace std;
 
 
 #define MAX_LOADSTRING 100
@@ -54,9 +51,7 @@ WCHAR szTitle[MAX_LOADSTRING];                  // The title bar text
 WCHAR szWindowClass[MAX_LOADSTRING];            // the main window class name
 
 CommandBuffer _commandBuffer;
-ProgramExecuter _programExecuter;
 AsciiCommandParser _asciiCommandParser;
-CommandParser _commandParser;
 
 
 int _refreshCounter;
@@ -117,7 +112,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
       }
   }
 
-  return (int) msg.wParam;
+  return int(msg.wParam);
 }
 
 
@@ -140,7 +135,7 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
     wcex.hInstance      = hInstance;
     wcex.hIcon          = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_DMXLIGHTSHOW));
     wcex.hCursor        = LoadCursor(nullptr, IDC_ARROW);
-    wcex.hbrBackground  = (HBRUSH)(COLOR_WINDOW+1);
+    wcex.hbrBackground  = HBRUSH(COLOR_WINDOW+1);
     wcex.lpszMenuName   = MAKEINTRESOURCEW(IDC_DMXLIGHTSHOW);
     wcex.lpszClassName  = szWindowClass;
     wcex.hIconSm        = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_SMALL));
@@ -185,17 +180,17 @@ INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 	switch (message)
 	{
 	case WM_INITDIALOG:
-		return (INT_PTR)TRUE;
+		return INT_PTR(TRUE);
 
 	case WM_COMMAND:
 		if (LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL)
 		{
 			EndDialog(hDlg, LOWORD(wParam));
-			return (INT_PTR)TRUE;
+			return INT_PTR(TRUE);
 		}
 		break;
 	}
-	return (INT_PTR)FALSE;
+	return INT_PTR(FALSE);
 }
 
 
@@ -236,11 +231,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 					for (fixture_number_t parNumber = 0; parNumber < NR_OF_PARS; parNumber++)
 					{
-						Par& par = (Par&) LightSetup.GetPar(parNumber);
-						Irgbw actualColor;
+						Par& par = static_cast<Par&>(LightSetup.GetPar(parNumber));
+						Irgbw actualColor; 
 						par.GetActualColor(actualColor);
 
-						if ((LightSetup.GetPlatform() != 0) && LightSetup.GetPlatform()->ArePropertiesSet())
+						if ((LightSetup.GetPlatform() != nullptr) && LightSetup.GetPlatform()->ArePropertiesSet())
 						{
 							_backgroundFixturePaint = true;
 
@@ -373,7 +368,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 								// Line 1
 								mbstowcs_s(&sizet, wtext, platformFixture.GetName1(),
 									strlen(platformFixture.GetName1()) + 1); //Plus null
-								LPWSTR ptr = wtext;
 
 								TextOut(hdc,
 									TEXT_OFFSET_X + platformFixture.GetX() * PAR_DISTANCE_X,
@@ -384,7 +378,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 								mbstowcs_s(&sizet,
 									wtext, platformFixture.GetName2(),
 									strlen(platformFixture.GetName2()) + 1); //Plus null
-								ptr = wtext;
 
 								TextOut(hdc,
 									TEXT_OFFSET_X + platformFixture.GetX() * PAR_DISTANCE_X,
@@ -394,7 +387,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 								// Abbr
 								mbstowcs_s(&sizet, wtext, platformFixture.GetAbbr(),
 									strlen(platformFixture.GetAbbr()) + 1); //Plus null
-								ptr = wtext;
 
 								TextOut(hdc,
 									TEXT_OFFSET_X + platformFixture.GetX() * PAR_DISTANCE_X,
@@ -426,8 +418,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 void CalcCenter(int degrees, int centerX, int centerY, int distance, int* outputX, int* outputY)
 {
-	*outputX = centerX + (int) (sin(degrees / 180.0f * PI_F) * distance);
-	*outputY = centerY + (int) (cos(degrees / 180.0f * PI_F) * distance);
+	*outputX = centerX + int(sin(degrees / 180.0f * PI_F) * distance);
+	*outputY = centerY + int(cos(degrees / 180.0f * PI_F) * distance);
 }
 
 void InitMestra()
@@ -454,7 +446,7 @@ void HandleMestraMessages(MSG& msg)
 	}
 
 	// Run program executer.
-	_programExecuter.Run();
+	ProgramExecuter::Run();
 
 	bool atLeasOneParIncreased = false;
 	for (fixture_number_t par = 0; par < NR_OF_PARS; par++)
@@ -467,7 +459,7 @@ void HandleMestraMessages(MSG& msg)
 		PrintFixtures();
 	}
 
-	InvalidateRect(msg.hwnd, NULL, FALSE);
+	InvalidateRect(msg.hwnd, nullptr, FALSE);
 }
 
 
@@ -483,7 +475,7 @@ void InjectString(const char* commandString)
 
 	_commandBuffer.Process(_asciiCommandParser);
 	Command& command = _asciiCommandParser.GetCommand();
-	_commandParser.Parse(command);
+	CommandParser::Parse(command);
 	
 	// Print command.
 	wchar_t wCommandText[256];
@@ -518,7 +510,7 @@ void InjectCommands()
 	if (_refreshCounter == 100)
 	{
 
-	  InjectString("AA t 4000");
+	  //InjectString("AA t 4000");
 
 
 
@@ -537,8 +529,12 @@ void InjectCommands()
 		//InjectString("t BA 4000");
 		//InjectString("p BA 72");
 
-		//InjectString("fa t 5000 d ir a irb p 52");
-		InjectString("ba t 7000 d ir a irb p 52");
+		InjectString("la t 300 d ir a ib p 63");
+		InjectString("ra t 300 d ir a ib p 63");
+		InjectString("ba t 200 d ir a ig p 63");
+		//InjectString("ba t 300 p 71");
+		//InjectString("ba t 5000 d ir a irb p 53");
+		//InjectString("ba t7000 d100,101,102,103 a50,51,52,53,54 p52");
 
 		//InjectString("ra a ib");
 		//InjectString("ra p 72");

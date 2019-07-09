@@ -4,9 +4,7 @@
 #ifdef _WINDOWS
 
 #include "CommandBuffer.h"
-#include "CharUtils.h"
 #include "StringUtils.h"
-#include <string.h>
 #include "AsciiCommandParser.h"
 
 

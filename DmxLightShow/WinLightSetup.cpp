@@ -30,7 +30,7 @@ WinLightSetup::~WinLightSetup()
 }
 
 
-bool WinLightSetup::ArePropertiesSet()
+bool WinLightSetup::ArePropertiesSet() const
 {
 	return _propertiesAreSet;
 }
@@ -40,35 +40,35 @@ void WinLightSetup::SetProperties()
 {
 	for (int parNumber = 0; parNumber < NR_OF_PARS; parNumber++)
 	{
-		GetPar((fixture_number_t) parNumber).SetPlatform(new WinFixture(), new WinPar());
+		GetPar(fixture_number_t(parNumber)).SetPlatform(new WinFixture(), new WinPar());
 	}
 
-	GetPar((fixture_number_t)0).GetPlatformFixture().SetProperties("Front", "Right 4", "FR4", 10, 1);
-	GetPar((fixture_number_t)1).GetPlatformFixture().SetProperties("Front", "Right 3", "FR3", 9, 1);
-	GetPar((fixture_number_t)2).GetPlatformFixture().SetProperties("Front", "Right 2", "FR2", 8, 1);
-	GetPar((fixture_number_t)3).GetPlatformFixture().SetProperties("Front", "Right 1", "FR1", 7, 1);
+	GetPar(fixture_number_t(0)).GetPlatformFixture().SetProperties("Front", "Right 4", "FR4", 10, 1);
+	GetPar(fixture_number_t(1)).GetPlatformFixture().SetProperties("Front", "Right 3", "FR3", 9, 1);
+	GetPar(fixture_number_t(2)).GetPlatformFixture().SetProperties("Front", "Right 2", "FR2", 8, 1);
+	GetPar(fixture_number_t(3)).GetPlatformFixture().SetProperties("Front", "Right 1", "FR1", 7, 1);
 
-	GetPar((fixture_number_t)4).GetPlatformFixture().SetProperties("Front", "Left 1", "FL1", 2, 1);
-	GetPar((fixture_number_t)5).GetPlatformFixture().SetProperties("Front", "Left 2", "FL2", 3, 1);
-	GetPar((fixture_number_t)6).GetPlatformFixture().SetProperties("Front", "Left 3", "FL3", 4, 1);
-	GetPar((fixture_number_t)7).GetPlatformFixture().SetProperties("Front", "Left 4", "FL4", 5, 1);
+	GetPar(fixture_number_t(4)).GetPlatformFixture().SetProperties("Front", "Left 1", "FL1", 5, 1);
+	GetPar(fixture_number_t(5)).GetPlatformFixture().SetProperties("Front", "Left 2", "FL2", 4, 1);
+	GetPar(fixture_number_t(6)).GetPlatformFixture().SetProperties("Front", "Left 3", "FL3", 3, 1);
+	GetPar(fixture_number_t(7)).GetPlatformFixture().SetProperties("Front", "Left 4", "FL4", 2, 1);
 
-	GetPar((fixture_number_t)8).GetPlatformFixture().SetProperties("Drums", "Right", "DR", 9, 3);
-	GetPar((fixture_number_t)9).GetPlatformFixture().SetProperties("Drums", "Left", "DL", 8, 3);
+	GetPar(fixture_number_t(8)).GetPlatformFixture().SetProperties("Drums", "Right", "DR", 9, 3);
+	GetPar(fixture_number_t(9)).GetPlatformFixture().SetProperties("Drums", "Left", "DL", 8, 3);
 
 	//Par("Keyboards", 	"Right", 	"KR",   5, 3);
 	//Par("Keyboards", 	"Left", 	"KL",   4, 3);
 
-	GetPar((fixture_number_t)10).GetPlatformFixture().SetProperties("Banner", "Right", "BR", 11, 2);
-	GetPar((fixture_number_t)11).GetPlatformFixture().SetProperties("Banner", "Left", "BL", 1, 2);
+	GetPar(fixture_number_t(10)).GetPlatformFixture().SetProperties("Banner", "Right", "BR", 11, 2);
+	GetPar(fixture_number_t(11)).GetPlatformFixture().SetProperties("Banner", "Left", "BL", 1, 2);
 
-	GetPar((fixture_number_t)12).GetPlatformFixture().SetProperties("Ego Riser", "Right", "ER", 9, 2);
-	GetPar((fixture_number_t)13).GetPlatformFixture().SetProperties("Ego Riser", "Left", "EL", 3, 2);
+	GetPar(fixture_number_t(12)).GetPlatformFixture().SetProperties("Ego Riser", "Right", "ER", 9, 2);
+	GetPar(fixture_number_t(13)).GetPlatformFixture().SetProperties("Ego Riser", "Left", "EL", 3, 2);
 
 	// LED Bars.
-	GetPar((fixture_number_t)14).GetPlatformFixture().SetProperties("LED Bar", "Right", "LR", 5, 3);
-	GetPar((fixture_number_t)15).GetPlatformFixture().SetProperties("LED Bar", "Center", "LC", 3, 3);
-	GetPar((fixture_number_t)16).GetPlatformFixture().SetProperties("LED Bar", "Left", "LL", 1, 3);
+	GetPar(fixture_number_t(14)).GetPlatformFixture().SetProperties("LED Bar", "Right", "LR", 5, 3);
+	GetPar(fixture_number_t(15)).GetPlatformFixture().SetProperties("LED Bar", "Center", "LC", 3, 3);
+	GetPar(fixture_number_t(16)).GetPlatformFixture().SetProperties("LED Bar", "Left", "LL", 1, 3);
 
 	_propertiesAreSet = true;
 }
@@ -76,13 +76,13 @@ void WinLightSetup::SetProperties()
 
 #define OUTPUT_LIGHT_SETUP 1
 
-void WinLightSetup::PrintHeader()
+void WinLightSetup::PrintHeader() const
 {
 #ifdef OUTPUT_LIGHT_SETUP
 
 	WCHAR message[256];
 
-	swprintf_s(message, L"Time: %u\n", millis() - ((uint32_t)(_programStartTime.time * 1000 + _programStartTime.millitm)));
+	swprintf_s(message, L"Time: %u\n", millis() - uint32_t(_programStartTime.time * 1000 + _programStartTime.millitm));
 	OutputDebugString(message);
 
 	OutputDebugString(L"┌▬▬▬┬▬▬▬▬┬▬▬▬┬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬┬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬┬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬┬▬▬▬▬▬▬▬▬▬▬▬▬┬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬┬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬┐\n");
@@ -96,7 +96,7 @@ void WinLightSetup::PrintHeader()
 }
 
 
-void WinLightSetup::PrintFixture(fixture_number_t fixtureNumber)
+void WinLightSetup::PrintFixture(fixture_number_t fixtureNumber) const
 {
 #ifdef OUTPUT_LIGHT_SETUP
 
@@ -106,10 +106,8 @@ void WinLightSetup::PrintFixture(fixture_number_t fixtureNumber)
 	Irgbw actualColor;
 	par.GetActualColor(actualColor);
 
-	Irgbw defaultColor;
-	par.GetDefaultColor(defaultColor);
-	Irgbw alternateColor;
-	par.GetAlternateColor(alternateColor);
+	Irgbw defaultColor = par.GetDefaultColor();
+	Irgbw alternateColor = par.GetAlternateColor();
 
 	const char* abbr = par.GetPlatformFixture().GetAbbr();
 				
@@ -135,7 +133,7 @@ void WinLightSetup::PrintFixture(fixture_number_t fixtureNumber)
 }
 
 
-void WinLightSetup::PrintFooter()
+void WinLightSetup::PrintFooter() const
 {
 #ifdef OUTPUT_LIGHT_SETUP
 

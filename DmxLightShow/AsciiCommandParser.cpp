@@ -5,14 +5,9 @@
 
 #include <stdlib.h>
 #include "AsciiCommandParser.h"
-#include "PresetCommand.h"
-#include "ClassNames.h"
 #include <string.h>
 #include <ctype.h>
 #include "CharUtils.h"
-#include "LightSetup.h"
-#include HEADER_FILE(ARDUINO_CLASS)
-#include "AssertUtils.h"
 
 
 struct Chars2ParBits
@@ -65,7 +60,7 @@ Chars2ParBits Chars2ParBitsMapping[] =
 
 
 AsciiCommandParser::AsciiCommandParser()
-	: _userCommand('\0'), 
+	: _userCommand(nullptr), 
 		_currentIndex(0),
 	  _parseError(false)
 {
@@ -118,6 +113,19 @@ void AsciiCommandParser::Parse(char* command)
 			}
 			break;
 
+			case 'G':
+			{
+				_command.SetTriggerState(true);
+				_currentIndex++;
+			}
+			break;
+
+			case '!':
+			{
+				_command.SetActivateTrigger(true);
+				_currentIndex++;
+			}
+
 			case 'P':
 				_command.SetPresetNumberSet(true);
 				_currentIndex++;
@@ -165,7 +173,7 @@ bool AsciiCommandParser::ParseColorCommand(Irgbw& irgbw)
 			irgbw.SetIntensity(255U);
 		}
 
-		if ((strcspn(&(_userCommand[_currentIndex]), ",")) < strlen(&(_userCommand[_currentIndex])))
+		if (strcspn(&_userCommand[_currentIndex], ",") < strlen(&_userCommand[_currentIndex]))
 		{
 			whiteIsPresent = ParseIrgbwAsNumbers(irgbw);
 		}
@@ -183,7 +191,7 @@ bool AsciiCommandParser::ParseColorCommand(Irgbw& irgbw)
 // 0<=Intensity<=255, 0 (%) <=Red, Green, Blue, White<=100 (%)
 bool AsciiCommandParser::ParseIrgbwAsNumbers(Irgbw& irgbw)
 {
-	bool whiteIsPresent = false;
+	bool whiteIsPresent;
 
 	// Read intensity.
 	if (_userCommand[_currentIndex] == ',')
@@ -193,36 +201,48 @@ bool AsciiCommandParser::ParseIrgbwAsNumbers(Irgbw& irgbw)
 	}
 	else
 	{
-		irgbw.SetIntensity((intensity_t) (strtoul(&(_userCommand[_currentIndex]), NULL, 0)));
-		SkipUntilComma();
+		irgbw.SetIntensity(intensity_t(strtoul(&_userCommand[_currentIndex], nullptr, 0)));
+		SkipDigits();
 	}
-	
+
+	ParseComma();
+	SkipWhitespace();
+
 	// Read red.
-	irgbw.SetRed((intensity_t) (strtoul(&(_userCommand[_currentIndex]), NULL, 0) * PAR_MAX_PAR_INTENSITY / 255));
-	SkipUntilComma();
+	irgbw.SetRed(intensity_t(strtoul(&_userCommand[_currentIndex], nullptr, 0)));
+	SkipDigits();
+	SkipWhitespace();
+	ParseComma();
+	SkipWhitespace();
 
 	// Read green.
-	irgbw.SetGreen((intensity_t) (strtoul(&(_userCommand[_currentIndex]), NULL, 0) * PAR_MAX_PAR_INTENSITY / 255));
-	SkipUntilComma();
+	irgbw.SetGreen(intensity_t(strtoul(&_userCommand[_currentIndex], nullptr, 0)));
+	SkipDigits();
+	SkipWhitespace();
+	ParseComma();
+	SkipWhitespace();
 
 	// Read blue.
-	irgbw.SetBlue((intensity_t) (strtoul(&(_userCommand[_currentIndex]), NULL, 0) * PAR_MAX_PAR_INTENSITY / 255));
-	
+	irgbw.SetBlue(intensity_t(strtoul(&_userCommand[_currentIndex], nullptr, 0)));
+	SkipDigits();
+	SkipWhitespace();
+
 	// Read white (optionally).
-	if ((strcspn(&(_userCommand[_currentIndex]), ",")) < strlen(&(_userCommand[_currentIndex])))
+	if (_userCommand[_currentIndex] == ',')
 	{
-		// White is present
 		whiteIsPresent = true;
-		SkipUntilComma();
-		irgbw.SetWhite((intensity_t) (strtoul(&(_userCommand[_currentIndex]), NULL, 0) * PAR_MAX_PAR_INTENSITY / 255));
+		ParseComma();
+		SkipWhitespace();
+		irgbw.SetWhite(intensity_t(strtoul(&_userCommand[_currentIndex], nullptr, 0) * PAR_MAX_PAR_INTENSITY / 255));
+		SkipDigits();
 	}
 	else
 	{
-		// No white present, default is 0
+		whiteIsPresent = false;
 		irgbw.SetWhite(0);
 	}
 
-	SkipUntilWhitespace();
+	SkipWhitespace();
 
 	return whiteIsPresent;
 }
@@ -233,7 +253,7 @@ bool AsciiCommandParser::ParseIrgbwAsCharacters(Irgbw& irgbw)
 	bool whiteIsPresent = false;
 
 	// Expect occurrences of i, r, g, b, w in any order
-	while ((_userCommand[_currentIndex] != '\0') && !isblank(_userCommand[_currentIndex]))
+	while (_userCommand[_currentIndex] != '\0' && !isblank(_userCommand[_currentIndex]))
 	{
 		switch (CharUtils::ToUpper(_userCommand[_currentIndex]))
 		{
@@ -272,11 +292,11 @@ bool AsciiCommandParser::ParseIrgbwAsCharacters(Irgbw& irgbw)
 
 void AsciiCommandParser::ParsePresetCommand()
 {
-	ParseWhitespace();
+	SkipWhitespace();
 	if (!_parseError)
 	{
 		_command.SetPresetNumberSet(true);
-		_command.SetPresetNumber((preset_t) (strtoul(&(_userCommand[_currentIndex]), NULL, 0)));
+		_command.SetPresetNumber(preset_t(strtoul(&_userCommand[_currentIndex], nullptr, 0)));
 		SkipUntilWhitespace();
 	}
 }
@@ -284,11 +304,11 @@ void AsciiCommandParser::ParsePresetCommand()
 
 void AsciiCommandParser::ParseStroboCommand()
 {
-	ParseWhitespace();
+	SkipWhitespace();
 	if (!_parseError)
 	{
-		_command.SetStroboTime((step_duration_t) strtoul(&(_userCommand[_currentIndex]), NULL, 0));
-		_parseError |= (_command.GetStroboTime() == 0);
+		_command.SetStroboTime(step_duration_t(strtoul(&_userCommand[_currentIndex], nullptr, 0)));
+		_parseError |= _command.GetStroboTime() == 0;
 		SkipUntilWhitespace();
 	}
 }
@@ -296,11 +316,11 @@ void AsciiCommandParser::ParseStroboCommand()
 
 void AsciiCommandParser::ParseDelayTimeCommand()
 {
-	ParseWhitespace();
+	SkipWhitespace();
 	if (!_parseError)
 	{
-		_command.SetDelayTime((step_duration_t) strtoul(&(_userCommand[_currentIndex]), NULL, 0));
-		_parseError |= (_command.GetDelayTime() == 0);
+		_command.SetDelayTime(step_duration_t(strtoul(&_userCommand[_currentIndex], nullptr, 0)));
+		_parseError |= _command.GetDelayTime() == 0;
 		SkipUntilWhitespace();
 	}
 }
@@ -316,7 +336,7 @@ void AsciiCommandParser::ParseWhitespace()
 	}
 	else
 	{
-		while ((_userCommand[_currentIndex] != '\0') && isspace(_userCommand[_currentIndex]))
+		while (_userCommand[_currentIndex] != '\0' && isspace(_userCommand[_currentIndex]))
 		{
 			_currentIndex++;
 		}
@@ -331,7 +351,7 @@ void AsciiCommandParser::ParseWhitespace()
 
 void AsciiCommandParser::SkipWhitespace()
 {
-	while ((_userCommand[_currentIndex] != '\0') && isspace(_userCommand[_currentIndex]))
+	while (_userCommand[_currentIndex] != '\0' && isspace(_userCommand[_currentIndex]))
 	{
 		_currentIndex++;
 	}
@@ -340,14 +360,14 @@ void AsciiCommandParser::SkipWhitespace()
 
 void AsciiCommandParser::SkipUntilWhitespace()
 {
-	while ((_userCommand[_currentIndex] != '\0') && !isblank(_userCommand[_currentIndex]))
+	while (_userCommand[_currentIndex] != '\0' && !isblank(_userCommand[_currentIndex]))
 	{
 		_currentIndex++;
 	}
 
 	if (_userCommand[_currentIndex] == '\0')
 	{
-		_parseError = true;
+		//_parseError = true;
 	}
 	else
 	{
@@ -356,21 +376,23 @@ void AsciiCommandParser::SkipUntilWhitespace()
 }
 
 
-void AsciiCommandParser::SkipUntilComma()
+void AsciiCommandParser::SkipDigits()
 {
-	while ((_userCommand[_currentIndex] != '\0') && (_userCommand[_currentIndex] != ','))
+	while (_userCommand[_currentIndex] != '\0' && isdigit(_userCommand[_currentIndex]))
 	{
 		_currentIndex++;
 	}
+}
 
-	if (_userCommand[_currentIndex] == '\0')
+
+void AsciiCommandParser::ParseComma()
+{
+	if (_userCommand[_currentIndex] == '\0' || _userCommand[_currentIndex] != ',')
 	{
 		_parseError = true;
 	}
-	else
-	{
-		_currentIndex++; // Skip comma
-	}
+
+	_currentIndex++;
 }
 
 
@@ -380,17 +402,17 @@ void AsciiCommandParser::ParseParBitsAndWhitespace()
 	char abbr1 = _userCommand[_currentIndex + 1];
 	_currentIndex += 2;
 
-	for (uint8_t index = 0; index < sizeof(Chars2ParBitsMapping) / sizeof(Chars2ParBits); index++)
+	for (uint8_t index = 0; index < sizeof Chars2ParBitsMapping / sizeof(Chars2ParBits); index++)
 	{
 		Chars2ParBits& mapping = Chars2ParBitsMapping[index];
-		if ((abbr0 == mapping.abbr[0]) &&
-			(abbr1 == mapping.abbr[1]))
+		if (abbr0 == mapping.abbr[0] &&
+			  abbr1 == mapping.abbr[1])
 		{
 			_command.SetParBits(mapping.parBits);
 		}
 	}
 
-	_parseError |= (_command.GetParBits() == 0);
+	_parseError |= _command.GetParBits() == 0;
 
 	SkipWhitespace();
 }

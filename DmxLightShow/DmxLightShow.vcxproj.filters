@@ -46,6 +46,12 @@
     <Filter Include="Source Files\LightSetup\FixtureTypes">
       <UniqueIdentifier>{296269b4-1c3a-4f7e-9f09-4f4956005203}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\ArduinoStubs">
+      <UniqueIdentifier>{1812ecb2-21f7-444a-8168-d5375186b9d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ArduinoStubs">
+      <UniqueIdentifier>{e81dd199-589c-4e45-95f9-d5674f714e80}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="StringUtils.h">
@@ -69,17 +75,11 @@
     <ClInclude Include="ClassNames.h">
       <Filter>Header Files\Framework</Filter>
     </ClInclude>
-    <ClInclude Include="ArduinoStub.h">
-      <Filter>Header Files\Win32</Filter>
-    </ClInclude>
     <ClInclude Include="PresetCommand.h">
       <Filter>Header Files\Commands</Filter>
     </ClInclude>
     <ClInclude Include="BitsUtils.h">
       <Filter>Header Files\Utilities</Filter>
-    </ClInclude>
-    <ClInclude Include="DmxSimpleStub.h">
-      <Filter>Header Files\Win32</Filter>
     </ClInclude>
     <ClInclude Include="Resource.h">
       <Filter>Header Files\Win32</Filter>
@@ -126,9 +126,6 @@
     <ClInclude Include="LedBarSegment.h">
       <Filter>Header Files\LightSetup\FixtureTypes</Filter>
     </ClInclude>
-    <ClInclude Include="SpiRAMStub.h">
-      <Filter>Header Files\Win32</Filter>
-    </ClInclude>
     <ClInclude Include="PlatformFixture.h">
       <Filter>Header Files\LightSetup</Filter>
     </ClInclude>
@@ -136,9 +133,6 @@
       <Filter>Header Files\LightSetup</Filter>
     </ClInclude>
     <ClInclude Include="PlatformPar.h">
-      <Filter>Header Files\LightSetup</Filter>
-    </ClInclude>
-    <ClInclude Include="FixtureData.h">
       <Filter>Header Files\LightSetup</Filter>
     </ClInclude>
     <ClInclude Include="AsciiCommandParser.h">
@@ -156,8 +150,17 @@
     <ClInclude Include="AssertUtils.h">
       <Filter>Header Files\Utilities</Filter>
     </ClInclude>
+    <ClInclude Include="SpiRAMStub.h">
+      <Filter>Header Files\ArduinoStubs</Filter>
+    </ClInclude>
+    <ClInclude Include="ArduinoStub.h">
+      <Filter>Header Files\ArduinoStubs</Filter>
+    </ClInclude>
+    <ClInclude Include="DmxSimpleStub.h">
+      <Filter>Header Files\ArduinoStubs</Filter>
+    </ClInclude>
     <ClInclude Include="SerialStub.h">
-      <Filter>Header Files\Win32</Filter>
+      <Filter>Header Files\ArduinoStubs</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -198,12 +201,6 @@
     <ClCompile Include="BitsUtils.cpp">
       <Filter>Source Files\Utilities</Filter>
     </ClCompile>
-    <ClCompile Include="ArduinoStub.cpp">
-      <Filter>Source Files\WIN32</Filter>
-    </ClCompile>
-    <ClCompile Include="DmxSimpleStub.cpp">
-      <Filter>Source Files\WIN32</Filter>
-    </ClCompile>
     <ClCompile Include="Window.cpp">
       <Filter>Source Files\WIN32</Filter>
     </ClCompile>
@@ -240,9 +237,6 @@
     <ClCompile Include="LedBarSegment.cpp">
       <Filter>Source Files\LightSetup\FixtureTypes</Filter>
     </ClCompile>
-    <ClCompile Include="SpiRAMStub.cpp">
-      <Filter>Source Files\WIN32</Filter>
-    </ClCompile>
     <ClCompile Include="PlatformFixture.cpp">
       <Filter>Source Files\LightSetup</Filter>
     </ClCompile>
@@ -250,9 +244,6 @@
       <Filter>Source Files\LightSetup</Filter>
     </ClCompile>
     <ClCompile Include="PlatformPar.cpp">
-      <Filter>Source Files\LightSetup</Filter>
-    </ClCompile>
-    <ClCompile Include="FixtureData.cpp">
       <Filter>Source Files\LightSetup</Filter>
     </ClCompile>
     <ClCompile Include="AsciiCommandParser.cpp">
@@ -270,8 +261,17 @@
     <ClCompile Include="AssertUtils.cpp">
       <Filter>Source Files\Utilities</Filter>
     </ClCompile>
+    <ClCompile Include="SpiRAMStub.cpp">
+      <Filter>Source Files\ArduinoStubs</Filter>
+    </ClCompile>
     <ClCompile Include="SerialStub.cpp">
-      <Filter>Source Files\WIN32</Filter>
+      <Filter>Source Files\ArduinoStubs</Filter>
+    </ClCompile>
+    <ClCompile Include="DmxSimpleStub.cpp">
+      <Filter>Source Files\ArduinoStubs</Filter>
+    </ClCompile>
+    <ClCompile Include="ArduinoStub.cpp">
+      <Filter>Source Files\ArduinoStubs</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -4,8 +4,6 @@
 
 #pragma once
 
-#include <string.h>
-#include "ClassNames.h"
 #include "Par.h"
 #include "Command.h"
 
@@ -35,10 +33,6 @@ private:
 	bool ParseIrgbwAsNumbers(Irgbw& irgwb);
 	bool ParseIrgbwAsCharacters(Irgbw& irgbw);
 
-	void SetIrgbw(Par::EActiveColor color, Irgbw& irgbw);
-
-	void SetColor(Irgbw& irgbw, Irgbw& irgbwTarget);
-
 	void ParsePresetCommand();
 
 	void ParseStroboCommand();
@@ -51,9 +45,8 @@ private:
 	void SkipWhitespace();
 
 	void SkipUntilWhitespace();
-	void SkipUntilComma();
-
-	void SetDelay(step_time_t delay);
+	void SkipDigits();
+	void ParseComma();
 };
 
 #endif // _WINDOWS

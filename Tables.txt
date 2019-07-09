@@ -1,6 +1,7 @@
 
 
-Commands:
+Commands
+========
 
 List of commands:
 
@@ -8,10 +9,12 @@ Command   First       Second     Description
         Parameter    Parameter
 ------- --------- -------------- -----------------------------------------
 
-<parbits> (d <DefaultColor>) (a <AlternativeColor>)  (p <PresetNumber>) (t <DelayTime>) (s <StrobeSpeed>) 
+<parbits> (`!` || (`d` <DefaultColor>) (`a` <AlternativeColor>) (`p` <PresetNumber>) (`t` <DelayTime>) (`s` <StrobeSpeed> | `g`))
 
 <ParBits>:           2 characters
+d					 default Color
 <DefaultColor>:      <Color>
+a					 alternative color
 <AlternativeColor>:  <Color>
 <Color>:             ( (('i')('r')('g')('b')('w'))*) | (<I>,<R>,<G>,<B>(,<W>)))
 <R>                  0-255
@@ -20,33 +23,81 @@ Command   First       Second     Description
 <I>                  0-255
 <W>:                 0-255, switches off strobo
 <DelayTime>:		 0-65535
-<StrobeTime>:        0-65535 (overrides w)
+<StrobeSpeed>:       0-65535 (overrides w)
+p					 preset number
+<PresetNumber>		 0-255
+t					 delay time
+g					 trigger state
+!					 activate trigger
 
 e.g.
 
-la a irgb d ir p 20 t 1000;
+la a irgb d ir p 20 t 1000 g;
 
-SPI Command:
 
-Item                Bytes/Bits Content
-------------------- ---------- --------------------------------
-ParBits                 0    	ParBits ID
-DefaultColorSet         1:0    Set default color
-DefaultColorMode        1:1    Use White (bit)
-AlternateColorSet       1:2    Set alternate color
-AlternateColorMode      1:3    Use White (bit)
-PresetNumberSet         1:4    Set preset number
-DelayTimeSet            1:5    Set Delay Time
-StrobeTime              1:6    Set Strobe Time
-DefaultColor         2- 6      I, R, G, B, W
-AlternateColor       7-11      I, R, G, B, W
-PresetNumber 		   12      0-255
-DelayTime              13      0-65535 ms
-StrobeTime 			   15      0-66535 ms
-CRC                    17      0-255
+Command bytes
+=============
 
+Item						Byte(s)	Bits	Comment
+------------------------	-------	-------	------------------------------------
+Par bits					0~ 3
+Flags						 4
+ Default Color Set					0
+ Default Color White Used			1			
+ Alternate Color Set				2
+ Alternate Color White Used			3
+ Preset Number Set					4
+ Delay Time Set						5
+ Strobo Time Set					6
+Flags 2						 5
+ Trigger State Set					0
+ Activate Trigger					1
+
+Default Color				 6~10
+Alternate Color				11~15
+Preset Number				16
+Delay Time					17~18
+Strobo Time					19
+
+#Bytes:                     20
+
+
+
+
+
+
+
+Fixture/Par data
+================
+
+Item					Type						Bytes	Class			Content
+-----------------------	--------------------------	-----	--------------	---------------------------
+(platformFixture)		Pointer*					2		Fixture
+fixtureNumber			fixture_number_t			1		Fixture
+initialize				bool						1		Fixture
+dmxOffsetChannel		dmx_channel_t				2		Fixture
+triggerState       		TriggeredState				1		Fixture			Program does not change steps until triggered, when at last step, it stops (until retriggered)
+program					program_t					1		Fixture
+nrOfSteps				step_t						2		Fixture
+stepTime				step_time_t					4		Fixture
+stepDuration			step_duration_t				4		Fixture
+currentStep				step_t						2		Fixture		
+parameter1				parameter_t					2		Fixture		
+parameter2				parameter_t					2		Fixture		
+parameter3				parameter_t					2		Fixture		
+defaultColor			Irgbw						5		Par
+alternateColor			Irgbw						5		Par
+segmentNumber			led_bar_saegment_number_t	1		LedBarSegment	Segment number (0-2)
+(Vtable)											2
+												   --
+Total											   39
+Nr of Fixtures                                     17   (14 pars + 3 led bar segments)	
+                                                  ---
+Total                                             663
+	
 
 List of presets
+===============
 
 Preset              Preset Program Description
 Group               number
@@ -81,6 +132,7 @@ Rainbow colors          70     40  No fade, left -> right,
                         73     40  Fade, right -> left
 
 Program List
+============
 
 Prg Name       Par1 Par2 Par3 Description
 --- ---------- ---- ---- ---- ------------------------------------------------------------------------
@@ -93,6 +145,8 @@ Prg Name       Par1 Par2 Par3 Description
  40 Rainbow    Yes   -    -   Par 1 = Step increase
 
 
+ PAR Bits
+ ========
 
                                                      LED Bar   Ego  Banners      
                                                                Risers      Drums  Front Left  Front Right
@@ -142,38 +196,4 @@ dx Fixture Group      Fixture Part                   Set
 76                    O Outer                        0   0  0  0  0  0  0  0  0   0  0  0  0  1  0  0  1  
 
 
-
-
-// _data
-// Byte(s) From Class Type     Property           Meaning
-// ------- ---------- -------- ------------------ ------------------------------------------------
-//   0     Fixture    uint8_t  _fixtureNumber     Fixture number (always fixed)
-//   1     Fixture    uint16_t _dmxOffsetChannel  DMX offset channel
-//   3.0   Fixture    bool     _initialize        True until it has been processed for first time  
-//   3.1   Fixture    bool     _oneShotProgram    True if one shot program
-//   4     Fixture    uint8_t  _program           Program number
-//   5- 7  Fixture    uint16_t _currentStep       Current step within program
-//   7- 8  Fixture    uint16_t _nrOfSteps         Number of steps within program
-//   9-12  Fixture    uint32_t _stepTime          Next time the current step changes
-//  13-14  Fixture    uint32_t _stepDuration      Duration of one/the current step)
-//  15-16  Fixture    int16_t  _parameter1        Parameter 1, depends on program
-//  17-18  Fixture    int16_t  _parameter2		  Parameter 2, depends on program
-//  19-20  Fixture    int16_t  _parameter3		  Parameter 3, depends on program
-//  21-25  Par        Irgbw    _defaultcolor      Default color
-//  26-30  Par        Irgbw    _alternateColor    Used for cross/multicolor programs
-//
-// Total 64 bytes, data is stored in LightSetup.
-//
-// Memory consumption
-//
-// SRAM Memory: Global variables:                                       1282 bytes
-//              Dynamic memory:    17 fixtures * 2 ptrs * 2 bytes/ptr =   68 bytes
-//              Stack size:         (rough estimate)                  =  200 bytes
-//              Interrupt           (rough estimate)                  =   20 bytes
-//                                                                      ---- 
-//              Total used SRAM:                                        1570 bytes / max: 2048 bytes
-// 
-// SD Memory:    17 fixtures * 64 bytes                               = 1088 bytes / max: 32768 bytes
-//
-//                
 

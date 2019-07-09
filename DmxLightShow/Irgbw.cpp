@@ -36,7 +36,7 @@ Irgbw::~Irgbw()
 }
 
 
-intensity_t Irgbw::GetIntensity()
+intensity_t Irgbw::GetIntensity() const
 {
 	return _intensity;
 }
@@ -48,7 +48,7 @@ void Irgbw::SetIntensity(intensity_t intensity)
 }
 
 
-intensity_t Irgbw::GetRed()
+intensity_t Irgbw::GetRed() const
 {
 	return _red;
 }
@@ -60,7 +60,7 @@ void Irgbw::SetRed(intensity_t red)
 }
 
 
-intensity_t Irgbw::GetGreen()
+intensity_t Irgbw::GetGreen() const
 {
 	return _green;
 }
@@ -72,10 +72,11 @@ void Irgbw::SetGreen(intensity_t green)
 }
 
 
-intensity_t Irgbw::GetBlue()
+intensity_t Irgbw::GetBlue() const
 {
 	return _blue;
 }
+
 
 void Irgbw::SetBlue(intensity_t blue)
 {
@@ -83,7 +84,7 @@ void Irgbw::SetBlue(intensity_t blue)
 }
 
 
-intensity_t Irgbw::GetWhite()
+intensity_t Irgbw::GetWhite() const
 {
 	return _white;
 }

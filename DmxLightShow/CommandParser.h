@@ -1,20 +1,23 @@
 #pragma once
 
-#include "MestraTypes.h"
 #include "Command.h"
 #include "Par.h"
 
 class CommandParser
 {
 public:
+	static void Parse(Command& command);
+
+private:
 	CommandParser();
 	~CommandParser();
 
-	void Parse(Command& command);
-	void SetDelayTime(Command& command, Par& par);
-	void SetDefaultColor(Command& command, Par& par);
-	void SetAlternateColor(Command& command, Par& par);
-	void SetPresetCommand(Command& command);
-	void SetStroboTime(Command& command);
+	static void SetDelayTime(Command& command, Par& par);
+	static void SetDefaultColor(Command& command, Par& par);
+	static void SetAlternateColor(Command& command, Par& par);
+	static void SetTriggerState(Command& command, Par& par);
+	static void ActivateTrigger(Par& par);
+	static void SetPresetCommand(Command& command);
+	static void SetStroboTime(Command& command);
 };
 

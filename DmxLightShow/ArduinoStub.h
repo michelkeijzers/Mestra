@@ -5,8 +5,11 @@
 #pragma once
 
 #include <stdint.h>
+// ReSharper disable once CppUnusedIncludeDirective
 #include "DmxSimpleStub.h"
 #include "SerialStub.h"
+#include "SpiRAMStub.h"
+// ReSharper restore CppUnusedIncludeDirective
 
 #define F
 #define PROGMEM

@@ -15,11 +15,11 @@ public:
 
 	/* override */ void SetProperties();
 
-	/* override */ void PrintHeader();
-	/* override */ void PrintFixture(fixture_number_t fixtureNumber);
-	/* override */ void PrintFooter();
+	/* override */ void PrintHeader() const;
+	/* override */ void PrintFixture(fixture_number_t fixtureNumber) const;
+	/* override */ void PrintFooter() const;
 	
-	bool ArePropertiesSet();
+	bool ArePropertiesSet() const;
 
 private:
 	timeb _programStartTime;

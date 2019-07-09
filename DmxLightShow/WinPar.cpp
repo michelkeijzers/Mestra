@@ -4,11 +4,10 @@
 
 #ifdef _WINDOWS
 
-#include <assert.h>
 #include <math.h>
 #include "WinPar.h"
 #include "MestraTypes.h"
-#include "ArduinoStub.h"
+
 
 WinPar::WinPar()
 {
@@ -21,25 +20,25 @@ WinPar::~WinPar()
 }
 
 
-dmx_value_t WinPar::GetRed2GammaCorrectedDmx(dmx_value_t red)
+dmx_value_t WinPar::GetRed2GammaCorrectedDmx(dmx_value_t red) const
 {
 	return Value2WindowsIntensity(red);
 }
 
 
-dmx_value_t WinPar::GetGreen2GammaCorrectedDmx(dmx_value_t green)
+dmx_value_t WinPar::GetGreen2GammaCorrectedDmx(dmx_value_t green) const
 {
 	return Value2WindowsIntensity(green);
 }
 
 
-dmx_value_t WinPar::GetBlue2GammaCorrectedDmx(dmx_value_t blue)
+dmx_value_t WinPar::GetBlue2GammaCorrectedDmx(dmx_value_t blue) const
 {
 	return Value2WindowsIntensity(blue);
 }
 
 
-dmx_value_t WinPar::GetWhite2GammaCorrectedDmx(dmx_value_t white)
+dmx_value_t WinPar::GetWhite2GammaCorrectedDmx(dmx_value_t white) const
 {
 	return Value2WindowsIntensity(white);
 }
@@ -48,7 +47,7 @@ dmx_value_t WinPar::GetWhite2GammaCorrectedDmx(dmx_value_t white)
 /* value to better looking value (f(0)=0, f(128=180, f(255)=255, using gamma correction
 See https://math.stackexchange.com/questions/3227585/what-formula-to-chose-a-nonlinear-formula/3227607?noredirect=1#comment6640358_3227607
 */
-dmx_value_t WinPar::Value2WindowsIntensity(uint8_t intensity)
+dmx_value_t WinPar::Value2WindowsIntensity(uint8_t intensity) const
 {
 	return (dmx_value_t)((255) * powf((float)intensity / 255 , 0.2f));
 }

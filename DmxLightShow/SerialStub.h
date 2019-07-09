@@ -1,10 +1,6 @@
 #pragma once
 
 
-#include "stdio.h"
-#include "Windows.h"
-
-
 // Decimal
 #define DEC 1
 #define HEX 2
@@ -21,7 +17,7 @@ public:
 	void print(int value);
 	void print(int value, int mode);
 
-	void flush();
+	static void flush();
 
 private:
 	wchar_t _message[256];

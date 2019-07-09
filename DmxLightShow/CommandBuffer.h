@@ -8,7 +8,7 @@
 #include <stdint.h>
 #include "AsciiCommandParser.h"
 
-#define COMMAND_BUFFER_MAX_LENGTH   32
+#define COMMAND_BUFFER_MAX_LENGTH   128
 
 class CommandBuffer
 {

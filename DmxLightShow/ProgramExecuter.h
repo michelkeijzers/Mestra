@@ -11,29 +11,29 @@
 class ProgramExecuter
 {
 public:
+	static void Run();
+	static void RunFixtures();
+
+	static void FadeInOutProgram(Par& par, bool initialize);
+	static void FadeOutProgram(Par& par, bool initialize);
+
+	static void DualColorProgram(Par& par, bool initialize);
+	static void DualColorFadeProgram(Par& par, bool initialize);
+
+	static void FixedColorProgram(Par& par, bool initialize);
+
+	static void RainbowColorProgram(Par& par, bool initialize); // Both normal and fade
+
+	static void SetFadeColor(Par& par, step_t step);
+
+private:
 	ProgramExecuter();
 	~ProgramExecuter();
 
-	void Run();
-	void RunFixtures();
+	static void SetDefaultOrAlternate(Par& par, Par::EActiveColor color);
 
-	void FadeInOutProgram(Par& par, bool initialize);
-	void FadeOutProgram(Par& par, bool initialize);
-
-  void DualColorProgram(Par& par, bool initialize);
-	void DualColorFadeProgram(Par& par, bool initialize);
-
-	void FixedColorProgram(Par& par, bool initialize);
-
-	void RainbowColorProgram(Par& par, bool initialize); // Both normal and fade
-
-	void SetFadeColor(Par& par, step_t step);
-
-private:
-	void SetDefaultOrAlternate(Par& par, Par::EActiveColor color);
-
-	void SetRainbowColor(Par& par, step_t step);
-	intensity_t CalcRainbowColor(step_t step,
+	static void SetRainbowColor(Par& par, step_t step);
+	static intensity_t CalcRainbowColor(step_t step,
 		intensity_t firstRangeValue, intensity_t secondRangeValue, intensity_t thirdRangeValue);
 };
 

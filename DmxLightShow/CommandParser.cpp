@@ -4,16 +4,10 @@
 // CommandParser.cpp
 // Parser for commands.
 
-#include <stdlib.h>
-#include "AsciiCommandParser.h"
 #include "PresetCommand.h"
 #include "ClassNames.h"
-#include <string.h>
-#include <ctype.h>
-#include "CharUtils.h"
 #include "LightSetup.h"
 #include HEADER_FILE(ARDUINO_CLASS)
-#include "AssertUtils.h"
 
 
 CommandParser::CommandParser()	
@@ -26,25 +20,33 @@ CommandParser::~CommandParser()
 }
 
 
-void CommandParser::Parse(Command& command)
+/* static */ void CommandParser::Parse(Command& command)
 {
 	for (fixture_number_t parNumber = 0; parNumber < NR_OF_PARS; parNumber++)
 	{
-		if ((command.GetParBits() & (1 << parNumber)) > 0)
+		if ((command.GetParBits() & 1 << parNumber) > 0)
 		{
 			Par& par = LightSetup.GetPar(parNumber);
 
-			SetDelayTime(command, par);
-			SetDefaultColor(command, par);
-			SetAlternateColor(command, par);
-			SetPresetCommand(command);
-			SetStroboTime(command);
+			if (command.GetActivateTrigger())
+			{
+				ActivateTrigger(par);
+			}
+			else
+			{
+				SetDelayTime(command, par);
+				SetDefaultColor(command, par);
+				SetAlternateColor(command, par);
+				SetTriggerState(command, par);
+				SetPresetCommand(command);
+				SetStroboTime(command);
+			}
 		}
 	}
 }
 
 
-void CommandParser::SetDelayTime(Command& command, Par& par)
+/* static */ void CommandParser::SetDelayTime(Command& command, Par& par)
 {
 	if (command.GetDelayTimeSet())
 	{
@@ -54,7 +56,8 @@ void CommandParser::SetDelayTime(Command& command, Par& par)
 	}
 }
 
-void CommandParser::SetDefaultColor(Command& command, Par& par)
+
+/* static */ void CommandParser::SetDefaultColor(Command& command, Par& par)
 {
 	if (command.GetDefaultColorSet())
 	{
@@ -73,12 +76,12 @@ void CommandParser::SetDefaultColor(Command& command, Par& par)
 }
 
 
-void CommandParser::SetAlternateColor(Command& command, Par& par)
+/* static */ void CommandParser::SetAlternateColor(Command& command, Par& par)
 {
 	if (command.GetAlternateColorSet())
 	{
 		Irgbw color;
-		command.GetAlternateColor(color);
+		command.GetAlternateColor( color);
 
 		if (command.GetAlternateColorWhiteUsed())
 		{
@@ -92,20 +95,34 @@ void CommandParser::SetAlternateColor(Command& command, Par& par)
 }
 
 
-void CommandParser::SetPresetCommand(Command& command)
+
+/* static */ void CommandParser::SetTriggerState(Command& command, Par& par)
+{
+	par.SetTriggerState(command.GetTriggerState() ? Par::ETriggerState::Waiting : Par::ETriggerState::Off);
+}
+
+
+/* static */ void CommandParser::ActivateTrigger(Par& par)
+{
+	par.ActivateTrigger();
+}
+
+
+
+/* static */ void CommandParser::SetPresetCommand(Command& command)
 {
 	if (command.GetPresetNumberSet())
 	{
-		PresetCommand presetCommand;
-		presetCommand.Run(command.GetParBits(), command.GetPresetNumber());
+		PresetCommand::Run(command.GetParBits(), command.GetPresetNumber());
 	}
 }
 
 
-void CommandParser::SetStroboTime(Command& command)
+/* static */ void CommandParser::SetStroboTime(Command& command)
 {
 	if (command.GetStroboTimeSet())
 	{
 		LightSetup.GetStrobo().Start(command.GetParBits(), command.GetStroboTime());
 	}
 }
+

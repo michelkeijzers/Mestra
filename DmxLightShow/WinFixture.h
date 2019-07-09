@@ -14,24 +14,24 @@ public:
 
 	virtual ~WinFixture();
 	
-	const char* GetName1();
-	const char* GetName2();
-	const char* GetAbbr();
+	const char* GetName1() const override;
+	const char* GetName2() const override;
+	const char* GetAbbr() const override;
 
-	/* override */ uint16_t GetX();
-	/* override */ uint16_t GetY();
+	uint16_t GetX() const override;
+	uint16_t GetY() const override;
 
-	/* override */ void SetProperties(const char* name1, const char* name2, const char* abbr,
-		uint16_t x, uint16_t y);
+	void SetProperties(const char* name1, const char* name2, const char* abbr,
+		uint16_t x, uint16_t y) override;
 
-	/* override */ bool HasColorChanged();
-	/* override */ void SetColorChanged(bool changed);
+	bool HasColorChanged() const override;
+	void SetColorChanged(bool changed) override;
 
-	/* override */ void StroboChanged();
+	void StroboChanged() override;
 	
-	/* override */ bool GetAtLeastOneStepIncreased();
-	/* override */ void ResetAtLeastOneStepIncreased();
-	/* override */ void PostProcessCheckIncreaseStep(bool increased);
+	bool GetAtLeastOneStepIncreased() const override;
+	void ResetAtLeastOneStepIncreased() override;
+	void PostProcessCheckIncreaseStep(bool increased) override;
 
 protected:
 	// Name (2 lines) and abbreviation.

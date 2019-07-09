@@ -1,8 +1,9 @@
 #include "PlatformLightSetup.h"
 
+
 PlatformLightSetup::PlatformLightSetup()
 	:
-	_pars(0)
+	_pars(nullptr)
 {
 }
 
@@ -12,7 +13,7 @@ PlatformLightSetup::~PlatformLightSetup()
 }
 
 
-Par& PlatformLightSetup::GetPar(fixture_number_t parNumber)
+Par& PlatformLightSetup::GetPar(fixture_number_t parNumber) const
 {
 	return *_pars[parNumber]; 
 }
