@@ -46,6 +46,8 @@ private:
 
 	void SkipUntilWhitespace();
 	void SkipDigits();
+
+	bool ParseBoolean();
 	void ParseComma();
 };
 

@@ -24,4 +24,3 @@ CharUtils::~CharUtils()
 {
 	return ch >= 'A' && ch <= 'Z' ? ch + ('a' - 'A') : ch;
 }
-

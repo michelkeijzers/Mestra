@@ -5,7 +5,7 @@
 //             M E G A        
 //            Flash SRAM   SRAMnew
 // Maximum:  253952 8192
-// Current:   12806 1044       663
+// Current:   13026 1044       663
 //       %:       5   12         8
 //
 // Stack:

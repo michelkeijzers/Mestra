@@ -6,6 +6,7 @@
 #include "BitsUtils.h"
 #include "LightSetup.h"
 #include "Irgbw.h"
+#include <assert.h>
 
 
 PresetCommand::PresetCommand()
@@ -18,12 +19,12 @@ PresetCommand::~PresetCommand()
 }
 
 
-/* static */ void PresetCommand::Run(par_bits_t parBits, preset_t presetNumber) 
+/* static */ void PresetCommand::Run(fixture_number_t fixtureNumber, par_bits_t parBits, preset_t presetNumber)
 {
 	fixture_number_t selectedParIndex = 0;
 	for (fixture_number_t parNumber = 0; parNumber < NR_OF_PARS; parNumber++)
 	{
-		if ((parBits & 0x0001 << parNumber) > 0)
+		if ((parBits & 0x0001 << parNumber) > 0 && parNumber == fixtureNumber)
 		{
 			fixture_number_t nrOfPars = BitsUtils::GetNrOfHighBits(parBits);
 			SetFixturePreset(presetNumber, parNumber, selectedParIndex, nrOfPars);
@@ -267,6 +268,7 @@ PresetCommand::~PresetCommand()
 		break;
 
 	default:
+		assert(false);
 		break;
 	}
 }

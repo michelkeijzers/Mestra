@@ -31,14 +31,14 @@ void CommandBuffer::AddChar(char charToAdd)
 
 void CommandBuffer::Process(AsciiCommandParser& asciiCommandParser)
 {
-	if ((_bufferLength > 0) && ((_buffer[_bufferLength - 1] == '\n') || (_buffer[_bufferLength - 1] == '\r')))
+	if (_bufferLength > 0 && (_buffer[_bufferLength - 1] == '\n' || _buffer[_bufferLength - 1] == '\r'))
 	{
 		_buffer[_bufferLength - 1] = '\0';
 
 		StringUtils::TrimWhitespace(_buffer);
 		StringUtils::ToUpper(_buffer);
 
-		 asciiCommandParser.Parse(_buffer);
+	    asciiCommandParser.Parse(_buffer);
 
 		_buffer[0] = '\0';
 		_bufferLength = 0;

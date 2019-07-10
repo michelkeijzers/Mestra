@@ -28,7 +28,7 @@ CommandParser::~CommandParser()
 		{
 			Par& par = LightSetup.GetPar(parNumber);
 
-			if (command.GetActivateTrigger())
+			if (command.GetActivateTriggerSet())
 			{
 				ActivateTrigger(par);
 			}
@@ -37,9 +37,9 @@ CommandParser::~CommandParser()
 				SetDelayTime(command, par);
 				SetDefaultColor(command, par);
 				SetAlternateColor(command, par);
-				SetTriggerState(command, par);
-				SetPresetCommand(command);
+				SetPresetCommand(command, parNumber);
 				SetStroboTime(command);
+				SetTriggerState(command, par); // Perform last (after setting preset)
 			}
 		}
 	}
@@ -98,7 +98,10 @@ CommandParser::~CommandParser()
 
 /* static */ void CommandParser::SetTriggerState(Command& command, Par& par)
 {
-	par.SetTriggerState(command.GetTriggerState() ? Par::ETriggerState::Waiting : Par::ETriggerState::Off);
+	if (command.GetTriggerStateSet())
+	{
+		par.SetTriggerState(command.GetTriggerState() ? Par::ETriggerState::Waiting : Par::ETriggerState::Off);
+	}
 }
 
 
@@ -109,11 +112,11 @@ CommandParser::~CommandParser()
 
 
 
-/* static */ void CommandParser::SetPresetCommand(Command& command)
+/* static */ void CommandParser::SetPresetCommand(Command& command, fixture_number_t fixtureNumber)
 {
 	if (command.GetPresetNumberSet())
 	{
-		PresetCommand::Run(command.GetParBits(), command.GetPresetNumber());
+		PresetCommand::Run(fixtureNumber, command.GetParBits(), command.GetPresetNumber());
 	}
 }
 

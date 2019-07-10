@@ -15,6 +15,15 @@ Command::~Command()
 }
 
 
+void Command::Clear()
+{
+	for (uint8_t index = 0; index < COMMAND_LENGTH; index++)
+	{
+		_data[index] = 0;
+	}
+}
+
+
 par_bits_t Command::GetParBits() const
 {
 	return par_bits_t(uint32_t(_data[COMMAND_START_PAR_BITS     ]) << 24U) +
@@ -35,7 +44,7 @@ void Command::SetParBits(par_bits_t parBits)
 
 bool Command::GetDefaultColorSet() const
 {
-	return bool(_data[COMMAND_START_FLAGS_1] & (1 << COMMAND_BIT_DEFAULT_COLOR_SET));
+	return bool(_data[COMMAND_START_FLAGS_1] & 1 << COMMAND_BIT_DEFAULT_COLOR_SET);
 }
 
 void Command::SetDefaultColorSet(bool set)
@@ -47,7 +56,7 @@ void Command::SetDefaultColorSet(bool set)
 
 bool Command::GetDefaultColorWhiteUsed() const
 {
-	return bool(_data[COMMAND_START_FLAGS_1] & (1 << COMMAND_BIT_DEFAULT_COLOR_WHITE_USED));
+	return bool(_data[COMMAND_START_FLAGS_1] & 1 << COMMAND_BIT_DEFAULT_COLOR_WHITE_USED);
 }
 
 
@@ -61,7 +70,7 @@ void Command::SetDefaultColorWhiteUsed(bool set)
 
 bool Command::GetAlternateColorSet() const
 {
-	return bool(_data[COMMAND_START_FLAGS_1] & (1 << COMMAND_BIT_ALTERNATE_COLOR_SET));
+	return bool(_data[COMMAND_START_FLAGS_1] & 1 << COMMAND_BIT_ALTERNATE_COLOR_SET);
 }
 
 void Command::SetAlternateColorSet(bool set)
@@ -123,26 +132,26 @@ void Command::SetStroboTimeSet(bool set)
 }
 
 
-bool Command::GetTriggerState() const
+bool Command::GetTriggerStateSet() const
 {
-	return bool(_data[COMMAND_START_FLAGS_2] & 1 << COMMAND_BIT_TRIGGER_STATE_SET);
+	return bool(_data[COMMAND_START_FLAGS_1] & 1 << COMMAND_BIT_TRIGGER_STATE_SET);
 }
 
 
-void Command::SetTriggerState(bool set)
+void Command::SetTriggerStateSet(bool set)
 {
-	_data[COMMAND_START_FLAGS_2] = uint8_t(
-		BitsUtils::ChangeBit(_data[COMMAND_START_FLAGS_2], COMMAND_BIT_TRIGGER_STATE_SET, set));
+	_data[COMMAND_START_FLAGS_1] = uint8_t(
+		BitsUtils::ChangeBit(_data[COMMAND_START_FLAGS_1], COMMAND_BIT_TRIGGER_STATE_SET, set));
 }
 
 
-bool Command::GetActivateTrigger() const
+bool Command::GetActivateTriggerSet() const
 {
 	return bool(_data[COMMAND_START_FLAGS_2] & 1 << COMMAND_BIT_ACTIVATE_TRIGGER);
 }
 
 
-void Command::SetActivateTrigger(bool set)
+void Command::SetActivateTriggerSet(bool set)
 {
 	_data[COMMAND_START_FLAGS_2] = uint8_t(
 		BitsUtils::ChangeBit(_data[COMMAND_START_FLAGS_2], COMMAND_BIT_ACTIVATE_TRIGGER, set));
@@ -201,6 +210,19 @@ preset_t Command::GetPresetNumber() const
 void Command::SetPresetNumber(preset_t presetNumber)
 {
 	_data[COMMAND_START_PRESET_NUMBER] = uint8_t(presetNumber);
+}
+
+
+bool Command::GetTriggerState() const
+{
+	return bool(_data[COMMAND_START_FLAGS_2] & 1 << COMMAND_BIT_TRIGGER_STATE);
+}
+
+
+void Command::SetTriggerState(bool set)
+{
+	_data[COMMAND_START_FLAGS_2] = uint8_t(
+		BitsUtils::ChangeBit(_data[COMMAND_START_FLAGS_2], COMMAND_BIT_TRIGGER_STATE, set));
 }
 
 

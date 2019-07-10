@@ -474,7 +474,7 @@ void InjectString(const char* commandString)
 	_commandBuffer.AddChar('\r');
 
 	_commandBuffer.Process(_asciiCommandParser);
-	Command& command = _asciiCommandParser.GetCommand();
+	Command command = _asciiCommandParser.GetCommand();
 	CommandParser::Parse(command);
 	
 	// Print command.
@@ -529,10 +529,13 @@ void InjectCommands()
 		//InjectString("t BA 4000");
 		//InjectString("p BA 72");
 
-		InjectString("la t 300 d ir a ib p 63");
-		InjectString("ra t 300 d ir a ib p 63");
-		InjectString("ba t 200 d ir a ig p 63");
-		//InjectString("ba t 300 p 71");
+		//InjectString("fa t 300 d ir a ib p 63");
+		//InjectString("ra t 300 d ir a ib p 63");
+		//InjectString("ba t 2000 d ir a ig p 63");
+
+		InjectString("fa d igb t 10000 p 50 g 1");
+
+
 		//InjectString("ba t 5000 d ir a irb p 53");
 		//InjectString("ba t7000 d100,101,102,103 a50,51,52,53,54 p52");
 
@@ -555,6 +558,11 @@ void InjectCommands()
 		InjectString("a b i");
 		InjectString("p b 50");
 		*/
+	}
+
+	else if (_refreshCounter % 2000 == 0)
+	{
+		InjectString("fa !");
 	}
 }
 

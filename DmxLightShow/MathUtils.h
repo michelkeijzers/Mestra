@@ -4,10 +4,6 @@
 
 class MathUtils
 {
-private:
-	MathUtils();
-	~MathUtils();
-
 public:
 	static int Min(int a, int b) 
 	{ 
@@ -31,4 +27,9 @@ public:
 	{
 		return Max(Max(a, b), c);
 	}
+
+
+private:
+	MathUtils();
+	~MathUtils();
 };

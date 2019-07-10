@@ -5,12 +5,14 @@
 #include "Fixture.h"
 #include "ClassNames.h"
 #include HEADER_FILE(ARDUINO_CLASS)
+#include "MathUtils.h"
 
 
 Fixture::Fixture(fixture_number_t fixtureNumber)
 	: 
 	_platformFixture(), 
 	_initialize(false), 
+	_forceUpdate(false),
 	_dmxOffsetChannel(0), 
 	_triggerState(Off), 
 	_program(0), 
@@ -70,6 +72,29 @@ Fixture::ETriggerState Fixture::GetTriggerState() const
 void Fixture::SetTriggerState(ETriggerState triggerState)
 {
 	_triggerState = triggerState;
+
+	switch (_triggerState)
+	{
+	case Off:
+		SetCurrentStep(0);
+		SetStepTime(millis() + GetStepDuration());
+		_forceUpdate = true;
+		break;
+
+	case Active:
+		SetCurrentStep(0);
+		SetStepTime(millis() + GetStepDuration());
+		_forceUpdate = true;
+		break;
+
+	case Waiting:
+		SetCurrentStep(MathUtils::Max(0, GetNrOfSteps() - 1));
+		_forceUpdate = true;
+		break;
+
+	default:
+		assert(false);
+	}
 }
 
 
@@ -84,10 +109,15 @@ void Fixture::ActivateTrigger()
 	case Active:
 		// Reactivate
 		SetCurrentStep(0);
+		SetStepTime(millis() + GetStepDuration());
+		_forceUpdate = true;
 		break;
 
 	case Waiting:
 		SetTriggerState(Active);
+		SetCurrentStep(0);
+		SetStepTime(millis() + GetStepDuration());
+		_forceUpdate = true;
 		break;
 
 	default:
@@ -210,7 +240,7 @@ void Fixture::InitializeProgram(program_t programNumber, step_t nrOfSteps, step_
 	SetProgram(programNumber);
 	SetNrOfSteps(nrOfSteps);
 	SetCurrentStep(startStep);
-  SetParameter1(parameter1);
+    SetParameter1(parameter1);
 	SetParameter2(parameter2);
 	SetParameter3(parameter3);
 }
@@ -230,8 +260,8 @@ bool Fixture::CheckIncreaseStep(step_t stepsToIncrease /* = 1 */)
 			{
 				if (currentMillis >= GetStepTime())
 				{
-					SetCurrentStep(static_cast<step_t>((GetCurrentStep() + stepsToIncrease) % GetNrOfSteps()));
-					SetStepTime(GetStepTime() + GetStepDuration());
+					SetCurrentStep(step_t((GetCurrentStep() + stepsToIncrease) % GetNrOfSteps()));
+					SetStepTime(currentMillis + GetStepDuration());
 					isIncreased = true;
 				}
 			}
@@ -254,16 +284,15 @@ bool Fixture::CheckIncreaseStep(step_t stepsToIncrease /* = 1 */)
 					
 					if (nextStep >= GetNrOfSteps())
 					{
-						SetTriggerState(Waiting);
-						SetCurrentStep(0);
-						SetStepTime(0);
+						SetTriggerState(Waiting); // Keep current step to last step too
+						SetCurrentStep(MathUtils::Max(0, GetNrOfSteps() - 1));
 					}
 					else
 					{
-						SetCurrentStep(static_cast<step_t>((GetCurrentStep() + stepsToIncrease) % GetNrOfSteps()));
-						SetStepTime(GetStepTime() + GetStepDuration());
+						SetCurrentStep(step_t((GetCurrentStep() + stepsToIncrease) % GetNrOfSteps()));
 					}
 
+					SetStepTime(currentMillis + GetStepDuration());
 					isIncreased = true;
 				}
 			}
@@ -272,6 +301,12 @@ bool Fixture::CheckIncreaseStep(step_t stepsToIncrease /* = 1 */)
 
 	default:
 		assert(false);
+	}
+
+	if (_forceUpdate)
+	{
+		isIncreased = true;
+		_forceUpdate = false;
 	}
 
 	_platformFixture->PostProcessCheckIncreaseStep(isIncreased);

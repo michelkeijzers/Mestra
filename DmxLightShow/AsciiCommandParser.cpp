@@ -1,6 +1,7 @@
 // CommandParser.cpp
 // Parser for commands.
 
+#include "StringUtils.h"
 #ifdef _WINDOWS
 
 #include <stdlib.h>
@@ -61,7 +62,7 @@ Chars2ParBits Chars2ParBitsMapping[] =
 
 AsciiCommandParser::AsciiCommandParser()
 	: _userCommand(nullptr), 
-		_currentIndex(0),
+	  _currentIndex(0),
 	  _parseError(false)
 {
 }
@@ -80,6 +81,8 @@ Command& AsciiCommandParser::GetCommand()
 
 void AsciiCommandParser::Parse(char* command)
 {
+	_command.Clear();
+
 	_userCommand = command;
 	_currentIndex = 0;
 	_parseError = false;
@@ -115,16 +118,17 @@ void AsciiCommandParser::Parse(char* command)
 
 			case 'G':
 			{
-				_command.SetTriggerState(true);
+				_command.SetTriggerStateSet(true);
+				_currentIndex++;
+				_command.SetTriggerState(ParseBoolean());
 				_currentIndex++;
 			}
 			break;
 
 			case '!':
-			{
-				_command.SetActivateTrigger(true);
+				_command.SetActivateTriggerSet(true);
 				_currentIndex++;
-			}
+				break;
 
 			case 'P':
 				_command.SetPresetNumberSet(true);
@@ -382,6 +386,28 @@ void AsciiCommandParser::SkipDigits()
 	{
 		_currentIndex++;
 	}
+}
+
+
+bool AsciiCommandParser::ParseBoolean()
+{
+	bool booleanValue = false;
+
+	SkipWhitespace();
+
+	if (_userCommand[_currentIndex] == '\0' || (_userCommand[_currentIndex] != '0' && _userCommand[_currentIndex] != '1'))
+	{
+		_parseError = true;
+	}
+	else
+	{
+		booleanValue = _userCommand[_currentIndex] == '1';
+	}
+
+	_currentIndex++;
+
+	SkipWhitespace();
+	return booleanValue;
 }
 
 

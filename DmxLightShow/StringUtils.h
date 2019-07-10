@@ -15,6 +15,9 @@ public:
 	static void ToUpper(char* str);
 	static void ToLower(char* str);
 
+	static uint8_t GetWordLength(const char* stringToAnalyze, uint8_t startIndex);
+
+
 private:
 	StringUtils();
 

@@ -38,7 +38,7 @@ public:
 	void SetInitialize(bool initialize);
 
 	ETriggerState GetTriggerState() const;
-  void SetTriggerState(ETriggerState triggerState);
+    void SetTriggerState(ETriggerState triggerState);
 
 	void ActivateTrigger();
 
@@ -75,6 +75,8 @@ private:
 	fixture_number_t _fixtureNumber;
 
 	bool _initialize;
+
+	bool _forceUpdate;
 
 	dmx_channel_t _dmxOffsetChannel;
 

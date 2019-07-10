@@ -110,7 +110,7 @@ Parameter 1 and parameter 2 are active steps (default color), otherwise alternat
 /* static */ void ProgramExecuter::DualColorProgram(Par& par, bool initialize)
 {
 	bool enable = par.GetCurrentStep() == step_time_t(par.GetParameter1()) ||
-            		par.GetCurrentStep() == step_time_t(par.GetParameter2());
+                  par.GetCurrentStep() == step_time_t(par.GetParameter2());
 
 	if (initialize)
 	{

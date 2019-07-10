@@ -9,7 +9,7 @@ Command   First       Second     Description
         Parameter    Parameter
 ------- --------- -------------- -----------------------------------------
 
-<parbits> (`!` || (`d` <DefaultColor>) (`a` <AlternativeColor>) (`p` <PresetNumber>) (`t` <DelayTime>) (`s` <StrobeSpeed> | `g`))
+<parbits> (`!` || (`d` <DefaultColor>) (`a` <AlternativeColor>) (`p` <PresetNumber>) (`t` <DelayTime>) (`s` <StrobeSpeed> | `g` <0|1>))
 
 <ParBits>:           2 characters
 d					 default Color
@@ -42,16 +42,17 @@ Item						Byte(s)	Bits	Comment
 ------------------------	-------	-------	------------------------------------
 Par bits					0~ 3
 Flags						 4
- Default Color Set					0
- Default Color White Used			1			
- Alternate Color Set				2
- Alternate Color White Used			3
- Preset Number Set					4
- Delay Time Set						5
- Strobo Time Set					6
+ Default Color Set			 0
+ Default Color White Used    1			
+ Alternate Color Set		 2
+ Alternate Color White Used	 3
+ Preset Number Set			 4
+ Delay Time Set				 5
+ Strobo Time Set			 6
+ Trigger State Set			 7
 Flags 2						 5
- Trigger State Set					0
- Activate Trigger					1
+ Trigger State               1
+ Activate Trigger			 2
 
 Default Color				 6~10
 Alternate Color				11~15

@@ -51,27 +51,28 @@ const par_bits_t PAR_AL = PAR_LA + PAR_DL + PAR_NL + PAR_BL;
 const par_bits_t PAR_AR = PAR_RA + PAR_DR + PAR_NR + PAR_BR;
 
 
-const uint8_t COMMAND_START_PAR_BITS										= 0;
-const uint8_t COMMAND_START_FLAGS_1                   	= COMMAND_START_PAR_BITS                    + 4;
-const uint8_t COMMAND_START_FLAGS_2                     = COMMAND_START_FLAGS_1                     + 1;
-const uint8_t COMMAND_START_DEFAULT_COLOR								= COMMAND_START_FLAGS_2                     + 1;
-const uint8_t COMMAND_START_ALTERNATE_COLOR							= COMMAND_START_DEFAULT_COLOR							  + 5;
-const uint8_t COMMAND_START_PRESET_NUMBER								= COMMAND_START_ALTERNATE_COLOR						  + 5;
-const uint8_t COMMAND_START_DELAY_TIME									= COMMAND_START_PRESET_NUMBER							  + 1;
-const uint8_t COMMAND_START_STROBO_TIME									= COMMAND_START_DELAY_TIME									+ 2;
+const uint8_t COMMAND_START_PAR_BITS				= 0;
+const uint8_t COMMAND_START_FLAGS_1                 = COMMAND_START_PAR_BITS        + 4;
+const uint8_t COMMAND_START_FLAGS_2                 = COMMAND_START_FLAGS_1         + 1;
+const uint8_t COMMAND_START_DEFAULT_COLOR			= COMMAND_START_FLAGS_2         + 1;
+const uint8_t COMMAND_START_ALTERNATE_COLOR			= COMMAND_START_DEFAULT_COLOR	+ 5;
+const uint8_t COMMAND_START_PRESET_NUMBER			= COMMAND_START_ALTERNATE_COLOR	+ 5;
+const uint8_t COMMAND_START_DELAY_TIME				= COMMAND_START_PRESET_NUMBER	+ 1;
+const uint8_t COMMAND_START_STROBO_TIME				= COMMAND_START_DELAY_TIME		+ 2;
 
-const uint8_t COMMAND_LENGTH														= COMMAND_START_STROBO_TIME								  + 1;
+const uint8_t COMMAND_LENGTH						= COMMAND_START_STROBO_TIME		+ 1;
 
-const uint8_t COMMAND_BIT_DEFAULT_COLOR_SET							= 0;
-const uint8_t COMMAND_BIT_DEFAULT_COLOR_WHITE_USED			= 1;
-const uint8_t COMMAND_BIT_ALTERNATE_COLOR_SET						= 2;
-const uint8_t COMMAND_BIT_ALTERNATE_COLOR_WHITE_USED		= 3;
-const uint8_t COMMAND_BIT_PRESET_NUMBER_SET							= 4;
-const uint8_t COMMAND_BIT_DELAY_TIME_SET								= 5;
-const uint8_t COMMAND_BIT_STROBO_TIME_SET								= 6;
+const uint8_t COMMAND_BIT_DEFAULT_COLOR_SET			= 0;
+const uint8_t COMMAND_BIT_DEFAULT_COLOR_WHITE_USED	= 1;
+const uint8_t COMMAND_BIT_ALTERNATE_COLOR_SET		= 2;
+const uint8_t COMMAND_BIT_ALTERNATE_COLOR_WHITE_USED= 3;
+const uint8_t COMMAND_BIT_PRESET_NUMBER_SET			= 4;
+const uint8_t COMMAND_BIT_DELAY_TIME_SET			= 5;
+const uint8_t COMMAND_BIT_STROBO_TIME_SET			= 6;
+const uint8_t COMMAND_BIT_TRIGGER_STATE_SET			= 7;
 
-const uint8_t COMMAND_BIT_TRIGGER_STATE_SET							= 0;
-const uint8_t COMMAND_BIT_ACTIVATE_TRIGGER							= 1;
+const uint8_t COMMAND_BIT_TRIGGER_STATE             = 0;
+const uint8_t COMMAND_BIT_ACTIVATE_TRIGGER			= 1;
 
 
 class Command
@@ -79,6 +80,8 @@ class Command
 public: 
 	Command();
 	~Command();
+
+	void Clear();
 
 	par_bits_t GetParBits() const;
 	void SetParBits(par_bits_t parBits);
@@ -98,17 +101,19 @@ public:
 	bool GetPresetNumberSet() const;
 	void SetPresetNumberSet(bool set);
 
+	bool GetTriggerStateSet() const;
+	void SetTriggerStateSet(bool set);
+
 	bool GetDelayTimeSet() const;
 	void SetDelayTimeSet(bool set);
 
 	bool GetStroboTimeSet() const;
 	void SetStroboTimeSet(bool set);
 
-	bool GetTriggerState() const;
-	void SetTriggerState(bool set);
+	//  Note that ActivateTrigger has no value (it is always true when set).
 
-	bool GetActivateTrigger() const;
-	void SetActivateTrigger(bool set);
+	bool GetActivateTriggerSet() const;
+	void SetActivateTriggerSet(bool set);
 
 	void GetDefaultColor(Irgbw& irgbw) const;
 	void SetDefaultColor(Irgbw& irgbw);
@@ -118,6 +123,9 @@ public:
 
 	preset_t GetPresetNumber() const;
 	void SetPresetNumber(preset_t presetNumber);
+
+	bool GetTriggerState() const;
+	void SetTriggerState(bool triggerState);
 
 	step_duration_t GetDelayTime() const;
 	void SetDelayTime(step_duration_t time);

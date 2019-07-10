@@ -10,7 +10,7 @@
 class PresetCommand
 {
 public:
-	static void Run(par_bits_t parBits, preset_t presetNumber);
+	static void Run(fixture_number_t fixtureNumber, par_bits_t parBits, preset_t presetNumber);
 
 private:
 	PresetCommand();

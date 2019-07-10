@@ -82,3 +82,28 @@ StringUtils::~StringUtils()
 		str++;
 	}
 }
+
+
+/*
+ * Returns the number of non whitespace characters starting from startIndex
+ *
+ * NOT CHECKED
+ */
+
+/* static */ uint8_t StringUtils::GetWordLength(const char* stringToAnalyze, uint8_t startIndex)
+{
+	uint8_t count = 0;
+	uint8_t length = strlen(stringToAnalyze);
+
+	while (startIndex < length)
+	{
+		if (isspace(stringToAnalyze[startIndex]))
+		{
+			break;
+		}
+
+		count++;
+	}
+
+	return count;
+}
