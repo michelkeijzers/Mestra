@@ -3,7 +3,7 @@
 
 #include "Irgbw.h"
 #include "Par.h"
-#include <assert.h>
+#include "AssertUtils.h"
 
 
 Irgbw::Irgbw()
@@ -111,9 +111,9 @@ void Irgbw::SetIrgbw(Irgbw& irgbw)
 
 void Irgbw::SetIrgb(intensity_t intensity, intensity_t red, intensity_t green, intensity_t blue)
 {
-	assert(red   <= PAR_MAX_PAR_INTENSITY);
-	assert(green <= PAR_MAX_PAR_INTENSITY);
-	assert(blue  <= PAR_MAX_PAR_INTENSITY);
+	AssertUtils::MyAssert(red   <= PAR_MAX_PAR_INTENSITY);
+	AssertUtils::MyAssert(green <= PAR_MAX_PAR_INTENSITY);
+	AssertUtils::MyAssert(blue  <= PAR_MAX_PAR_INTENSITY);
 
 	SetIntensity(intensity);
 	SetRed(red);
@@ -125,7 +125,7 @@ void Irgbw::SetIrgb(intensity_t intensity, intensity_t red, intensity_t green, i
 void Irgbw::SetIrgbw(intensity_t intensity, intensity_t red, intensity_t green, intensity_t blue, 
  intensity_t white)
 {
-	assert(white <= PAR_MAX_PAR_INTENSITY);
+	AssertUtils::MyAssert(white <= PAR_MAX_PAR_INTENSITY);
 
 	SetIrgb(intensity, red, green, blue);
 	SetWhite(white);

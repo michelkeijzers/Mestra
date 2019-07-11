@@ -1,4 +1,4 @@
-#include <assert.h>
+#include "AssertUtils.h"
 #include "LedBarSegment.h"
 #include "ClassNames.h"
 #include HEADER_FILE(DMX_SIMPLE_CLASS)
@@ -92,28 +92,28 @@ void LedBarSegment::SetInitialMode() const
 
 /* virtual */ dmx_value_t LedBarSegment::GetRed2Dmx(intensity_t red) const
 {
-	assert(red < PAR_MAX_PAR_INTENSITIES);
+	AssertUtils::MyAssert(red < PAR_MAX_PAR_INTENSITIES);
 	return red * UINT8_MAX / PAR_MAX_PAR_INTENSITY;
 }
 
 
 /* virtual */ dmx_value_t LedBarSegment::GetGreen2Dmx(intensity_t green) const
 {
-	assert(green < PAR_MAX_PAR_INTENSITIES);
+	AssertUtils::MyAssert(green < PAR_MAX_PAR_INTENSITIES);
 	return green * UINT8_MAX / PAR_MAX_PAR_INTENSITY;
 }
 
 
 /* virtual */ dmx_value_t LedBarSegment::GetBlue2Dmx(intensity_t blue) const
 {
-	assert(blue < PAR_MAX_PAR_INTENSITIES);
+	AssertUtils::MyAssert(blue < PAR_MAX_PAR_INTENSITIES);
 	return blue * UINT8_MAX / PAR_MAX_PAR_INTENSITY;
 }
 
 
 /* virtual */ dmx_value_t LedBarSegment::GetWhite2Dmx(intensity_t white) const
 {
-	assert(white < PAR_MAX_PAR_INTENSITIES);
+	AssertUtils::MyAssert(white < PAR_MAX_PAR_INTENSITIES);
 	return white * UINT8_MAX / PAR_MAX_PAR_INTENSITY;
 }
 

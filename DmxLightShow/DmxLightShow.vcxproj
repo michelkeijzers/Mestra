@@ -159,6 +159,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="ArduinoDmxLightShow.h" />
     <ClInclude Include="ArduinoStub.h" />
     <ClInclude Include="AssertUtils.h" />
     <ClInclude Include="BitsUtils.h" />
@@ -197,6 +198,7 @@
     <ClInclude Include="DmxLightShow.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ArduinoDmxLightShow.cpp" />
     <ClCompile Include="ArduinoStub.cpp" />
     <ClCompile Include="AssertUtils.cpp" />
     <ClCompile Include="BitsUtils.cpp" />

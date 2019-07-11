@@ -5,7 +5,7 @@
 
 #pragma once
 
-#include <stdint.h>
+#include "MestraTypes.h"
 #include "AsciiCommandParser.h"
 
 #define COMMAND_BUFFER_MAX_LENGTH   128

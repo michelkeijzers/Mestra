@@ -1,7 +1,7 @@
 #ifdef _WINDOWS
 
+#include "assert.h"
 #include "SpiRAMStub.h"
-#include "AssertUtils.h"
 #include "string.h"
 
 

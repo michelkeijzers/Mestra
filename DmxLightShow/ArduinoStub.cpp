@@ -16,4 +16,10 @@ uint32_t millis()
 	return uint32_t(now.time * 1000 + now.millitm);
 }
 
+
+// ReSharper disable once CppParameterNeverUsed
+void pinMode(int pin, int state)
+{
+}
+
 #endif // _WINDOWS

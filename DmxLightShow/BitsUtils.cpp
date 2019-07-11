@@ -3,6 +3,7 @@
 
 #include "BitsUtils.h"
 
+
 BitsUtils::BitsUtils()
 {
 }
@@ -29,5 +30,5 @@ BitsUtils::~BitsUtils()
 
 /* static */ uint32_t BitsUtils::ChangeBit(uint32_t value, uint8_t bitNumber, bool set)
 {
-	return value & ~(1 << bitNumber) | (set ? 1 : 0) << bitNumber;
+	return (value & ~(1 << bitNumber)) | (set ? 1 : 0) << bitNumber;
 }

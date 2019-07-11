@@ -6,7 +6,6 @@
 
 #include "ClassNames.h"
 #include HEADER_FILE(ARDUINO_CLASS)
-#include "AssertUtils.h"
 #include <stdio.h>
 #include "LightSetup.h"
 #include "WinLightSetup.h"

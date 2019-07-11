@@ -1,7 +1,7 @@
 // Fixture.h
 // Generic properties for a fixture.
 
-#include <assert.h>
+#include "AssertUtils.h"
 #include "Fixture.h"
 #include "ClassNames.h"
 #include HEADER_FILE(ARDUINO_CLASS)
@@ -93,7 +93,7 @@ void Fixture::SetTriggerState(ETriggerState triggerState)
 		break;
 
 	default:
-		assert(false);
+		AssertUtils::MyAssert(false);
 	}
 }
 
@@ -121,7 +121,7 @@ void Fixture::ActivateTrigger()
 		break;
 
 	default:
-		assert(false);
+		AssertUtils::MyAssert(false);
 	}
 }
 
@@ -234,7 +234,7 @@ void Fixture::SetPlatformFixture(PlatformFixture* platformFixture)
 void Fixture::InitializeProgram(program_t programNumber, step_t nrOfSteps, step_t startStep, 
 	parameter_t parameter1 /* = 0 */, parameter_t parameter2 /* = 0 */, parameter_t parameter3 /* = 0 */ )
 {
-	assert(startStep < nrOfSteps);
+	AssertUtils::MyAssert(startStep < nrOfSteps);
 
 	SetInitialize(true);
 	SetProgram(programNumber);
@@ -300,7 +300,7 @@ bool Fixture::CheckIncreaseStep(step_t stepsToIncrease /* = 1 */)
 		}
 
 	default:
-		assert(false);
+		AssertUtils::MyAssert(false);
 	}
 
 	if (_forceUpdate)

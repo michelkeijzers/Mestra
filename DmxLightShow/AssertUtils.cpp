@@ -6,7 +6,22 @@
 
 */
 
-/* static */ /* void AssertUtils::Assert(bool expression, const char* fileName, int line)
+/* static */
+#include "ClassNames.h"
+#include HEADER_FILE(SERIAL_CLASS)
+#include "AssertUtils.h"
+#ifdef _WINDOWS
+#include <cstdlib>
+#endif
+
+
+void AssertUtils::MyAssert(bool expression)
+{
+	//TODO call MyAssert with fileName/line
+}
+
+
+void AssertUtils::MyAssert(bool expression, const char* fileName, int line)
 {
 	if (!expression)
 	{
@@ -20,4 +35,3 @@
 	}
 }
 
-*/

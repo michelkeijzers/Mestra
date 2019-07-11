@@ -8,6 +8,12 @@
 SerialClass Serial;
 
 
+void SerialClass::begin(int baudrate)
+{
+	static_cast<int>(baudrate);
+}
+
+
 void SerialClass::println(const char* str)
 {
 	size_t sizet;

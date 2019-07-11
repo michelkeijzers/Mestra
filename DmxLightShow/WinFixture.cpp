@@ -6,7 +6,6 @@
 #ifdef _WINDOWS
 
 
-#include <string>
 #include "WinFixture.h"
 
 

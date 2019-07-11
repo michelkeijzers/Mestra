@@ -9,6 +9,8 @@
 class SerialClass
 {
 public:
+	void begin(int baudrate);
+
 	void println(const char* str);
 	void println(int value);
 	void println(int value, int mode);
@@ -26,4 +28,3 @@ private:
 
 
 extern SerialClass Serial;
-

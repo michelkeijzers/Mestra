@@ -2,7 +2,22 @@
 
 #pragma once
 
-#include <stdint.h>
+#include "ClassNames.h"
+#ifndef _WINDOWS
+#include HEADER_FILE(ARDUINO_CLASS)
+#endif
+
+#include "stdint.h"
+
+/*
+typedef signed char        int8_t;
+typedef short int          int16_t;
+typedef int                int32_t;
+typedef long long          int64_t;
+typedef unsigned char      uint8_t;
+typedef unsigned short     uint16_t;
+typedef unsigned int       uint32_t;
+*/
 
 typedef uint32_t par_bits_t;
 typedef uint16_t dmx_channel_t;

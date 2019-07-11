@@ -1,15 +1,15 @@
 // Window.cpp
 // Only for Windows.
 
-#include "ProgramExecuter.h"
 #ifdef _WINDOWS
+
+#include "ProgramExecuter.h"
+#include <string>
 
 // DmxLightShow.cpp : Defines the entry point for the application.
 //
 
 #include <cmath>
-#include <string>
-#include "math.h"
 #include "framework.h"
 
 #include "AsciiCommandParser.h"
@@ -30,18 +30,18 @@ using namespace std;
 //#define SHOW_LEDS       
 #define PAR_DISTANCE_X		 100
 #define PAR_DISTANCE_Y		 180
-#define PAR_DIAMETER			(PAR_DISTANCE_X - 3)
-#define PAR_RADIUS				(PAR_DIAMETER / 2)
-#define LED_DIAMETER			(PAR_DIAMETER / 4 - 12)
-#define LED_RADIUS				(LED_DIAMETER / 2)
-#define TEXT_OFFSET_X      -30
-#define TEXT_OFFSET_Y			-100
+#define PAR_DIAMETER		(PAR_DISTANCE_X - 3)
+#define PAR_RADIUS			(PAR_DIAMETER / 2)
+#define LED_DIAMETER		(PAR_DIAMETER / 4 - 12)
+#define LED_RADIUS			(LED_DIAMETER / 2)
+#define TEXT_OFFSET_X        -30
+#define TEXT_OFFSET_Y		-100
 #define FIXTURE_OFFSET_X	 -10
 #define FIXTURE_OFFSET_Y	 -80
 #define RGB_DISTANCE 0.4
-#define WHITE_DISTANCE	     0.15
+#define WHITE_DISTANCE	       0.15
 
-#define FONT_SIZE           11
+#define FONT_SIZE             11
 
 #define PI_F 3.14159265358979f
 
@@ -77,8 +77,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                      _In_ int       nCmdShow)
 {
 
-	LightSetup.CreateFixtures();
-	_refreshCounter = 0;
+  LightSetup.CreateFixtures();
+  _refreshCounter = 0;
 
   UNREFERENCED_PARAMETER(hPrevInstance);
   UNREFERENCED_PARAMETER(lpCmdLine);
@@ -108,7 +108,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
           TranslateMessage(&msg);
           DispatchMessage(&msg);
 
-					HandleMestraMessages(msg);
+		  HandleMestraMessages(msg);
       }
   }
 
@@ -229,181 +229,186 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
           PAINTSTRUCT ps;
           HDC hdc = BeginPaint(hWnd, &ps);
 
-					for (fixture_number_t parNumber = 0; parNumber < NR_OF_PARS; parNumber++)
-					{
-						Par& par = static_cast<Par&>(LightSetup.GetPar(parNumber));
-						Irgbw actualColor; 
-						par.GetActualColor(actualColor);
+			for (fixture_number_t parNumber = 0; parNumber < NR_OF_PARS; parNumber++)
+			{
+				Par& par = static_cast<Par&>(LightSetup.GetPar(parNumber));
+				Irgbw actualColor; 
+				par.GetActualColor(actualColor);
 
-						if ((LightSetup.GetPlatform() != nullptr) && LightSetup.GetPlatform()->ArePropertiesSet())
-						{
-							_backgroundFixturePaint = true;
+				if ((LightSetup.GetPlatform() != nullptr) && LightSetup.GetPlatform()->ArePropertiesSet())
+				{
+					_backgroundFixturePaint = true;
 
-							SelectObject(hdc, GetStockObject(DC_BRUSH));
+					SelectObject(hdc, GetStockObject(DC_BRUSH));
 													 
-							PlatformFixture& platformFixture = par.GetPlatformFixture(); 
+					PlatformFixture& platformFixture = par.GetPlatformFixture(); 
 							
-							int centerX = FIXTURE_OFFSET_X + platformFixture.GetX() * PAR_DISTANCE_X;
-							int centerY = FIXTURE_OFFSET_Y + platformFixture.GetY() * PAR_DISTANCE_Y;
+					int centerX = FIXTURE_OFFSET_X + platformFixture.GetX() * PAR_DISTANCE_X;
+					int centerY = FIXTURE_OFFSET_Y + platformFixture.GetY() * PAR_DISTANCE_Y;
 								
-							// If color not changed, continue with next par.
+					// If color not changed, continue with next par.
 #ifdef COLOR_CHANGE_CHECKING
-							//if (par.GetPlatformFixture().HasColorChanged())
-							{
-								//par.GetPlatformFixture().SetColorChanged(false);
+					//if (par.GetPlatformFixture().HasColorChanged())
+					{
+						//par.GetPlatformFixture().SetColorChanged(false);
 #endif // COLOR_CHANGE_CHECKING
-								// Total color
-								dmx_value_t intensity = actualColor.GetIntensity();
-								dmx_value_t red = actualColor.GetRed();
-								dmx_value_t green = actualColor.GetGreen();
-								dmx_value_t blue = actualColor.GetBlue();
-								dmx_value_t white = actualColor.GetWhite();
+						// Total color
+						dmx_value_t intensity = actualColor.GetIntensity();
+						dmx_value_t red = actualColor.GetRed();
+						dmx_value_t green = actualColor.GetGreen();
+						dmx_value_t blue = actualColor.GetBlue();
+						dmx_value_t white = actualColor.GetWhite();
 
-  							dmx_value_t totalRed = min(intensity, max(white, red));
-								dmx_value_t totalGreen = min(intensity, max(white, green));
-								dmx_value_t totalBlue = min(intensity, max(white, blue));
+  					dmx_value_t totalRed = min(intensity, max(white, red));
+						dmx_value_t totalGreen = min(intensity, max(white, green));
+						dmx_value_t totalBlue = min(intensity, max(white, blue));
 
-								SetDCBrushColor(hdc, RGB(totalRed, totalGreen, totalBlue));
+						SetDCBrushColor(hdc, RGB(totalRed, totalGreen, totalBlue));
 
-								if (parNumber >= NR_OF_CHINESE_PARS)
-								{
-									// Led Bar.
+						if (parNumber >= NR_OF_CHINESE_PARS)
+						{
+							// Led Bar.
 
-									SetDCBrushColor(hdc, RGB(totalRed, totalGreen, totalBlue));
+							SetDCBrushColor(hdc, RGB(totalRed, totalGreen, totalBlue));
 
-									Rectangle(hdc, centerX - 20, centerY - 20, centerX + (2 * PAR_DISTANCE_X) - 25, centerY + 20);
-								}
-								else
-								{
-									// Black PAR.
-									if (!_backgroundPainted)
-									{
-										SetDCBrushColor(hdc, RGB(0, 0, 0));
+							Rectangle(hdc, centerX - 20, centerY - 20, centerX + (2 * PAR_DISTANCE_X) - 25, centerY + 20);
+						}
+						else
+						{
+							// Black PAR.
+							if (!_backgroundPainted)
+							{
+								SetDCBrushColor(hdc, RGB(0, 0, 0));
 
-										Ellipse(hdc,
-											centerX - PAR_RADIUS, centerY - PAR_RADIUS,
-											centerX + PAR_RADIUS, centerY + PAR_RADIUS);
-									}
+								Ellipse(hdc,
+									centerX - PAR_RADIUS, centerY - PAR_RADIUS,
+									centerX + PAR_RADIUS, centerY + PAR_RADIUS);
+							}
 
-									Ellipse(hdc,
-										centerX - PAR_RADIUS, centerY - PAR_RADIUS,
-										centerX + PAR_RADIUS, centerY + PAR_RADIUS);
+							Ellipse(hdc,
+								centerX - PAR_RADIUS, centerY - PAR_RADIUS,
+								centerX + PAR_RADIUS, centerY + PAR_RADIUS);
 
 #ifdef SHOW_LEDS
-									// Red circles
-									SetDCBrushColor(hdc, RGB(red, 0, 0));
+							// Red circles
+							SetDCBrushColor(hdc, RGB(red, 0, 0));
 
-									CalcCenter(40, centerX, centerY, (int)(PAR_DIAMETER * RGB_DISTANCE), &x, &y);
-									Ellipse(hdc,
-										x - LED_RADIUS, y - LED_RADIUS,
-										x + LED_RADIUS, y + LED_RADIUS);
+							CalcCenter(40, centerX, centerY, (int)(PAR_DIAMETER * RGB_DISTANCE), &x, &y);
+							Ellipse(hdc,
+								x - LED_RADIUS, y - LED_RADIUS,
+								x + LED_RADIUS, y + LED_RADIUS);
 
-									CalcCenter(40 + 120, centerX, centerY, (int)(PAR_DIAMETER * RGB_DISTANCE), &x, &y);
-									Ellipse(hdc,
-										x - LED_RADIUS, y - LED_RADIUS,
-										x + LED_RADIUS, y + LED_RADIUS);
+							CalcCenter(40 + 120, centerX, centerY, (int)(PAR_DIAMETER * RGB_DISTANCE), &x, &y);
+							Ellipse(hdc,
+								x - LED_RADIUS, y - LED_RADIUS,
+								x + LED_RADIUS, y + LED_RADIUS);
 
-									CalcCenter(40 + 240, centerX, centerY, (int)(PAR_DIAMETER * RGB_DISTANCE), &x, &y);
-									Ellipse(hdc,
-										x - LED_RADIUS, y - LED_RADIUS,
-										x + LED_RADIUS, y + LED_RADIUS);
+							CalcCenter(40 + 240, centerX, centerY, (int)(PAR_DIAMETER * RGB_DISTANCE), &x, &y);
+							Ellipse(hdc,
+								x - LED_RADIUS, y - LED_RADIUS,
+								x + LED_RADIUS, y + LED_RADIUS);
 
-									// Green circles
-									SetDCBrushColor(hdc, RGB(0, green, 0));
-									CalcCenter(0, centerX, centerY, (int)(PAR_DIAMETER * RGB_DISTANCE), &x, &y);
-									Ellipse(hdc,
-										x - LED_RADIUS, y - LED_RADIUS,
-										x + LED_RADIUS, y + LED_RADIUS);
+							// Green circles
+							SetDCBrushColor(hdc, RGB(0, green, 0));
+							CalcCenter(0, centerX, centerY, (int)(PAR_DIAMETER * RGB_DISTANCE), &x, &y);
+							Ellipse(hdc,
+								x - LED_RADIUS, y - LED_RADIUS,
+								x + LED_RADIUS, y + LED_RADIUS);
 
-									CalcCenter(0 + 120, centerX, centerY, (int)(PAR_DIAMETER * RGB_DISTANCE), &x, &y);
-									Ellipse(hdc,
-										x - LED_RADIUS, y - LED_RADIUS,
-										x + LED_RADIUS, y + LED_RADIUS);
+							CalcCenter(0 + 120, centerX, centerY, (int)(PAR_DIAMETER * RGB_DISTANCE), &x, &y);
+							Ellipse(hdc,
+								x - LED_RADIUS, y - LED_RADIUS,
+								x + LED_RADIUS, y + LED_RADIUS);
 
-									CalcCenter(0 + 240, centerX, centerY, (int)(PAR_DIAMETER * RGB_DISTANCE), &x, &y);
-									Ellipse(hdc,
-										x - LED_RADIUS, y - LED_RADIUS,
-										x + LED_RADIUS, y + LED_RADIUS);
+							CalcCenter(0 + 240, centerX, centerY, (int)(PAR_DIAMETER * RGB_DISTANCE), &x, &y);
+							Ellipse(hdc,
+								x - LED_RADIUS, y - LED_RADIUS,
+								x + LED_RADIUS, y + LED_RADIUS);
 
-									// Blue circles
-									SetDCBrushColor(hdc, RGB(0, 0, blue));
-									CalcCenter(80, centerX, centerY, (int)(PAR_DIAMETER * RGB_DISTANCE), &x, &y);
-									Ellipse(hdc,
-										x - LED_RADIUS, y - LED_RADIUS,
-										x + LED_RADIUS, y + LED_RADIUS);
+							// Blue circles
+							SetDCBrushColor(hdc, RGB(0, 0, blue));
+							CalcCenter(80, centerX, centerY, (int)(PAR_DIAMETER * RGB_DISTANCE), &x, &y);
+							Ellipse(hdc,
+								x - LED_RADIUS, y - LED_RADIUS,
+								x + LED_RADIUS, y + LED_RADIUS);
 
-									CalcCenter(80 + 120, centerX, centerY, (int)(PAR_DIAMETER * RGB_DISTANCE), &x, &y);
-									Ellipse(hdc,
-										x - LED_RADIUS, y - LED_RADIUS,
-										x + LED_RADIUS, y + LED_RADIUS);
+							CalcCenter(80 + 120, centerX, centerY, (int)(PAR_DIAMETER * RGB_DISTANCE), &x, &y);
+							Ellipse(hdc,
+								x - LED_RADIUS, y - LED_RADIUS,
+								x + LED_RADIUS, y + LED_RADIUS);
 
-									CalcCenter(80 + 240, centerX, centerY, (int)(PAR_DIAMETER * RGB_DISTANCE), &x, &y);
-									Ellipse(hdc,
-										x - LED_RADIUS, y - LED_RADIUS,
-										x + LED_RADIUS, y + LED_RADIUS);
+							CalcCenter(80 + 240, centerX, centerY, (int)(PAR_DIAMETER * RGB_DISTANCE), &x, &y);
+							Ellipse(hdc,
+								x - LED_RADIUS, y - LED_RADIUS,
+								x + LED_RADIUS, y + LED_RADIUS);
 
 
-									// White circles
-									SetDCBrushColor(hdc, RGB(white, white, white));
-									CalcCenter(0, centerX, centerY, (int)(PAR_DIAMETER * WHITE_DISTANCE), &x, &y);
-									Ellipse(hdc,
-										x - LED_RADIUS, y - LED_RADIUS,
-										x + LED_RADIUS, y + LED_RADIUS);
+							// White circles
+							SetDCBrushColor(hdc, RGB(white, white, white));
+							CalcCenter(0, centerX, centerY, (int)(PAR_DIAMETER * WHITE_DISTANCE), &x, &y);
+							Ellipse(hdc,
+								x - LED_RADIUS, y - LED_RADIUS,
+								x + LED_RADIUS, y + LED_RADIUS);
 
-									CalcCenter(120, centerX, centerY, (int)(PAR_DIAMETER * WHITE_DISTANCE), &x, &y);
-									Ellipse(hdc,
-										x - LED_RADIUS, y - LED_RADIUS,
-										x + LED_RADIUS, y + LED_RADIUS);
+							CalcCenter(120, centerX, centerY, (int)(PAR_DIAMETER * WHITE_DISTANCE), &x, &y);
+							Ellipse(hdc,
+								x - LED_RADIUS, y - LED_RADIUS,
+								x + LED_RADIUS, y + LED_RADIUS);
 
-									CalcCenter(240, centerX, centerY, (int)(PAR_DIAMETER * WHITE_DISTANCE), &x, &y);
-									Ellipse(hdc,
-										x - LED_RADIUS, y - LED_RADIUS,
-										x + LED_RADIUS, y + LED_RADIUS);
+							CalcCenter(240, centerX, centerY, (int)(PAR_DIAMETER * WHITE_DISTANCE), &x, &y);
+							Ellipse(hdc,
+								x - LED_RADIUS, y - LED_RADIUS,
+								x + LED_RADIUS, y + LED_RADIUS);
 #endif // SHOW_LEDS
-								}
-
-								wchar_t wtext[20];
-								size_t sizet;
-
-								// Line 1
-								mbstowcs_s(&sizet, wtext, platformFixture.GetName1(),
-									strlen(platformFixture.GetName1()) + 1); //Plus null
-
-								TextOut(hdc,
-									TEXT_OFFSET_X + platformFixture.GetX() * PAR_DISTANCE_X,
-									TEXT_OFFSET_Y + platformFixture.GetY() * PAR_DISTANCE_Y + PAR_DIAMETER + FONT_SIZE - 2 - 8,
-									wtext, lstrlen(wtext));
-
-								// Line 2
-								mbstowcs_s(&sizet,
-									wtext, platformFixture.GetName2(),
-									strlen(platformFixture.GetName2()) + 1); //Plus null
-
-								TextOut(hdc,
-									TEXT_OFFSET_X + platformFixture.GetX() * PAR_DISTANCE_X,
-									TEXT_OFFSET_Y + platformFixture.GetY() * PAR_DISTANCE_Y + PAR_DIAMETER + (FONT_SIZE + 2) * 2 - 8,
-									wtext, lstrlen(wtext));
-
-								// Abbr
-								mbstowcs_s(&sizet, wtext, platformFixture.GetAbbr(),
-									strlen(platformFixture.GetAbbr()) + 1); //Plus null
-
-								TextOut(hdc,
-									TEXT_OFFSET_X + platformFixture.GetX() * PAR_DISTANCE_X,
-									TEXT_OFFSET_Y + platformFixture.GetY() * PAR_DISTANCE_Y + PAR_DIAMETER + (FONT_SIZE + 2) * 3 - 4,
-									wtext, lstrlen(wtext));
-							}
-#ifdef COLOR_CHANGE_CHECKING
 						}
+
+						wchar_t wtext[20];
+						size_t sizet;
+
+						// Line 1
+						mbstowcs_s(&sizet, wtext, platformFixture.GetName1(),
+							strlen(platformFixture.GetName1()) + 1); //Plus null
+
+						TextOut(hdc,
+							TEXT_OFFSET_X + platformFixture.GetX() * PAR_DISTANCE_X,
+							TEXT_OFFSET_Y + platformFixture.GetY() * PAR_DISTANCE_Y + PAR_DIAMETER + FONT_SIZE - 2 - 8,
+							wtext, lstrlen(wtext));
+
+						// Line 2
+						mbstowcs_s(&sizet,
+							wtext, platformFixture.GetName2(),
+							strlen(platformFixture.GetName2()) + 1); //Plus null
+
+						TextOut(hdc,
+							TEXT_OFFSET_X + platformFixture.GetX() * PAR_DISTANCE_X,
+							TEXT_OFFSET_Y + platformFixture.GetY() * PAR_DISTANCE_Y + PAR_DIAMETER + (FONT_SIZE + 2) * 2 - 8,
+							wtext, lstrlen(wtext));
+
+						// Abbr
+						mbstowcs_s(&sizet, wtext, platformFixture.GetAbbr(),
+							strlen(platformFixture.GetAbbr()) + 1); //Plus null
+
+						TextOut(hdc,
+							TEXT_OFFSET_X + platformFixture.GetX() * PAR_DISTANCE_X,
+							TEXT_OFFSET_Y + platformFixture.GetY() * PAR_DISTANCE_Y + PAR_DIAMETER + (FONT_SIZE + 2) * 3 - 4,
+							wtext, lstrlen(wtext));
+					}
+#ifdef COLOR_CHANGE_CHECKING
+				}
 #endif // COLOR_CHANGE_CHECKING
-					}
 
-					if (_backgroundFixturePaint)
-					{
-						_backgroundPainted = true;
-					}
+				wchar_t wtext[20];
+				size_t sizet;
+				swprintf_s(wtext, L"%d", _refreshCounter);
+				TextOut(hdc, 0, 0, wtext, lstrlen(wtext));
+			}
 
-					EndPaint(hWnd, &ps);
+			if (_backgroundFixturePaint)
+			{
+				_backgroundPainted = true;
+			}
+
+			EndPaint(hWnd, &ps);
         }
         break;
     case WM_DESTROY:
@@ -434,7 +439,7 @@ void InitMestra()
 
 void HandleMestraMessages(MSG& msg)
 {
-	Sleep(1);
+	
 	_refreshCounter++;
 	InjectCommands();
 
@@ -560,7 +565,7 @@ void InjectCommands()
 		*/
 	}
 
-	else if (_refreshCounter % 2000 == 0)
+	else if (_refreshCounter % 500 == 0)
 	{
 		InjectString("fa !");
 	}

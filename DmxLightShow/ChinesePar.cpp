@@ -5,6 +5,7 @@
 #include HEADER_FILE(ARDUINO_CLASS)
 #include HEADER_FILE(DMX_SIMPLE_CLASS)
 
+
 #define DMX_OFFSET_CHANNEL_INTENSITY (dmx_channel_t)   0
 #define DMX_OFFSET_CHANNEL_RED       (dmx_channel_t)   1
 #define DMX_OFFSET_CHANNEL_GREEN     (dmx_channel_t)   2
@@ -116,7 +117,7 @@ ChinesePar::~ChinesePar()
 
 /* override */ dmx_value_t ChinesePar::GetRed2Dmx(intensity_t red) const
 {
-	assert(red < PAR_MAX_PAR_INTENSITIES);
+	AssertUtils::MyAssert(red < PAR_MAX_PAR_INTENSITIES);
 
 	return (red < PAR_MAX_PAR_INTENSITIES) ? GetPlatformPar().GetRed2GammaCorrectedDmx(_red2Dmx[red]) : UINT8_MAX;
 }
@@ -124,14 +125,14 @@ ChinesePar::~ChinesePar()
 
 /* override */ dmx_value_t ChinesePar::GetGreen2Dmx(intensity_t green) const
 {
-	assert(green < PAR_MAX_PAR_INTENSITIES);
+	AssertUtils::MyAssert(green < PAR_MAX_PAR_INTENSITIES);
 	return (green < PAR_MAX_PAR_INTENSITIES) ? GetPlatformPar().GetGreen2GammaCorrectedDmx(_green2Dmx[green]) : UINT8_MAX;
 }
 
 
 /* override */ dmx_value_t ChinesePar::GetBlue2Dmx(intensity_t blue) const
 {
-	assert(blue < PAR_MAX_PAR_INTENSITIES);
+	AssertUtils::MyAssert(blue < PAR_MAX_PAR_INTENSITIES);
 
 	return (blue < PAR_MAX_PAR_INTENSITIES) ? GetPlatformPar().GetBlue2GammaCorrectedDmx(_blue2Dmx[blue]) : UINT8_MAX;
 }
@@ -139,7 +140,7 @@ ChinesePar::~ChinesePar()
 
 /* override */ dmx_value_t ChinesePar::GetWhite2Dmx(intensity_t white) const
 {
-	assert(white < PAR_MAX_PAR_INTENSITIES);
+	AssertUtils::MyAssert(white < PAR_MAX_PAR_INTENSITIES);
 	return (white < PAR_MAX_PAR_INTENSITIES) ? GetPlatformPar().GetWhite2GammaCorrectedDmx(_white2Dmx[white]) : UINT8_MAX;
 }
 

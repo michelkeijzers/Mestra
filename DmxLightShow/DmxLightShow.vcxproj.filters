@@ -162,6 +162,9 @@
     <ClInclude Include="SerialStub.h">
       <Filter>Header Files\ArduinoStubs</Filter>
     </ClInclude>
+    <ClInclude Include="ArduinoDmxLightShow.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DmxLightShow.rc">
@@ -272,6 +275,9 @@
     </ClCompile>
     <ClCompile Include="ArduinoStub.cpp">
       <Filter>Source Files\ArduinoStubs</Filter>
+    </ClCompile>
+    <ClCompile Include="ArduinoDmxLightShow.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

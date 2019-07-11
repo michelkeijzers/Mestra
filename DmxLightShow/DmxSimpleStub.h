@@ -5,9 +5,11 @@
 
 #pragma once
 
-#include <stdint.h>
+#include "MestraTypes.h"
+
 
 #define DMX_SIMPLE_STUB_MAX_DMX_CHANNELS 512
+
 
 class DmxSimpleClass
 {

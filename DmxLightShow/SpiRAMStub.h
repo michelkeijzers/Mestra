@@ -1,6 +1,6 @@
 #pragma once
 
-#include <stdint.h>
+#include "MestraTypes.h"
 
 // Assuming 32K256
 #define SRAM_SIZE      32768

@@ -8,6 +8,7 @@
 #include "ClassNames.h"
 #include "LightSetup.h"
 #include "MathUtils.h"
+#include "MestraTypes.h"
 #include "ProgramExecuter.h"
 #include HEADER_FILE(ARDUINO_CLASS)
 
@@ -335,6 +336,6 @@ Step: 0=100% default color, step MAX_PAR_INTENSITY=100% alternate color
 		break;
 
 	default:
-		assert(false);
+		AssertUtils::MyAssert(false);
 	}
 }

@@ -74,7 +74,7 @@ void LightSetupClass::CreateFixtures()
 
 Par& LightSetupClass::GetPar(fixture_number_t parNumber) const
 {
-	assert(parNumber < NR_OF_PARS);
+	AssertUtils::MyAssert(parNumber < NR_OF_PARS);
 	return *_pars[parNumber];
 }
 

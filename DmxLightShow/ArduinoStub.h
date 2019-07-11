@@ -4,15 +4,15 @@
 
 #pragma once
 
-#include <stdint.h>
-// ReSharper disable once CppUnusedIncludeDirective
-#include "DmxSimpleStub.h"
-#include "SerialStub.h"
-#include "SpiRAMStub.h"
-// ReSharper restore CppUnusedIncludeDirective
+#include "MestraTypes.h"
 
 #define F
 #define PROGMEM
 
+#define LED_BUILTIN 10
+//#define INPUT        0 // Existing type in Windows
+#define OUTPUT       1
+
 extern uint32_t millis();
 
+extern void pinMode(int pin, int state);

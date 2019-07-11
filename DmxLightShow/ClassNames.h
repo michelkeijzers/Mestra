@@ -9,14 +9,16 @@
 // Class names
 #ifdef _WINDOWS
 
-#define ARDUINO_CLASS			        	ArduinoStub
-#define DMX_SIMPLE_CLASS	        	DmxSimpleStub
-#define SPI_RAM_CLASS               SpiRAMStub
+#define ARDUINO_CLASS		ArduinoStub
+#define DMX_SIMPLE_CLASS	DmxSimpleStub
+#define SPI_RAM_CLASS		SpiRAMStub
+#define SERIAL_CLASS        SerialStub
 
 #else
 
-#define ARDUINO_CLASS								Arduino
-#define DMX_SIMPLE_CLASS						DmxSimple
-#define SPI_RAM_CLASS               SpiRAM
+#define ARDUINO_CLASS		Arduino
+#define DMX_SIMPLE_CLASS	DmxSimple
+#define SPI_RAM_CLASS		SpiRAM
+#define SERIAL_CLASS		Arduino
 
 #endif
