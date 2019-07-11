@@ -84,12 +84,12 @@ void WinLightSetup::PrintHeader() const
 	swprintf_s(message, L"Time: %u\n", millis() - uint32_t(_programStartTime.time * 1000 + _programStartTime.millitm));
 	OutputDebugString(message);
 
-	OutputDebugString(L"┌▬▬▬┬▬▬▬▬┬▬▬▬┬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬┬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬┬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬┬▬▬▬▬▬▬▬▬▬▬▬▬┬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬┬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬┐\n");
-	OutputDebugString(L"│Fix│Abbr│DMX│   Current Color   │   Default Color   │  Alternate Color  │  Program   │Program Params   │       Steps        │\n");
-	OutputDebugString(L"│   │    │   ├▬▬▬┬▬▬▬┬▬▬▬┬▬▬▬┬▬▬▬┼▬▬▬┬▬▬▬┬▬▬▬┬▬▬▬┬▬▬▬┼▬▬▬┬▬▬▬┬▬▬▬┬▬▬▬┬▬▬▬┼▬▬▬▬┬▬▬▬▬▬▬▬┼▬▬▬▬▬┬▬▬▬▬▬┬▬▬▬▬▬┼▬▬▬▬▬┬▬▬▬▬▬┬▬▬▬▬▬▬▬▬┼\n");
-	OutputDebugString(L"│   │    │Off│Int│Red│Gre│Bl │Whi│Int│Red│Gre│Bl │Whi│Int│Red│Gre│Bl │Whi│Init│Program│Param│Param│Param│Curr │Nr of│ Step   │\n");
-	OutputDebugString(L"│   │    │Cha│ens│   │ en│ ue│ te│ens│   │ en│ ue│ te│ens│   │ en│ ue│ te│    │Number │  1  │  2  │  3  │Step │Steps│Duration│\n");
-	OutputDebugString(L"┼▬▬▬┼▬▬▬▬┼▬▬▬┼▬▬▬┼▬▬▬┼▬▬▬┼▬▬▬┼▬▬▬┼▬▬▬┬▬▬▬┼▬▬▬┼▬▬▬┼▬▬▬┼▬▬▬┼▬▬▬┼▬▬▬┼▬▬▬┼▬▬▬┼▬▬▬▬┼▬▬▬▬▬▬▬┼▬▬▬▬▬┼▬▬▬▬▬┼▬▬▬▬▬┼▬▬▬▬▬┼▬▬▬▬▬┼▬▬▬▬▬▬▬▬┼\n");
+	OutputDebugString(L"┌▬▬▬┬▬▬▬▬┬▬▬▬┬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬┬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬┬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬┬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬┬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬┬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬┐\n");
+	OutputDebugString(L"│Fix│Abbr│DMX│   Current Color   │   Default Color   │  Alternate Color  │  Program       │Program Params   │       Steps        │\n");
+	OutputDebugString(L"│   │    │   ├▬▬▬┬▬▬▬┬▬▬▬┬▬▬▬┬▬▬▬┼▬▬▬┬▬▬▬┬▬▬▬┬▬▬▬┬▬▬▬┼▬▬▬┬▬▬▬┬▬▬▬┬▬▬▬┬▬▬▬┼▬▬▬▬┬▬▬▬▬▬▬▬┬▬▬▬┼▬▬▬▬▬┬▬▬▬▬▬┬▬▬▬▬▬┼▬▬▬▬▬┬▬▬▬▬▬┬▬▬▬▬▬▬▬▬┼\n");
+	OutputDebugString(L"│   │    │Off│Int│Red│Gre│Bl │Whi│Int│Red│Gre│Bl │Whi│Int│Red│Gre│Bl │Whi│Init│Program│Trg│Param│Param│Param│Curr │Nr of│ Step   │\n");
+	OutputDebugString(L"│   │    │Cha│ens│   │ en│ ue│ te│ens│   │ en│ ue│ te│ens│   │ en│ ue│ te│    │Number │Sta│  1  │  2  │  3  │Step │Steps│Duration│\n");
+	OutputDebugString(L"┼▬▬▬┼▬▬▬▬┼▬▬▬┼▬▬▬┼▬▬▬┼▬▬▬┼▬▬▬┼▬▬▬┼▬▬▬┬▬▬▬┼▬▬▬┼▬▬▬┼▬▬▬┼▬▬▬┼▬▬▬┼▬▬▬┼▬▬▬┼▬▬▬┼▬▬▬▬┼▬▬▬▬▬▬▬┼▬▬▬┼▬▬▬▬▬┼▬▬▬▬▬┼▬▬▬▬▬┼▬▬▬▬▬┼▬▬▬▬▬┼▬▬▬▬▬▬▬▬┼\n");
 
 #endif // OUTPUT_LIGHT_SETUP
 }
@@ -110,12 +110,12 @@ void WinLightSetup::PrintFixture(fixture_number_t fixtureNumber) const
 
 	const char* abbr = par.GetPlatformFixture().GetAbbr();
 				
-	//                   Par Number                                                        Init Program               Current Step
-	//                      |  Abbreviation                                                           \ Program              |    Number of Steps
-	//                      |     |  DMX Channel                                                       \ Number              |    / 
-	//                      |     |      |    --Actual Color--   --Default Color--   -Alternate Color-  \    |   Parameters  |   /  Step Duration
-	//                      |     |      |   /                \ /                 \ /                 \  |   |  /         |  |   |   |
-	swprintf_s(message, L"│%2u │%c%c%c │%3u│%3u:%3u:%3u:%3u:%3u│%3u:%3u:%3u:%3u:%3u│%3u:%3u:%3u:%3u:%3u│%4u│%7u│%5u:%5u:%5u│%5u│%5u│%6u  │\n",
+	//                   Par Number                                                        Init Program                      Current Step
+	//                      |  Abbreviation                                                           \ Program                     |    Number of Steps
+	//                      |     |  DMX Channel                                                       \ Number Trigger             |    / 
+	//                      |     |      |    --Actual Color--   --Default Color--   -Alternate Color-  \    |  State   Parameters  |   /  Step Duration
+	//                      |     |      |   /                \ /                 \ /                 \  |   |     |   /         |  |   |   |
+	swprintf_s(message, L"│%2u │%c%c%c │%3u│%3u:%3u:%3u:%3u:%3u│%3u:%3u:%3u:%3u:%3u│%3u:%3u:%3u:%3u:%3u│%4u:%7u:%c%c%c|%5u:%5u:%5u│%5u:%5u:%6u  │\n",
 		fixtureNumber,
 		wchar_t(abbr[0] == '\0' ? ' ' : abbr[0]),
 		wchar_t(abbr[1] == '\0' ? ' ' : abbr[1]),
@@ -124,7 +124,11 @@ void WinLightSetup::PrintFixture(fixture_number_t fixtureNumber) const
 		actualColor.GetIntensity(), actualColor.GetRed(), actualColor.GetGreen(), actualColor.GetBlue(), actualColor.GetWhite(),
 		defaultColor.GetIntensity(), defaultColor.GetRed(), defaultColor.GetGreen(), defaultColor.GetBlue(), defaultColor.GetWhite(),
 		alternateColor.GetIntensity(), alternateColor.GetRed(), alternateColor.GetGreen(), alternateColor.GetBlue(), alternateColor.GetWhite(),
-		par.GetInitialize(), par.GetProgram(), par.GetParameter1(), par.GetParameter2(), par.GetParameter3(),
+		par.GetInitialize(), par.GetProgram(), 
+		par.GetTriggerState() == Fixture::Off ? 'O' : par.GetTriggerState() == Fixture::Waiting ? 'W' : 'A',
+		par.GetTriggerState() == Fixture::Off ? 'f' : par.GetTriggerState() == Fixture::Waiting ? 'a' : 'c',
+		par.GetTriggerState() == Fixture::Off ? 'f' : par.GetTriggerState() == Fixture::Waiting ? 'i' : 't',
+		par.GetParameter1(), par.GetParameter2(), par.GetParameter3(),
 		par.GetCurrentStep(), par.GetNrOfSteps(), par.GetStepDuration());
 	OutputDebugString(message);
 
@@ -136,7 +140,7 @@ void WinLightSetup::PrintFooter() const
 {
 #ifdef OUTPUT_LIGHT_SETUP
 
-	OutputDebugString(L"└▬▬▬┴▬▬▬▬┴▬▬▬┴▬▬▬┴▬▬▬┴▬▬▬┴▬▬▬┴▬▬▬┴▬▬▬┴▬▬▬┴▬▬▬┴▬▬▬┴▬▬▬┴▬▬▬┴▬▬▬┴▬▬▬┴▬▬▬┴▬▬▬┴▬▬▬▬┴▬▬▬▬▬▬▬┴▬▬▬▬▬┴▬▬▬▬▬┴▬▬▬▬▬┴▬▬▬▬▬┴▬▬▬▬▬┴▬▬▬▬▬▬▬▬┼\n");
+	OutputDebugString(L"└▬▬▬┴▬▬▬▬┴▬▬▬┴▬▬▬┴▬▬▬┴▬▬▬┴▬▬▬┴▬▬▬┴▬▬▬┴▬▬▬┴▬▬▬┴▬▬▬┴▬▬▬┴▬▬▬┴▬▬▬┴▬▬▬┴▬▬▬┴▬▬▬┴▬▬▬▬┴▬▬▬▬▬▬▬┴▬▬▬┴▬▬▬▬▬┴▬▬▬▬▬┴▬▬▬▬▬┴▬▬▬▬▬┴▬▬▬▬▬┴▬▬▬▬▬▬▬▬┼\n");
 
 #endif // OUTPUT_LIGHT_SETUP
 }

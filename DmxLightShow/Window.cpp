@@ -398,7 +398,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 #endif // COLOR_CHANGE_CHECKING
 
 				wchar_t wtext[20];
-				size_t sizet;
 				swprintf_s(wtext, L"%d", _refreshCounter);
 				TextOut(hdc, 0, 0, wtext, lstrlen(wtext));
 			}
@@ -565,7 +564,7 @@ void InjectCommands()
 		*/
 	}
 
-	else if (_refreshCounter % 500 == 0)
+	else if (_refreshCounter % 2500 == 0)
 	{
 		InjectString("fa !");
 	}
