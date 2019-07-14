@@ -1,5 +1,6 @@
 #ifdef _WINDOWS
 
+
 #include "assert.h"
 #include "SpiRAMStub.h"
 #include "string.h"
@@ -94,5 +95,6 @@ void SpiRAM::write_stream(int address, char* buffer, int length)
 
 	memcpy(&(_sram[address]), buffer, (size_t) length);
 }
+
 
 #endif // WINDOWS

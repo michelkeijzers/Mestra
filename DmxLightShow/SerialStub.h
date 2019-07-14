@@ -28,3 +28,8 @@ private:
 
 
 extern SerialClass Serial;
+extern SerialClass Serial1;
+extern SerialClass Serial2;
+extern SerialClass Serial3;
+
+

@@ -531,8 +531,9 @@ void InjectCommands()
 		//InjectString("t BA 4000");
 		//InjectString("p BA 72");
 
-		InjectString("fa c g t 1000 d ir a ib p 50");
-		InjectString("la c l t 1000 d ir a ib p 72");
+		// InjectString("fa c g t 1000 d ir a ib p 52");
+		InjectString("fa c l t 5000 d ir a ib p 52");
+		//InjectString("la c l t 1000 d ir a ib p 72");
 		//InjectString("ra c l t 1000 d ir a ib p 72");
 		//InjectString("ra t 3000 d ir a ib p 63");
 		//InjectString("ba t 2000 d ir a ig p 63");
@@ -562,7 +563,7 @@ void InjectCommands()
 	}
 	else if (_refreshCounter % 1000 == 0)
 	{
-		InjectString("fa c o");
+		// InjectString("fa c o");
 	}
 }
 

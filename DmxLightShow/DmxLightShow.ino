@@ -4,11 +4,11 @@
 
 void setup() 
 {
-	ArduinoDmxLightShow::Setup();
+  ArduinoDmxLightShow::Setup();
 }
 
 
 void loop() 
 {
-	ArduinoDmxLightShow::Loop();
+  ArduinoDmxLightShow::Loop();
 }

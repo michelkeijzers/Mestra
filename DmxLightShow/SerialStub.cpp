@@ -1,5 +1,6 @@
 #ifdef _WINDOWS
 
+
 #include "SerialStub.h"
 #include "Windows.h"
 #include "stdio.h"
@@ -66,5 +67,6 @@ void SerialClass::print(int value)
 void SerialClass::flush()
 {
 }
+
 
 #endif // _WINDOWS

@@ -5,8 +5,8 @@
 //             M E G A        
 //            Flash SRAM   SRAMnew
 // Maximum:  253952 8192
-// Current:   11956 1277       663
-//       %:       4   15         8
+// Current:   19396 3268       663
+//       %:       7   39         8
 //
 // Stack:
 //
@@ -21,9 +21,6 @@
 // Or alternative: DmxSimple.write()
 // Total                                           11                 16      + 2 per level (7) = 11+16+14=41
 
-
-
-
 // Interrupt
 #include "ArduinoDmxLightShow.h"
 
@@ -31,21 +28,30 @@
 #include HEADER_FILE(ARDUINO_CLASS)
 #include HEADER_FILE(DMX_SIMPLE_CLASS)
 #include HEADER_FILE(SERIAL_CLASS)
-/*
-#include <SPI.h>
 
-#include <SD.h>
+// MIDI
+#include HEADER_FILE(MIDI_CLASS)
 
-#include <MIDI.h>
-#include <boarddefs.h>
-#include <IRremote.h>
-#include <IRremoteInt.h>
-#include <ir_Lego_PF_BitStreamEncoder.h>
+// SD
+#include HEADER_FILE(SPI_CLASS)
+#include HEADER_FILE(SD_CLASS)
 
-#include <LiquidCrystal.h>
+// IR
+//#include <boarddefs.h>
+#include HEADER_FILE(IR_REMOTE_CLASS)
+//#include <IRremoteInt.h>
+//#include <ir_Lego_PF_BitStreamEncoder.h>
 
-*/
+// LCD
+#include HEADER_FILE(LIQUID_CRYSTAL_CLASS)
 
+// RF
+//#include <nRF24L01.h>
+//#include <printf.h>
+#include HEADER_FILE(RF24_CLASS)
+//#include <RF24_config.h>
+
+// Application
 #include "SerialPrint.h"
 #include "McuLightSetup.h"
 #include "LightSetup.h"
@@ -53,39 +59,36 @@
 #include "CommandParser.h"
 #include "ProgramExecuter.h"
 
-/*
 
-
-IRrecv irrecv(0);
-decode_results results;
-
-const int rs = 12, en = 11, d4 = 5, d5 = 4, d6 = 3, d7 = 2;
-LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
-
-#include <nRF24L01.h>
-#include <printf.h>
-#include <RF24.h>
-#include <RF24_config.h>
-
-
-MIDI_CREATE_INSTANCE(HardwareSerial, Serial1, midiA);
-MIDI_CREATE_INSTANCE(HardwareSerial, Serial1, midiB);
-MIDI_CREATE_INSTANCE(HardwareSerial, Serial1, midiC);
-
-File dataFile;
-
-
-RF24 radio(7, 8); // CE, CSN
-const byte address[6] = "00001";
-
-*/
-
+// DMX
 const uint8_t  DMX_SEND_PIN = 2;
 const uint16_t DMX_MAX_CHANNELS = 140;
 
+// MIDI
+MIDI_CREATE_INSTANCE(HardwareSerial, Serial1, midiA);
+MIDI_CREATE_INSTANCE(HardwareSerial, Serial2, midiB);
+MIDI_CREATE_INSTANCE(HardwareSerial, Serial3, midiC);
+
+// SD
+File dataFile;
+
+// IR
+IRrecv irrecv(0);
+decode_results results;
+
+// LCD
+const int rs = 12, en = 11, d4 = 5, d5 = 4, d6 = 3, d7 = 2;
+LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
+
+// RF
+RF24 radio(7, 8); // CE, CSN
+//const byte address[6] = "00001";
+
+// Application
 
 Command         _command;
 McuLightSetup   _mcuLightSetup;
+
 
 
 ArduinoDmxLightShow::ArduinoDmxLightShow()

@@ -20,6 +20,8 @@ uint32_t millis()
 // ReSharper disable once CppParameterNeverUsed
 void pinMode(int pin, int state)
 {
+	(void) pin;
+	(void) state;
 }
 
 #endif // _WINDOWS

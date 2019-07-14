@@ -171,6 +171,24 @@
     <ClInclude Include="PackedCommand.h">
       <Filter>Header Files\Commands</Filter>
     </ClInclude>
+    <ClInclude Include="MidiStub.h">
+      <Filter>Header Files\ArduinoStubs</Filter>
+    </ClInclude>
+    <ClInclude Include="SpiStub.h">
+      <Filter>Header Files\ArduinoStubs</Filter>
+    </ClInclude>
+    <ClInclude Include="LiquidCrystalStub.h">
+      <Filter>Header Files\ArduinoStubs</Filter>
+    </ClInclude>
+    <ClInclude Include="Rf24Stub.h">
+      <Filter>Header Files\ArduinoStubs</Filter>
+    </ClInclude>
+    <ClInclude Include="SdStub.h">
+      <Filter>Header Files\ArduinoStubs</Filter>
+    </ClInclude>
+    <ClInclude Include="IrRemoteStub.h">
+      <Filter>Header Files\ArduinoStubs</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DmxLightShow.rc">
@@ -290,6 +308,24 @@
     </ClCompile>
     <ClCompile Include="CommandBuffer.cpp">
       <Filter>Source Files\WIN32</Filter>
+    </ClCompile>
+    <ClCompile Include="MidiStub.cpp">
+      <Filter>Source Files\ArduinoStubs</Filter>
+    </ClCompile>
+    <ClCompile Include="LiquidCrystalStub.cpp">
+      <Filter>Source Files\ArduinoStubs</Filter>
+    </ClCompile>
+    <ClCompile Include="Rf24Stub.cpp">
+      <Filter>Source Files\ArduinoStubs</Filter>
+    </ClCompile>
+    <ClCompile Include="SdStub.cpp">
+      <Filter>Source Files\ArduinoStubs</Filter>
+    </ClCompile>
+    <ClCompile Include="SpiStub.cpp">
+      <Filter>Source Files\ArduinoStubs</Filter>
+    </ClCompile>
+    <ClCompile Include="IrRemoteStub.cpp">
+      <Filter>Source Files\ArduinoStubs</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
