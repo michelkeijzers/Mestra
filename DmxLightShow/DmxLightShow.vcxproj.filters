@@ -165,6 +165,12 @@
     <ClInclude Include="ArduinoDmxLightShow.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ParGroups.h">
+      <Filter>Header Files\LightSetup</Filter>
+    </ClInclude>
+    <ClInclude Include="PackedCommand.h">
+      <Filter>Header Files\Commands</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DmxLightShow.rc">
@@ -258,9 +264,6 @@
     <ClCompile Include="CommandParser.cpp">
       <Filter>Source Files\Commands</Filter>
     </ClCompile>
-    <ClCompile Include="CommandBuffer.cpp">
-      <Filter>Source Files\WIN32</Filter>
-    </ClCompile>
     <ClCompile Include="AssertUtils.cpp">
       <Filter>Source Files\Utilities</Filter>
     </ClCompile>
@@ -278,6 +281,15 @@
     </ClCompile>
     <ClCompile Include="ArduinoDmxLightShow.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ParGroups.cpp">
+      <Filter>Source Files\LightSetup</Filter>
+    </ClCompile>
+    <ClCompile Include="PackedCommand.cpp">
+      <Filter>Source Files\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="CommandBuffer.cpp">
+      <Filter>Source Files\WIN32</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

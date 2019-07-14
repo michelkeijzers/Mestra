@@ -10,13 +10,6 @@
 /* abstract */ class Fixture
 {
 public:
-	enum ETriggerState
-	{
-		Off,			// Default
-		Waiting,	// Waiting for trigger
-		Active 		// Trigger is active
-	};
-
 	Fixture(fixture_number_t fixture_number);
 
 	virtual ~Fixture();
@@ -26,6 +19,8 @@ public:
 
 	PlatformFixture& GetPlatformFixture() const;
 
+	fixture_number_t GetFixtureNumber() const;
+	
 	virtual bool CheckIncreaseStep(step_t stepsToIncrease = 1);
 
 	virtual void StroboChanged();
@@ -36,11 +31,6 @@ public:
 
 	bool GetInitialize() const;
 	void SetInitialize(bool initialize);
-
-	ETriggerState GetTriggerState() const;
-    void SetTriggerState(ETriggerState triggerState);
-
-	void ActivateTrigger();
 
 	program_t GetProgram() const;
 	void SetProgram(program_t program);
@@ -54,8 +44,14 @@ public:
 	step_duration_t GetStepDuration() const;
 	void SetStepDuration(step_duration_t stepDuration);
 
-	step_t GetCurrentStep() const;
-	void SetCurrentStep(step_t currentStep);
+	step_t GetStepNumber() const;
+	void SetStepNumber(step_t currentStep);
+
+	bool GetHold() const;
+	void SetHold(bool hold);
+
+	bool GetOnce() const;
+	void SetOnce(bool hold);
 
 	parameter_t GetParameter1() const;
 	void SetParameter1(parameter_t parameter1);
@@ -65,6 +61,8 @@ public:
 
 	parameter_t GetParameter3() const;
 	void SetParameter3(parameter_t parameter3);
+
+	bool GetForceUpdate() const;
 
 protected:
 	void SetPlatformFixture(PlatformFixture* platformFixture);
@@ -80,8 +78,6 @@ private:
 
 	dmx_channel_t _dmxOffsetChannel;
 
-	ETriggerState _triggerState;
-
 	program_t _program;
 
 	step_t _nrOfSteps;
@@ -90,7 +86,11 @@ private:
 
 	step_duration_t _stepDuration;
 
-	step_t _currentStep;
+	step_t _stepNumber;
+
+	bool _hold;
+
+	bool _once;
 
 	parameter_t _parameter1;
 	parameter_t _parameter2;

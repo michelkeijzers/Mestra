@@ -1,136 +1,184 @@
+DEBT
+====
+
+
+
+Memory consumption:
+- Change step time (for delay times) to 1 byte instead of 2 using a table (exponentionally)
+- Check why command and packedcommand use more memory than before
+- Put fixture 4 booleans together: initialize, forceupdate, hold, once
 
 
 Commands
 ========
 
-List of commands:
+<ParGroup> <Item>*
 
-Command   First       Second     Description
-        Parameter    Parameter
-------- --------- -------------- -----------------------------------------
+<ParGroup>:           2 characters
 
-<parbits> (`!` || (`d` <DefaultColor>) (`a` <AlternativeColor>) (`p` <PresetNumber>) (`t` <DelayTime>) (`s` <StrobeSpeed> | `g` <0|1>))
+<<Item>:             (<Command>          |
+                      <DelayTime>        |
+                      <PresetNumber>     |
+                      <StrobeTime>       |
+                      <StepNumber>       |
+                      <Hold>             |
+					  <Once>             |
+                      <AlternativeColor> |
+                      <DefaultColor>)*
 
-<ParBits>:           2 characters
-d					 default Color
-<DefaultColor>:      <Color>
-a					 alternative color
-<AlternativeColor>:  <Color>
+<Command>:           'c' <TriggerMode> | <Loop> | <Once> | <Restart>) 
+<DelayTime>:         't' <uint16>
+<StrobeSpeed>:       'b' <uint16> (overrides white)
+<PresetNumber>:      'p' <uint8>
+<StepNumber>:        's' <uint16> | 'l' //  L means last step number
+<Hold>:              'h' <bool>
+<Once>:              'o' <bool>
+<DefaultColor>:      'd' <Color>
+<AlternativeColor>:  'a' <Color>
+
+
+<TriggerMode>:       'g'    CurrentStep = Last (by StepNumber), Hold = True , Once = True
+<Loop>:              'l'    CurrentStep = 0                   , Hold = False, Once = False
+<Once>:              'o'    CurrentStep = 0                   , Hold = False, Once = True
+<Restart>:           'r'    CurrentStep = 0                   , Hold = False, Once unchanged
+
 <Color>:             ( (('i')('r')('g')('b')('w'))*) | (<I>,<R>,<G>,<B>(,<W>)))
-<R>                  0-255
-<G>                  0-255
-<B>                  0-255
-<I>                  0-255
-<W>:                 0-255, switches off strobo
-<DelayTime>:		 0-65535
-<StrobeSpeed>:       0-65535 (overrides w)
-p					 preset number
-<PresetNumber>		 0-255
-t					 delay time
-g					 trigger state
-!					 activate trigger
+<R>:                 <uint8>
+<G>:                 <uint8>
+<B>:                 <uint8>
+<I>:                 <uint8>
+<W>:                 <uint8>, switches off strobo
+<ws>:                white space
+
+<uint16>:            '0'..'65535'
+<uint8>:             '0'..'255'
+<bool':              '0' | '1'
 
 e.g.
 
-la a irgb d ir p 20 t 1000 g;
+la l a:irgb d ir p 20 t 1000
+la 
 
 
 Command bytes
 =============
 
-Item						Byte(s)	Bits	Comment
-------------------------	-------	-------	------------------------------------
-Par bits					0~ 3
-Flags						 4
- Default Color Set			 0
- Default Color White Used    1			
- Alternate Color Set		 2
- Alternate Color White Used	 3
- Preset Number Set			 4
- Delay Time Set				 5
- Strobo Time Set			 6
- Trigger State Set			 7
-Flags 2						 5
- Trigger State               1
- Activate Trigger			 2
+Byte   Bit Item                          
+------ --- ---------------------------------
+ 0     7~4 (unused)
+       3~0 Length
+ 1     7~5 (unused)
+       4~0 Par Group
+ 2     7~0 Flags1 see next table
+ 3     7~0 Flags2 see next table
+ 4..32     Additional Bytes
 
-Default Color				 6~10
-Alternate Color				11~15
-Preset Number				16
-Delay Time					17~18
-Strobo Time					19
+Byte Bit Flags              #Add.Bytes  
+---- --- ------------------ ----------     
+  2   7  Preset Number Set      1           
+      6  Delay Time Set         2        
+      5  Strobe Time Set        2          
+      4  Step Number Set        2           
+      3  Step Number Short Set  1
+      2  Step Number Short      0: 0    1: Last
+     1~0 (unused)			    -      
 
-#Bytes:                     20
+  3	  7  Hold Set
+	  6  Hold                   0: Off  1: On
+	  5  Once Set          
+	  4  Once                   0: Off  1: On
+      3  Default Color Set      1..11
+      2  Alternate Color Set    1..11
+	 1~0 (unused)
 
+Add.Bytes               Byte Bit(s) Name                               
+----------------------- ---- -----  --------------------------------------------------------------------
+Color                     0    7    0: Short Form Color
+                                    1: Long Form Color
 
-
-
-
-
+Short Form Color          0    6    Intensity 0/255           
+                          0    5    Red       0/255
+                          0    4    Green     0/255
+                          0    3    Blue      0/255
+                          0    2    White Used        
+                          0    1    White     0/255
+                          0    0    (unused)
+                     
+Long Form Color           0    6    Intensity  0: 255                        , 1: Value in additional byte     
+                          0    5    Red        0: Default value (see bit 0.0), 1: Value in additional byte
+                          0    4    Green      0: Default value (see bit 0.0), 1: Value in additional byte
+                          0    3    Blue       0: Default value (see bit 0.0), 1: Value in additional byte
+                          0    2    White Used 
+                          0    1    White      0: Default value (see bit 0.0), 1: Value in additional byte
+                          0    0    Default Value 0: 0, 1:255
 
 Fixture/Par data
 ================
 
-Item					Type						Bytes	Class			Content
------------------------	--------------------------	-----	--------------	---------------------------
-(platformFixture)		Pointer*					2		Fixture
-fixtureNumber			fixture_number_t			1		Fixture
-initialize				bool						1		Fixture
-dmxOffsetChannel		dmx_channel_t				2		Fixture
-triggerState       		TriggeredState				1		Fixture			Program does not change steps until triggered, when at last step, it stops (until retriggered)
-program					program_t					1		Fixture
-nrOfSteps				step_t						2		Fixture
-stepTime				step_time_t					4		Fixture
-stepDuration			step_duration_t				4		Fixture
-currentStep				step_t						2		Fixture		
-parameter1				parameter_t					2		Fixture		
-parameter2				parameter_t					2		Fixture		
-parameter3				parameter_t					2		Fixture		
-defaultColor			Irgbw						5		Par
-alternateColor			Irgbw						5		Par
-segmentNumber			led_bar_saegment_number_t	1		LedBarSegment	Segment number (0-2)
-(Vtable)											2
-												   --
-Total											   39
-Nr of Fixtures                                     17   (14 pars + 3 led bar segments)	
-                                                  ---
-Total                                             663
-	
+Bytes/bits     Item                    Type                       Class          Remarks/Improvements
+-------------- ----------------------- -------------------------- -------------- --------------------------
+   0     7~4   (unused)                                                           Unused bits
+         3~0   fixtureNumber           fixture_number_t           Fixture
+   1     7     initialize              bool                       Fixture
+         6     stepping                bool                       Fixture
+         5     once                    bool                       Fixture
+         4~3   (unused)                                                          Unused bits, but reserve for programs
+         2~0   program                 program_t                  Fixture                    
+   1     0     dmxOffsetChannel        dmx_channel_t, MS bit      Fixture  
+   2     7~0   dmxOffsetChannel        dmx_channel_t, LSB         Fixture        Assume DMX offset channels of 8
+   3- 4  full  currentStep             step_t                     Fixture 
+   5- 6  full  nrOfSteps               step_t                     Fixture
+   7-10  full  stepTime                step_time_t                Fixture        Use smarter duration (exponential predefined table)
+  11-14  full  stepDuration            step_duration_t            Fixture        Use smarter duration (exponential predefined table)
+  15-16  full  parameter1              parameter_t                Fixture 
+  17-18  full  parameter2              parameter_t                Fixture 
+  19-20  full  parameter3              parameter_t                Fixture      
+  21-25  full  defaultColor            Irgbw                      Par            Color can fit in 5 * 0..48 (max 64), thus 30 bits
+  26-30  full  alternateColor          Irgbw                      Par            Color can fit in 5 * 0..48 (max 64), thus 30 bits
+  31     7~2                                                                     Unused bits
+  31     1~0   segmentNumber           led_bar_segment_number_t   LedBarSegment  Segment number (0-2)
+  32-35        (Vtable/PlatformFixture*)                          
+    
+Total                                                36
+Nr of Fixtures                                       17 *  (14 pars + 3 led bar segments) 
+                                                    ---
+Total                                               612
+
 
 List of presets
 ===============
 
-Preset              Preset Program Description
-Group               number
-------------------- ------ ------- ------------------------------------------
-Switch colors           10    n.a. Default color    -> Alternate color
-                        11    n.a. Alternate color  -> Default color
-                        12    n.a. Default color   <-> Alternate color
-                        13    n.a. Default color    -> Actual color
-                        14    n.a. Actual color     -> Default color
-                        15    n.a. Default color   <-> Actual color
-                        16    n.a. Alternate color  -> Actual color
-                        17    n.a. Actual color     -> Alternate color
-                        18    n.a. Alternate color <-> Actual color
-Solid color             20      0  Solod (Default) color
-Dual colors             30     10  Switch between default and alternate color
-                        31     10  Switch between alternate and default color
-Chase                   40     10  Chase left -> right
-                        41     10  Chase right -> left
-                        42     10  Chase left -> right -> left
-                        43     10  Chase right -> left -> right
-Fade in/out             50     20  Fade default color->alternate color
-                        51     21  Fade alternate color->default color
-                        52     20  Fade def->alt->def
-                        53     20  Fade alt->def->alt
-Fade + Chase            60     30  Fade + Chase, left -> right
-                        61     30  Fade + Chase, right -> left
-                        62     30  Fade + Chase, left -> right -> left
-                        63     30  Fade + Chase, right -> left -> right
-Rainbow colors          70     40  No fade, left -> right, 
-                        71     40  No fade, right -> left
-                        72     40  Fade, left -> right
-                        73     40  Fade, right -> left
+Preset              ID  Preset Program Description
+Group                   number
+------------------- --- ------ ------- ------------------------------------------
+Switch colors        0     10    n.a. Default color    -> Alternate color
+                     1     11    n.a. Alternate color  -> Default color
+                     2     12    n.a. Default color   <-> Alternate color
+                     3     13    n.a. Default color    -> Actual color
+                     4     14    n.a. Actual color     -> Default color
+                     5     15    n.a. Default color   <-> Actual color
+                     6     16    n.a. Alternate color  -> Actual color
+                     7     17    n.a. Actual color     -> Alternate color
+                     8     18    n.a. Alternate color <-> Actual color
+Solid color          9     20      0  Solod (Default) color
+Dual colors         10     30     10  Switch between default and alternate color
+                    11     31     10  Switch between alternate and default color
+Chase               12     40     10  Chase left -> right
+                    13     41     10  Chase right -> left
+                    14     42     10  Chase left -> right -> left
+                    15     43     10  Chase right -> left -> right
+Fade in/out         16     50     20  Fade default color->alternate color
+                    17     51     21  Fade alternate color->default color
+                    18     52     20  Fade def->alt->def
+                    19     53     20  Fade alt->def->alt
+Fade + Chase        20     60     30  Fade + Chase, left -> right
+                    21     61     30  Fade + Chase, right -> left
+                    22     62     30  Fade + Chase, left -> right -> left
+                    23     63     30  Fade + Chase, right -> left -> right
+Rainbow colors      24     70     40  No fade, left -> right, 
+                    25     71     40  No fade, right -> left
+                    26     72     40  Fade, left -> right
+                    27     73     40  Fade, right -> left
 
 Program List
 ============
@@ -146,8 +194,8 @@ Prg Name       Par1 Par2 Par3 Description
  40 Rainbow    Yes   -    -   Par 1 = Step increase
 
 
- PAR Bits
- ========
+ PAR Groups
+ ==========
 
                                                      LED Bar   Ego  Banners      
                                                                Risers      Drums  Front Left  Front Right
@@ -158,11 +206,11 @@ Prg Name       Par1 Par2 Par3 Description
 In Index   30 29 28 27 26 25 24 23 22 21 20 19 18 17 16  15 14 13 12 11 10 9  8   7  6  5  4  3  2  1  0
 dx Fixture Group      Fixture Part                   Set
 -- ------------------ ------------------------------ -------- ----- ----- -----  ----------- -----------
-01 A All Groups       A All                          1   1  1  1  1  1  1  1  1   1  1  1  1  1  1  1  1
-02                    C Center                       0   1  0  0  0  0  0  0  0   0  1  1  0  0  1  1  0  
-03                    E All Except Ego Risers        1   1  1  0  0  1  1  1  1   1  1  1  1  1  1  1  1
-04                    L Left                         1   0  0  0  0  1  0  1  0   1  1  1  1  0  0  0  0  
-05                    R Right                        0   0  1  0  0  0  1  0  1   0  0  0  0  1  1  1  1  
+00 A All Groups       A All                          1   1  1  1  1  1  1  1  1   1  1  1  1  1  1  1  1
+01                    C Center                       0   1  0  0  0  0  0  0  0   0  1  1  0  0  1  1  0  
+02                    E All Except Ego Risers        1   1  1  0  0  1  1  1  1   1  1  1  1  1  1  1  1
+03                    L Left                         1   0  0  0  0  1  0  1  0   1  1  1  1  0  0  0  0  
+04                    R Right                        0   0  1  0  0  0  1  0  1   0  0  0  0  1  1  1  1  
 10 B Led Bar          A All                          1   1  1  0  0  0  0  0  0   0  0  0  0  0  0  0  0  
 11                    C Center                       0   1  0  0  0  0  0  0  0   0  0  0  0  0  0  0  0  
 12                    L Left                         1   0  0  0  0  0  0  0  0   0  0  0  0  0  0  0  0  
@@ -198,3 +246,19 @@ dx Fixture Group      Fixture Part                   Set
 
 
 
+
+
+NOTES
+=====
+
+CommandParser::Parse()
+  for fixture
+    if par
+	  CommandParser::SetPresetNumber(command, parNumber 0..32)
+	    if preset set
+		   PresetCommand::Run(fixture number, par bits, preset number)
+		     for fixture 0..31
+			   if fixture
+			     SetFixture
+
+	    

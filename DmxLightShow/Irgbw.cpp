@@ -109,6 +109,16 @@ void Irgbw::SetIrgbw(Irgbw& irgbw)
 }
 
 
+void Irgbw::Clear()
+{
+	_intensity = 0;
+	_red = 0;
+	_green = 0;
+	_blue = 0;
+	_white = 0;
+}
+
+
 void Irgbw::SetIrgb(intensity_t intensity, intensity_t red, intensity_t green, intensity_t blue)
 {
 	AssertUtils::MyAssert(red   <= PAR_MAX_PAR_INTENSITY);

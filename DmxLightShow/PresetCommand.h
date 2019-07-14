@@ -10,7 +10,7 @@
 class PresetCommand
 {
 public:
-	static void Run(fixture_number_t fixtureNumber, par_bits_t parBits, preset_t presetNumber);
+	static void Run(par_group_t parGroup, Par& par, preset_t presetNumber);
 
 private:
 	PresetCommand();
@@ -18,8 +18,7 @@ private:
 
 	static void CommandAllOff(Par& par);
 	
-	static void SetFixturePreset(preset_t presetNumber, fixture_number_t parNumber,
-		fixture_number_t selectedParIndex, fixture_number_t nrOfPars);
+	static void SetFixturePreset(Par& par, fixture_number_t parIndexInGroup, fixture_number_t nrOfParsInGroup, preset_t presetNumber);
 	
 	static void SetFixedIrgb(Par& par, Irgbw& color,
 		intensity_t intensity, intensity_t red, intensity_t green, intensity_t blue);

@@ -1,16 +1,14 @@
 
 #include "ArduinoDmxLightShow.h"
 
-ArduinoDmxLightShow _lightShow;
 
 void setup() 
 {
-	_lightShow.Setup();
+	ArduinoDmxLightShow::Setup();
 }
 
 
 void loop() 
 {
-	_lightShow.Loop();
+	ArduinoDmxLightShow::Loop();
 }
-

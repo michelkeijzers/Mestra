@@ -13,11 +13,12 @@ private:
 	~CommandParser();
 
 	static void SetDelayTime(Command& command, Par& par);
+	static void SetStrobeTime(Command& command);
+	static void SetPresetNumber(Command& command, Par& par);
+	static void SetStepNumber(Command& command, Par& par);
+	static void SetHold(Command& command, Par& par);
+	static void SetOnce(Command& command, Par& par);
 	static void SetDefaultColor(Command& command, Par& par);
 	static void SetAlternateColor(Command& command, Par& par);
-	static void SetTriggerState(Command& command, Par& par);
-	static void ActivateTrigger(Par& par);
-	static void SetPresetCommand(Command& command, fixture_number_t fixtureNumber);
-	static void SetStroboTime(Command& command);
 };
 

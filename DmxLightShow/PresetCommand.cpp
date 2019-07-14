@@ -6,7 +6,8 @@
 #include "BitsUtils.h"
 #include "LightSetup.h"
 #include "Irgbw.h"
-#include <assert.h>
+#include "AssertUtils.h"
+#include "ParGroups.h"
 
 
 PresetCommand::PresetCommand()
@@ -19,26 +20,15 @@ PresetCommand::~PresetCommand()
 }
 
 
-/* static */ void PresetCommand::Run(fixture_number_t fixtureNumber, par_bits_t parBits, preset_t presetNumber)
+/* static */ void PresetCommand::Run(par_group_t parGroup, Par& par, preset_t presetNumber)
 {
-	fixture_number_t selectedParIndex = 0;
-	for (fixture_number_t parNumber = 0; parNumber < NR_OF_PARS; parNumber++)
-	{
-		if ((parBits & 0x0001 << parNumber) > 0 && parNumber == fixtureNumber)
-		{
-			fixture_number_t nrOfPars = BitsUtils::GetNrOfHighBits(parBits);
-			SetFixturePreset(presetNumber, parNumber, selectedParIndex, nrOfPars);
-			selectedParIndex++;
-		}
-	}
+	SetFixturePreset(par, ParGroups::GetParIndexInGroup(parGroup, par.GetFixtureNumber()), ParGroups::GetNrOfPars(parGroup), presetNumber);
 }
 
 
 // GetValue contains preset number.
-/* static */ void PresetCommand::SetFixturePreset(preset_t presetNumber, fixture_number_t parNumber, fixture_number_t selectedParIndex, fixture_number_t nrOfPars)
+/* static */ void PresetCommand::SetFixturePreset(Par& par, fixture_number_t parIndexInGroup, fixture_number_t NrOfParsInGroup, preset_t presetNumber)
 {
-	Par& par = LightSetup.GetPar(parNumber);
-	
 	step_t nrOfSteps = 1;
 	
 	switch (presetNumber)
@@ -144,30 +134,30 @@ PresetCommand::~PresetCommand()
 
 	case 40:
 		// Chase left -> right
-		par.InitializeProgram(program_t(10), step_t(nrOfPars), step_t(0), 
-			selectedParIndex, selectedParIndex);
+		par.InitializeProgram(program_t(10), step_t(NrOfParsInGroup), step_t(0), 
+			parIndexInGroup, parIndexInGroup);
 		break;
 
 	case 41:
 		// Chase right -> left
-		par.InitializeProgram(program_t(10), step_t(nrOfPars), step_t(0),
-			parameter_t(nrOfPars - selectedParIndex - 1),
-			parameter_t(nrOfPars - selectedParIndex - 1));
+		par.InitializeProgram(program_t(10), step_t(NrOfParsInGroup), step_t(0),
+			parameter_t(NrOfParsInGroup - parIndexInGroup - 1),
+			parameter_t(NrOfParsInGroup - parIndexInGroup - 1));
 		break;
 
 	case 42:
 		// Chase left -> right -> left
-		nrOfSteps = (nrOfPars - 1) * 2;
+		nrOfSteps = (NrOfParsInGroup - 1) * 2;
 		par.InitializeProgram(program_t(10), nrOfSteps, step_t(0),
-			parameter_t(selectedParIndex), 
-			parameter_t((nrOfSteps - selectedParIndex) % nrOfSteps));
+			parameter_t(parIndexInGroup), 
+			parameter_t((nrOfSteps - parIndexInGroup) % nrOfSteps));
 		break;
 
 	case 43:
 		// Chase right -> left -> right
-		par.InitializeProgram(program_t(10), step_t((nrOfPars - 1) * 2), step_t(0),
-			parameter_t(nrOfPars - 1 - selectedParIndex),
-			parameter_t(nrOfPars - 1 + selectedParIndex));
+		par.InitializeProgram(program_t(10), step_t((NrOfParsInGroup - 1) * 2), step_t(0),
+			parameter_t(NrOfParsInGroup - 1 - parIndexInGroup),
+			parameter_t(NrOfParsInGroup - 1 + parIndexInGroup));
 		break;
 
 	case 50: 
@@ -185,7 +175,8 @@ PresetCommand::~PresetCommand()
 
 	case 52:
 		// Fade default color -> alternate color -> default color
-		par.InitializeProgram(program_t(20), step_t(PAR_MAX_PAR_INTENSITIES - 1), step_t(0));
+		par.InitializeProgram(program_t(20), 
+			step_t(PAR_MAX_PAR_INTENSITIES * 2 - 2), step_t(0));
 		break;
 
 	case 53:
@@ -197,37 +188,37 @@ PresetCommand::~PresetCommand()
 
 	case 60:
 		// Fade chase left -> Right
-		par.InitializeProgram(program_t(30), step_t(nrOfPars * (PAR_MAX_PAR_INTENSITIES - 1)),
+		par.InitializeProgram(program_t(30), step_t(NrOfParsInGroup * (PAR_MAX_PAR_INTENSITIES - 1)),
 			step_t(0), 
-			parameter_t(selectedParIndex), parameter_t(selectedParIndex), parameter_t(nrOfPars));
+			parameter_t(parIndexInGroup), parameter_t(parIndexInGroup), parameter_t(NrOfParsInGroup));
 		break;
 
 	case 61:
 	  // Fade chase right -> left
 		par.InitializeProgram(program_t(30), 
-			step_t(nrOfPars * (PAR_MAX_PAR_INTENSITIES - 1)), step_t(0),
-			parameter_t(nrOfPars - selectedParIndex - 1), 
-			parameter_t(nrOfPars - selectedParIndex - 1), 
-			parameter_t(nrOfPars));
+			step_t(NrOfParsInGroup * (PAR_MAX_PAR_INTENSITIES - 1)), step_t(0),
+			parameter_t(NrOfParsInGroup - parIndexInGroup - 1), 
+			parameter_t(NrOfParsInGroup - parIndexInGroup - 1), 
+			parameter_t(NrOfParsInGroup));
 		break;
 
 	case 62:
 		// Fade chase left -> right -> left
-		nrOfSteps = (nrOfPars - 1) * 2;
+		nrOfSteps = (NrOfParsInGroup - 1) * 2;
 		par.InitializeProgram(program_t(30), 
 			step_t(nrOfSteps * (PAR_MAX_PAR_INTENSITIES - 1)), step_t(0),
-			parameter_t(selectedParIndex), 
-			parameter_t((nrOfSteps - selectedParIndex) % nrOfSteps), 
+			parameter_t(parIndexInGroup), 
+			parameter_t((nrOfSteps - parIndexInGroup) % nrOfSteps), 
 			parameter_t(nrOfSteps));
 		break;
 
 	case 63:
 		// Fade chase right -> left -> right
-		nrOfSteps = (nrOfPars - 1) * 2;
+		nrOfSteps = (NrOfParsInGroup - 1) * 2;
 		par.InitializeProgram(program_t(30), 
 			step_t(nrOfSteps * (PAR_MAX_PAR_INTENSITIES - 1)), step_t(0),
-			parameter_t(nrOfPars - 1 - selectedParIndex), 
-			parameter_t(nrOfPars - 1 + selectedParIndex), 
+			parameter_t(NrOfParsInGroup - 1 - parIndexInGroup), 
+			parameter_t(NrOfParsInGroup - 1 + parIndexInGroup), 
 			parameter_t(nrOfSteps));
 		break;
 
@@ -235,7 +226,7 @@ PresetCommand::~PresetCommand()
 		// Rainbow colors, left -> right
 		par.InitializeProgram(program_t(40), 
 			step_t(PAR_MAX_PAR_INTENSITIES * PROGRAM_EXECUTER_RAINBOW_COLORS),
-			step_t(PAR_MAX_PAR_INTENSITIES * (selectedParIndex % PROGRAM_EXECUTER_RAINBOW_COLORS)),
+			step_t(PAR_MAX_PAR_INTENSITIES * (parIndexInGroup % PROGRAM_EXECUTER_RAINBOW_COLORS)),
 			parameter_t(-PAR_MAX_PAR_INTENSITIES)); // -MAX_PAR_INTENSITIES means decreasing a full color
 																					// (no fade), left -> right
 		break;
@@ -245,7 +236,7 @@ PresetCommand::~PresetCommand()
 		par.InitializeProgram(program_t(40), 
 			step_t(PAR_MAX_PAR_INTENSITIES * PROGRAM_EXECUTER_RAINBOW_COLORS),
 			step_t(PAR_MAX_PAR_INTENSITIES * 
-			 (PROGRAM_EXECUTER_RAINBOW_COLORS - 1) - PAR_MAX_PAR_INTENSITIES * (selectedParIndex % PROGRAM_EXECUTER_RAINBOW_COLORS)),
+			 (PROGRAM_EXECUTER_RAINBOW_COLORS - 1) - PAR_MAX_PAR_INTENSITIES * (parIndexInGroup % PROGRAM_EXECUTER_RAINBOW_COLORS)),
 			parameter_t(PAR_MAX_PAR_INTENSITIES)); // MAX_PAR_INTENSITIES means increasing a full color (no 
 																	    			 // fade), right -> left
 		break;
@@ -255,7 +246,7 @@ PresetCommand::~PresetCommand()
 		par.InitializeProgram(program_t(40), 
 			step_t(PAR_MAX_PAR_INTENSITIES * PROGRAM_EXECUTER_RAINBOW_COLORS),
 			step_t(PAR_MAX_PAR_INTENSITIES *
-				PROGRAM_EXECUTER_RAINBOW_COLORS - 1 - PAR_MAX_PAR_INTENSITIES * (selectedParIndex % PROGRAM_EXECUTER_RAINBOW_COLORS)),
+				PROGRAM_EXECUTER_RAINBOW_COLORS - 1 - PAR_MAX_PAR_INTENSITIES * (parIndexInGroup % PROGRAM_EXECUTER_RAINBOW_COLORS)),
 			parameter_t(1)); // 1 means left -> right
 		break;
 
@@ -263,12 +254,12 @@ PresetCommand::~PresetCommand()
 		// Rainbow colors + Fade, right -> left (note left->right->left or vice versa is not needed)
 		par.InitializeProgram(program_t(40), 
 			step_t(PAR_MAX_PAR_INTENSITIES * PROGRAM_EXECUTER_RAINBOW_COLORS),
-			step_t(PAR_MAX_PAR_INTENSITIES * (selectedParIndex % PROGRAM_EXECUTER_RAINBOW_COLORS)),
+			step_t(PAR_MAX_PAR_INTENSITIES * (parIndexInGroup % PROGRAM_EXECUTER_RAINBOW_COLORS)),
 			parameter_t(1)); // -1 means right -> left
 		break;
 
 	default:
-		assert(false);
+		AssertUtils::MyAssert(false);
 		break;
 	}
 }

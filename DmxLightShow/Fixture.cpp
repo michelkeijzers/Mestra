@@ -14,12 +14,13 @@ Fixture::Fixture(fixture_number_t fixtureNumber)
 	_initialize(false), 
 	_forceUpdate(false),
 	_dmxOffsetChannel(0), 
-	_triggerState(Off), 
 	_program(0), 
 	_nrOfSteps(0), 
 	_stepTime(0),
 	_stepDuration(0),
-	_currentStep(0),
+	_stepNumber(0),
+	_hold(false),
+	_once(false),
 	_parameter1(0),
 	_parameter2(0),
 	_parameter3(0)
@@ -36,6 +37,12 @@ Fixture::~Fixture()
 
 void Fixture::StroboChanged()
 {
+}
+
+
+fixture_number_t Fixture::GetFixtureNumber() const
+{
+	return _fixtureNumber;
 }
 
 
@@ -60,69 +67,6 @@ bool Fixture::GetInitialize() const
 void Fixture::SetInitialize(bool initialize)
 {
 	_initialize = initialize;
-}
-
-
-Fixture::ETriggerState Fixture::GetTriggerState() const
-{
-	return _triggerState;;
-}
-
-
-void Fixture::SetTriggerState(ETriggerState triggerState)
-{
-	_triggerState = triggerState;
-
-	switch (_triggerState)
-	{
-	case Off:
-		SetCurrentStep(0);
-		SetStepTime(millis() + GetStepDuration());
-		_forceUpdate = true;
-		break;
-
-	case Active:
-		SetCurrentStep(0);
-		SetStepTime(millis() + GetStepDuration());
-		_forceUpdate = true;
-		break;
-
-	case Waiting:
-		SetCurrentStep(MathUtils::Max(0, GetNrOfSteps() - 1));
-		_forceUpdate = true;
-		break;
-
-	default:
-		AssertUtils::MyAssert(false);
-	}
-}
-
-
-void Fixture::ActivateTrigger()
-{
-	switch (GetTriggerState())
-	{
-	case Off:
-		// Ignore
-		break;
-
-	case Active:
-		// Reactivate
-		SetCurrentStep(0);
-		SetStepTime(millis() + GetStepDuration());
-		_forceUpdate = true;
-		break;
-
-	case Waiting:
-		SetTriggerState(Active);
-		SetCurrentStep(0);
-		SetStepTime(millis() + GetStepDuration());
-		_forceUpdate = true;
-		break;
-
-	default:
-		AssertUtils::MyAssert(false);
-	}
 }
 
 
@@ -172,14 +116,48 @@ void Fixture::SetStepDuration(step_duration_t stepDuration)
 }
 
 
-step_t Fixture::GetCurrentStep() const
+step_t Fixture::GetStepNumber() const
 {
-	return _currentStep;
+	return _stepNumber;
 }
 
-void Fixture::SetCurrentStep(step_t currentStep)
+
+void Fixture::SetStepNumber(step_t stepNumber)
 {
-	_currentStep = currentStep;
+	if (stepNumber != _stepNumber)
+	{
+		_stepNumber = stepNumber;
+		_forceUpdate = true;
+	}
+}
+
+
+bool Fixture::GetHold() const
+{
+	return _hold;
+}
+
+
+void Fixture::SetHold(bool hold)
+{
+	if (!_hold && hold)
+	{
+		_forceUpdate = true;
+	}
+	
+	_hold = hold;
+}
+
+
+bool Fixture::GetOnce() const
+{
+	return _once;
+}
+
+
+void Fixture::SetOnce(bool once)
+{
+	_once = once;
 }
 
 
@@ -219,6 +197,12 @@ void Fixture::SetParameter3(parameter_t parameter3)
 }
 
 
+bool Fixture::GetForceUpdate() const
+{
+	return _forceUpdate;
+}
+
+
 PlatformFixture& Fixture::GetPlatformFixture() const
 {
 	return *_platformFixture;
@@ -239,7 +223,7 @@ void Fixture::InitializeProgram(program_t programNumber, step_t nrOfSteps, step_
 	SetInitialize(true);
 	SetProgram(programNumber);
 	SetNrOfSteps(nrOfSteps);
-	SetCurrentStep(startStep);
+	SetStepNumber(startStep);
     SetParameter1(parameter1);
 	SetParameter2(parameter2);
 	SetParameter3(parameter3);
@@ -249,64 +233,42 @@ void Fixture::InitializeProgram(program_t programNumber, step_t nrOfSteps, step_
 bool Fixture::CheckIncreaseStep(step_t stepsToIncrease /* = 1 */)
 {
 	bool isIncreased = false;
+	uint32_t currentMillis = millis();
 
-	switch (GetTriggerState())
+	if (_hold)
 	{
-	case Off:
-		{
-			uint32_t currentMillis = millis();
-
-			if (GetStepDuration() > 0)
-			{
-				if (currentMillis >= GetStepTime())
-				{
-					SetCurrentStep(step_t((GetCurrentStep() + stepsToIncrease) % GetNrOfSteps()));
-					SetStepTime(currentMillis + GetStepDuration());
-					isIncreased = true;
-				}
-			}
-			break;
-		}
-
-	case Waiting:
 		// Do nothing
-		break;
-
-	case Active:
+	}
+	else
+	{
+		if (GetStepDuration() > 0 && currentMillis >= GetStepTime())
 		{
-			uint32_t currentMillis = millis();
-
-			if (GetStepDuration() > 0)
+			if (GetStepNumber() + stepsToIncrease < 0 ||
+			    GetStepNumber() + stepsToIncrease >= GetNrOfSteps())
 			{
-				if (currentMillis >= GetStepTime())
+				if (!_once)
 				{
-					step_t nextStep = GetCurrentStep() + stepsToIncrease;
-					
-					if (nextStep >= GetNrOfSteps())
-					{
-						SetTriggerState(Waiting); // Keep current step to last step too
-						SetCurrentStep(MathUtils::Max(0, GetNrOfSteps() - 1));
-					}
-					else
-					{
-						SetCurrentStep(step_t((GetCurrentStep() + stepsToIncrease) % GetNrOfSteps()));
-					}
-
-					SetStepTime(currentMillis + GetStepDuration());
 					isIncreased = true;
+					SetStepNumber(step_t((GetStepNumber() + stepsToIncrease) % GetNrOfSteps()));
 				}
 			}
-			break;
+			else
+			{
+				isIncreased = true;
+				SetStepNumber(step_t(GetStepNumber() + stepsToIncrease));
+			}
 		}
-
-	default:
-		AssertUtils::MyAssert(false);
 	}
 
 	if (_forceUpdate)
 	{
 		isIncreased = true;
 		_forceUpdate = false;
+	}
+
+	if (isIncreased)
+	{
+		SetStepTime(currentMillis + GetStepDuration());
 	}
 
 	_platformFixture->PostProcessCheckIncreaseStep(isIncreased);

@@ -180,6 +180,8 @@
     <ClInclude Include="LightSetup.h" />
     <ClInclude Include="MathUtils.h" />
     <ClInclude Include="ChinesePar.h" />
+    <ClInclude Include="PackedCommand.h" />
+    <ClInclude Include="ParGroups.h" />
     <ClInclude Include="PlatformFixture.h" />
     <ClInclude Include="PlatformLightSetup.h" />
     <ClInclude Include="PlatformPar.h" />
@@ -219,6 +221,8 @@
     <ClCompile Include="McuLightSetup.cpp" />
     <ClCompile Include="McuPar.cpp" />
     <ClCompile Include="ChinesePar.cpp" />
+    <ClCompile Include="PackedCommand.cpp" />
+    <ClCompile Include="ParGroups.cpp" />
     <ClCompile Include="PlatformFixture.cpp" />
     <ClCompile Include="PlatformLightSetup.cpp" />
     <ClCompile Include="PlatformPar.cpp" />

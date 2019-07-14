@@ -1,62 +1,23 @@
 // CommandParser.cpp
 // Parser for commands.
 
-#include "StringUtils.h"
 #ifdef _WINDOWS
 
-#include <stdlib.h>
-#include "AsciiCommandParser.h"
-#include <string.h>
 #include <ctype.h>
-#include "CharUtils.h"
+#include <stdlib.h>
+#include <string.h>
+
+#include "AssertUtils.h"
+#include "StringUtils.h"
+
+#include "AsciiCommandParser.h"
+#include "ParGroups.h"
 
 
 struct Chars2ParBits
 {
 	const char* abbr;
 	par_bits_t  parBits;
-};
-
-
-Chars2ParBits Chars2ParBitsMapping[] =
-{
-	{ "AA", PAR_AA },
-	{ "AC", PAR_AC },
-	{ "AE", PAR_AE },
-	{ "AL", PAR_AL },
-	{ "AR", PAR_AR },
-	{ "BA", PAR_BA },
-	{ "BC", PAR_BC },
-	{ "BL", PAR_BL },
-	{ "BR", PAR_BR },
-	{ "DA", PAR_DA },
-	{ "DL", PAR_DL },
-	{ "DR", PAR_DR },
-	{ "EA", PAR_EA },
-	{ "EL", PAR_EL },
-	{ "ER", PAR_ER },
-	{ "FA", PAR_FA },
-	{ "FC", PAR_FC },
-	{ "FI", PAR_FI },
-	{ "FM", PAR_FM },
-	{ "FO", PAR_FO },
-	{ "L1", PAR_L1 },
-	{ "L2", PAR_L2 },
-	{ "L3", PAR_L3 },
-	{ "L4", PAR_L4 },
-	{ "LA", PAR_LA },
-	{ "LI", PAR_LI },
-	{ "LO", PAR_LO },
-	{ "NA", PAR_NA },
-	{ "NL", PAR_NL },
-	{ "NR", PAR_NR },
-	{ "R1", PAR_R1 },
-	{ "R2", PAR_R2 },
-	{ "R3", PAR_R3 },
-	{ "R4", PAR_R4 },
-	{ "RA", PAR_RA },
-	{ "RI", PAR_RI },
-	{ "RO", PAR_RO }
 };
 
 
@@ -106,6 +67,12 @@ void AsciiCommandParser::Parse(char* command)
 			}
 			break;
 
+			case 'B':
+				_command.SetStrobeTimeSet(true);
+				_currentIndex++;
+				ParseStrobeTime();
+				break;
+
 			case 'D':
 			{
 				_command.SetDefaultColorSet(true);
@@ -116,40 +83,44 @@ void AsciiCommandParser::Parse(char* command)
 			}
 			break;
 
-			case 'G':
-			{
-				_command.SetTriggerStateSet(true);
+			case 'C':
 				_currentIndex++;
-				_command.SetTriggerState(ParseBoolean());
-				_currentIndex++;
-			}
-			break;
+				ParseCommand();
+				break;
 
-			case '!':
-				_command.SetActivateTriggerSet(true);
+			case 'H':
+				_command.SetHoldSet(true);
 				_currentIndex++;
+				_command.SetHold(ParseBoolean());
+				break;
+
+			case 'O':
+				_command.SetOnceSet(true);
+				_currentIndex++;
+				_command.SetOnce(ParseBoolean());
 				break;
 
 			case 'P':
 				_command.SetPresetNumberSet(true);
 				_currentIndex++;
-				ParsePresetCommand();
+				ParsePresetNumber();
 				break;
 
 			case 'S':
-				_command.SetStroboTimeSet(true);
+				_command.SetStepNumberSet(true);
 				_currentIndex++;
-				ParseStroboCommand();
+				ParseStepNumber();
 				break;
 
 			case 'T':
 				_command.SetDelayTimeSet(true);
 				_currentIndex++;
-				ParseDelayTimeCommand();
+				ParseDelayTime();
 				break;
 
 			default:
 				_parseError = true;
+				AssertUtils::MyAssert(false);
 				break;
 			}
 
@@ -159,6 +130,64 @@ void AsciiCommandParser::Parse(char* command)
 	else
 	{
 		_parseError = true;
+		AssertUtils::MyAssert(false);
+	}
+}
+
+
+void AsciiCommandParser::ParseCommand()
+{
+	SkipWhitespace();
+
+	switch (_userCommand[_currentIndex])
+	{
+	case 'G':
+		// Trigger mode
+		_currentIndex++;
+
+		_command.SetStepNumberSet(true);
+		_command.SetLastStepNumber(true);
+		_command.SetHoldSet(true);
+		_command.SetHold(true);
+		_command.SetOnceSet(true);
+		_command.SetOnce(true);
+		break;
+
+	case 'L':
+		_currentIndex++;
+
+		_command.SetStepNumberSet(true);
+		_command.SetStepNumber(0);
+		_command.SetHoldSet(true);
+		_command.SetHold(false);
+		_command.SetOnceSet(true);
+		_command.SetOnce(false);
+		break;
+
+	case 'O':
+		_currentIndex++;
+
+		_command.SetStepNumberSet(true);
+		_command.SetStepNumber(0);
+		_command.SetHoldSet(true);
+		_command.SetHold(false);
+		_command.SetOnceSet(true);
+		_command.SetOnce(true);
+		break;
+
+	case 'R':
+		_currentIndex++;
+
+		_command.SetStepNumberSet(true);
+		_command.SetStepNumber(0);
+		_command.SetHoldSet(true);
+		_command.SetHold(false);
+		break;
+
+	default:
+		_parseError = true;
+		AssertUtils::MyAssert(false);
+		break;
 	}
 }
 
@@ -259,7 +288,7 @@ bool AsciiCommandParser::ParseIrgbwAsCharacters(Irgbw& irgbw)
 	// Expect occurrences of i, r, g, b, w in any order
 	while (_userCommand[_currentIndex] != '\0' && !isblank(_userCommand[_currentIndex]))
 	{
-		switch (CharUtils::ToUpper(_userCommand[_currentIndex]))
+		switch (_userCommand[_currentIndex])
 		{
 		case 'I':
 			irgbw.SetIntensity(PAR_MAX_INTENSITY);
@@ -284,6 +313,7 @@ bool AsciiCommandParser::ParseIrgbwAsCharacters(Irgbw& irgbw)
 
 		default:
 			_parseError = true;
+			AssertUtils::MyAssert(false);
 			break;
 		}
 
@@ -294,7 +324,7 @@ bool AsciiCommandParser::ParseIrgbwAsCharacters(Irgbw& irgbw)
 }
 
 
-void AsciiCommandParser::ParsePresetCommand()
+void AsciiCommandParser::ParsePresetNumber()
 {
 	SkipWhitespace();
 	if (!_parseError)
@@ -306,19 +336,41 @@ void AsciiCommandParser::ParsePresetCommand()
 }
 
 
-void AsciiCommandParser::ParseStroboCommand()
+void AsciiCommandParser::ParseStepNumber()
 {
 	SkipWhitespace();
 	if (!_parseError)
 	{
-		_command.SetStroboTime(step_duration_t(strtoul(&_userCommand[_currentIndex], nullptr, 0)));
-		_parseError |= _command.GetStroboTime() == 0;
+		_command.SetStepNumberSet(true);
+		if (_userCommand[_currentIndex] == 'L')
+		{
+			_command.SetLastStepNumber(true);
+		}
+		else
+		{
+			_command.SetStepNumber(preset_t(strtoul(&_userCommand[_currentIndex], nullptr, 0)));
+		}
+		
 		SkipUntilWhitespace();
 	}
 }
 
 
-void AsciiCommandParser::ParseDelayTimeCommand()
+
+
+void AsciiCommandParser::ParseStrobeTime()
+{
+	SkipWhitespace();
+	if (!_parseError)
+	{
+		_command.SetStrobeTime(step_duration_t(strtoul(&_userCommand[_currentIndex], nullptr, 0)));
+		_parseError |= _command.GetStrobeTime() == 0;
+		SkipUntilWhitespace();
+	}
+}
+
+
+void AsciiCommandParser::ParseDelayTime()
 {
 	SkipWhitespace();
 	if (!_parseError)
@@ -336,6 +388,7 @@ void AsciiCommandParser::ParseWhitespace()
 	if (!isspace(_userCommand[_currentIndex]))
 	{
 		_parseError = true;
+		AssertUtils::MyAssert(false);
 		_userCommand[_currentIndex] = '\0'; // Stop parsing
 	}
 	else
@@ -349,6 +402,7 @@ void AsciiCommandParser::ParseWhitespace()
 	if (_userCommand[_currentIndex] == '\0')
 	{
 		_parseError = true;
+		AssertUtils::MyAssert(false);
 	}
 }
 
@@ -398,6 +452,7 @@ bool AsciiCommandParser::ParseBoolean()
 	if (_userCommand[_currentIndex] == '\0' || (_userCommand[_currentIndex] != '0' && _userCommand[_currentIndex] != '1'))
 	{
 		_parseError = true;
+		AssertUtils::MyAssert(false);
 	}
 	else
 	{
@@ -416,6 +471,7 @@ void AsciiCommandParser::ParseComma()
 	if (_userCommand[_currentIndex] == '\0' || _userCommand[_currentIndex] != ',')
 	{
 		_parseError = true;
+		AssertUtils::MyAssert(false);
 	}
 
 	_currentIndex++;
@@ -428,17 +484,9 @@ void AsciiCommandParser::ParseParBitsAndWhitespace()
 	char abbr1 = _userCommand[_currentIndex + 1];
 	_currentIndex += 2;
 
-	for (uint8_t index = 0; index < sizeof Chars2ParBitsMapping / sizeof(Chars2ParBits); index++)
-	{
-		Chars2ParBits& mapping = Chars2ParBitsMapping[index];
-		if (abbr0 == mapping.abbr[0] &&
-			  abbr1 == mapping.abbr[1])
-		{
-			_command.SetParBits(mapping.parBits);
-		}
-	}
-
-	_parseError |= _command.GetParBits() == 0;
+	bool ok;
+	_command.SetParGroup(ParGroups::GetParGroup(abbr0, abbr1, &ok));
+	_parseError &= ok;
 
 	SkipWhitespace();
 }

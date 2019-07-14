@@ -83,6 +83,7 @@ ProgramExecuter::~ProgramExecuter()
 			break;
 
 		default:
+			AssertUtils::MyAssert(false);
 			break;
 		}
 	}
@@ -93,7 +94,7 @@ ProgramExecuter::~ProgramExecuter()
 {
 	if (initialize)
 	{
-		par.SetCurrentStep(0);
+		par.SetStepNumber(0);
 		Irgbw defaultColor = par.GetDefaultColor();
 		par.WriteIrgb(defaultColor);
 	}
@@ -110,13 +111,13 @@ ProgramExecuter::~ProgramExecuter()
 Parameter 1 and parameter 2 are active steps (default color), otherwise alternative color.*/
 /* static */ void ProgramExecuter::DualColorProgram(Par& par, bool initialize)
 {
-	bool enable = par.GetCurrentStep() == step_time_t(par.GetParameter1()) ||
-                  par.GetCurrentStep() == step_time_t(par.GetParameter2());
+	bool enable = par.GetStepNumber() == step_t(par.GetParameter1()) ||
+                  par.GetStepNumber() == step_t(par.GetParameter2());
 
 	if (initialize)
 	{
 		SetDefaultOrAlternate(par, enable ? Par::EActiveColor::Default : Par::EActiveColor::Alternate);
-		par.SetCurrentStep(1);
+		par.SetStepNumber(1);
 	}
 	else if (par.CheckIncreaseStep())
 	{
@@ -132,16 +133,16 @@ Parameter 1 and parameter 2 are active steps (default color), otherwise alternat
 		Irgbw defaultColor = par.GetDefaultColor();
 		Irgbw alternateColor = par.GetAlternateColor();
 
-		par.WriteIrgb(par.GetCurrentStep() < PAR_MAX_PAR_INTENSITIES ? defaultColor : alternateColor);
+		par.WriteIrgb(par.GetStepNumber() < PAR_MAX_PAR_INTENSITIES - 1 ? defaultColor : alternateColor);
 
 		par.SetStepDuration(step_duration_t(MathUtils::Max(1, par.GetStepDuration() / (2U * (PAR_MAX_PAR_INTENSITY - 1U)))));
 		par.SetStepTime(millis() + par.GetStepDuration());
 	}
 	else if (par.CheckIncreaseStep())
 	{
-		step_t currentStep = par.GetCurrentStep();
+		step_t currentStep = par.GetStepNumber();
 		SetFadeColor(par,
-			currentStep < PAR_MAX_PAR_INTENSITIES
+			currentStep < PAR_MAX_PAR_INTENSITIES - 1
 			? currentStep
 			: (2 * PAR_MAX_PAR_INTENSITY - currentStep - 1U) % PAR_MAX_PAR_INTENSITY);
 	}
@@ -161,7 +162,7 @@ Parameter 1 and parameter 2 are active steps (default color), otherwise alternat
 		}
 		else if (par.CheckIncreaseStep())
 		{
-			step_t currentStep = par.GetCurrentStep();
+			step_t currentStep = par.GetStepNumber();
 			SetFadeColor(par, PAR_MAX_PAR_INTENSITY - currentStep - 1U);
 		}
 	}
@@ -177,8 +178,8 @@ Parameter 1 and parameter 2 are active steps (default color), otherwise alternat
 
 		// Always exactly default color or alternate color, not an inbetween color
 		par.WriteIrgb(
-			par.GetParameter1() * (PAR_MAX_PAR_INTENSITIES - 1U) == par.GetCurrentStep() ||
-			par.GetParameter2() * (PAR_MAX_PAR_INTENSITIES - 1U) == par.GetCurrentStep()
+			par.GetParameter1() * (PAR_MAX_PAR_INTENSITIES - 1) == par.GetStepNumber() ||
+			par.GetParameter2() * (PAR_MAX_PAR_INTENSITIES - 1) == par.GetStepNumber()
 			? defaultColor
 			: alternateColor);
 
@@ -187,42 +188,42 @@ Parameter 1 and parameter 2 are active steps (default color), otherwise alternat
 	}
 	else if (par.CheckIncreaseStep())
 	{
-		step_t activeStep1 = par.GetParameter1() * (PAR_MAX_PAR_INTENSITIES - 1U);
-		if (activeStep1 == 0U && (par.GetCurrentStep() >= PAR_MAX_PAR_INTENSITIES))
+		step_t activeStep1 = par.GetParameter1() * (PAR_MAX_PAR_INTENSITIES - 1);
+		if (activeStep1 == 0U && (par.GetStepNumber() >= PAR_MAX_PAR_INTENSITIES))
 		{
-			activeStep1 += par.GetParameter3() * (PAR_MAX_PAR_INTENSITIES - 1U);
+			activeStep1 += par.GetParameter3() * (PAR_MAX_PAR_INTENSITIES - 1);
 		}
 
-		step_t activeStep2 = par.GetParameter2() * (PAR_MAX_PAR_INTENSITIES - 1U);
-		if (activeStep2 == 0U && (par.GetCurrentStep() >= PAR_MAX_PAR_INTENSITIES))
+		step_t activeStep2 = par.GetParameter2() * (PAR_MAX_PAR_INTENSITIES - 1);
+		if (activeStep2 == 0U && (par.GetStepNumber() >= PAR_MAX_PAR_INTENSITIES))
 		{
-			activeStep2 += par.GetParameter3() * (PAR_MAX_PAR_INTENSITIES - 1U);
+			activeStep2 += par.GetParameter3() * (PAR_MAX_PAR_INTENSITIES - 1);
 		}
 
-		if (abs(par.GetCurrentStep() - activeStep1) < PAR_MAX_PAR_INTENSITIES)
+		if (abs(par.GetStepNumber() - activeStep1) < PAR_MAX_PAR_INTENSITIES)
 		{
-			if (par.GetCurrentStep() < activeStep1)
+			if (par.GetStepNumber() < activeStep1)
 			{
 				// Towards active step 1.
-				SetFadeColor(par, step_t(activeStep1 - par.GetCurrentStep()));
+				SetFadeColor(par, step_t(activeStep1 - par.GetStepNumber()));
 			}
 			else
 			{
 				// Away from step 1.
-				SetFadeColor(par, step_t(par.GetCurrentStep() - activeStep1));
+				SetFadeColor(par, step_t(par.GetStepNumber() - activeStep1));
 			}
 		}
-		else if (abs(par.GetCurrentStep() - activeStep2) < PAR_MAX_PAR_INTENSITIES)
+		else if (abs(par.GetStepNumber() - activeStep2) < PAR_MAX_PAR_INTENSITIES)
 		{
-			if (par.GetCurrentStep() < activeStep2)
+			if (par.GetStepNumber() < activeStep2)
 			{
 				// Towards active step 2.
-				SetFadeColor(par, step_t(activeStep2 - par.GetCurrentStep()));
+				SetFadeColor(par, step_t(activeStep2 - par.GetStepNumber()));
 			}
 			else
 			{
 				// Away from step 2.
-				SetFadeColor(par, step_t(par.GetCurrentStep() - activeStep2));
+				SetFadeColor(par, step_t(par.GetStepNumber() - activeStep2));
 			}
 		}
 	}
@@ -238,7 +239,7 @@ Parameter 1 and parameter 2 are active steps (default color), otherwise alternat
 {
 	if (initialize)
 	{
-		SetRainbowColor(par, par.GetCurrentStep());
+		SetRainbowColor(par, par.GetStepNumber());
 
 		par.SetStepDuration(step_duration_t(MathUtils::Max(1, step_duration_t(par.GetStepDuration() / 
 		 (PROGRAM_EXECUTER_RAINBOW_COLORS * PAR_MAX_PAR_INTENSITY / abs(par.GetParameter1()))))));
@@ -247,7 +248,7 @@ Parameter 1 and parameter 2 are active steps (default color), otherwise alternat
 	}
 	else if (par.CheckIncreaseStep(step_t(par.GetParameter1())))
 	{
-		SetRainbowColor(par, par.GetCurrentStep());
+		SetRainbowColor(par, par.GetStepNumber());
 	}
 }
 
@@ -287,7 +288,7 @@ Parameter 1 and parameter 2 are active steps (default color), otherwise alternat
 	intensity_t firstRangeValue, intensity_t secondRangeValue, intensity_t thirdRangeValue)
 {
 	return step < PAR_MAX_PAR_INTENSITIES ? firstRangeValue
-		: step < 2U * PAR_MAX_PAR_INTENSITIES
+		: step < 2 * PAR_MAX_PAR_INTENSITIES
 		       ? secondRangeValue
 		       : thirdRangeValue;
 }
@@ -327,15 +328,16 @@ Step: 0=100% default color, step MAX_PAR_INTENSITY=100% alternate color
 	{
 	case Par::EActiveColor::Default:
 		color = par.GetDefaultColor(); //TOOD: Remove
-		par.WriteIrgb(color);
 		break;
 
 	case Par::EActiveColor::Alternate:
 		color = par.GetAlternateColor(); //TODO: Remove
-		par.WriteIrgb(color);
 		break;
 
 	default:
 		AssertUtils::MyAssert(false);
+		break;
 	}
+
+	par.WriteIrgb(color);
 }

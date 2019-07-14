@@ -10,6 +10,7 @@
 #include "ClassNames.h"
 #include HEADER_FILE(SERIAL_CLASS)
 #include "AssertUtils.h"
+#include <stdio.h>
 #ifdef _WINDOWS
 #include <cstdlib>
 #endif
@@ -34,4 +35,3 @@ void AssertUtils::MyAssert(bool expression, const char* fileName, int line)
 		abort();
 	}
 }
-

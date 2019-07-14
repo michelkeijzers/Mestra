@@ -28,16 +28,20 @@ private:
 
 	bool _parseError;
 
+	void ParseCommand();
+
 	bool ParseColorCommand(Irgbw& irgbw);
 
 	bool ParseIrgbwAsNumbers(Irgbw& irgwb);
 	bool ParseIrgbwAsCharacters(Irgbw& irgbw);
 
-	void ParsePresetCommand();
+	void ParsePresetNumber();
 
-	void ParseStroboCommand();
+	void ParseStepNumber();
 
-	void ParseDelayTimeCommand();
+	void ParseStrobeTime();
+
+	void ParseDelayTime();
 
 	void ParseParBitsAndWhitespace();
 

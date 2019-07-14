@@ -17,6 +17,8 @@ public:
 
 	~Irgbw();
 
+	void Clear();
+
 	void SetIrgb(intensity_t intensity, intensity_t red, intensity_t green, intensity_t blue);
 	void SetIrgbw(intensity_t intensity, intensity_t red, intensity_t green, intensity_t blue, 
 	 intensity_t white);

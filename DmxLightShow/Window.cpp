@@ -1,15 +1,15 @@
 // Window.cpp
 // Only for Windows.
 
-#ifdef _WINDOWS
-
 #include "ProgramExecuter.h"
-#include <string>
+#ifdef _WINDOWS
 
 // DmxLightShow.cpp : Defines the entry point for the application.
 //
 
 #include <cmath>
+#include <string>
+#include "math.h"
 #include "framework.h"
 
 #include "AsciiCommandParser.h"
@@ -30,10 +30,10 @@ using namespace std;
 //#define SHOW_LEDS       
 #define PAR_DISTANCE_X		 100
 #define PAR_DISTANCE_Y		 180
-#define PAR_DIAMETER		(PAR_DISTANCE_X - 3)
-#define PAR_RADIUS			(PAR_DIAMETER / 2)
-#define LED_DIAMETER		(PAR_DIAMETER / 4 - 12)
-#define LED_RADIUS			(LED_DIAMETER / 2)
+#define PAR_DIAMETER	     (PAR_DISTANCE_X - 3)
+#define PAR_RADIUS			 (PAR_DIAMETER / 2)
+#define LED_DIAMETER		 (PAR_DIAMETER / 4 - 12)
+#define LED_RADIUS			 (LED_DIAMETER / 2)
 #define TEXT_OFFSET_X        -30
 #define TEXT_OFFSET_Y		-100
 #define FIXTURE_OFFSET_X	 -10
@@ -43,7 +43,8 @@ using namespace std;
 
 #define FONT_SIZE             11
 
-#define PI_F 3.14159265358979f
+#define PI_F                   3.14159265358979f
+
 
 // Global Variables:
 HINSTANCE hInst;                                // current instance
@@ -77,42 +78,42 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                      _In_ int       nCmdShow)
 {
 
-  LightSetup.CreateFixtures();
-  _refreshCounter = 0;
+	LightSetup.CreateFixtures();
+	_refreshCounter = 0;
 
-  UNREFERENCED_PARAMETER(hPrevInstance);
-  UNREFERENCED_PARAMETER(lpCmdLine);
+	UNREFERENCED_PARAMETER(hPrevInstance);
+	UNREFERENCED_PARAMETER(lpCmdLine);
 
-  // Initialize global strings
-  LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
-  LoadStringW(hInstance, IDC_DMXLIGHTSHOW, szWindowClass, MAX_LOADSTRING);
-  MyRegisterClass(hInstance);
+	// Initialize global strings
+	LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
+	LoadStringW(hInstance, IDC_DMXLIGHTSHOW, szWindowClass, MAX_LOADSTRING);
+	MyRegisterClass(hInstance);
 
-  // Perform application initialization:
-  if (!InitInstance (hInstance, nCmdShow))
-  {
-      return FALSE;
-  }
+	// Perform application initialization:
+	if (!InitInstance (hInstance, nCmdShow))
+	{
+		return FALSE;
+	}
 
-  HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_DMXLIGHTSHOW));
+	HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_DMXLIGHTSHOW));
 
-  MSG msg;
+	MSG msg;
 
 	InitMestra();
 
-  // Main message loop:
-  while (GetMessage(&msg, nullptr, 0, 0))
-  {
-      if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
-      {
-          TranslateMessage(&msg);
-          DispatchMessage(&msg);
+	// Main message loop:
+	while (GetMessage(&msg, nullptr, 0, 0))
+	{
+		if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
+		{
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
 
-		  HandleMestraMessages(msg);
-      }
-  }
+			HandleMestraMessages(msg);
+		}
+	}
 
-  return int(msg.wParam);
+	return int(msg.wParam);
 }
 
 
@@ -226,8 +227,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         break;
     case WM_PAINT:
         {
-          PAINTSTRUCT ps;
-          HDC hdc = BeginPaint(hWnd, &ps);
+			PAINTSTRUCT ps;
+			HDC hdc = BeginPaint(hWnd, &ps);
 
 			for (fixture_number_t parNumber = 0; parNumber < NR_OF_PARS; parNumber++)
 			{
@@ -396,10 +397,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 #ifdef COLOR_CHANGE_CHECKING
 				}
 #endif // COLOR_CHANGE_CHECKING
-
-				wchar_t wtext[20];
-				swprintf_s(wtext, L"%d", _refreshCounter);
-				TextOut(hdc, 0, 0, wtext, lstrlen(wtext));
 			}
 
 			if (_backgroundFixturePaint)
@@ -426,6 +423,7 @@ void CalcCenter(int degrees, int centerX, int centerY, int distance, int* output
 	*outputY = centerY + int(cos(degrees / 180.0f * PI_F) * distance);
 }
 
+
 void InitMestra()
 {
 	//LightSetup.CreateFixtures();
@@ -438,7 +436,7 @@ void InitMestra()
 
 void HandleMestraMessages(MSG& msg)
 {
-	
+	Sleep(1);
 	_refreshCounter++;
 	InjectCommands();
 
@@ -478,7 +476,7 @@ void InjectString(const char* commandString)
 	_commandBuffer.AddChar('\r');
 
 	_commandBuffer.Process(_asciiCommandParser);
-	Command command = _asciiCommandParser.GetCommand();
+	Command& command = _asciiCommandParser.GetCommand();
 	CommandParser::Parse(command);
 	
 	// Print command.
@@ -514,7 +512,7 @@ void InjectCommands()
 	if (_refreshCounter == 100)
 	{
 
-	  //InjectString("AA t 4000");
+		//InjectString("AA t 4000");
 
 
 
@@ -533,13 +531,12 @@ void InjectCommands()
 		//InjectString("t BA 4000");
 		//InjectString("p BA 72");
 
-		//InjectString("fa t 300 d ir a ib p 63");
-		//InjectString("ra t 300 d ir a ib p 63");
+		InjectString("fa c g t 1000 d ir a ib p 50");
+		InjectString("la c l t 1000 d ir a ib p 72");
+		//InjectString("ra c l t 1000 d ir a ib p 72");
+		//InjectString("ra t 3000 d ir a ib p 63");
 		//InjectString("ba t 2000 d ir a ig p 63");
-
-		InjectString("fa d igb t 10000 p 50 g 1");
-
-
+		//InjectString("ba t 300 p 71");
 		//InjectString("ba t 5000 d ir a irb p 53");
 		//InjectString("ba t7000 d100,101,102,103 a50,51,52,53,54 p52");
 
@@ -563,10 +560,9 @@ void InjectCommands()
 		InjectString("p b 50");
 		*/
 	}
-
-	else if (_refreshCounter % 2500 == 0)
+	else if (_refreshCounter % 1000 == 0)
 	{
-		InjectString("fa !");
+		InjectString("fa c o");
 	}
 }
 
