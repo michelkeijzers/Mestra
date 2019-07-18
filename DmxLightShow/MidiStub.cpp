@@ -4,7 +4,31 @@
 #include "MidiStub.h"
 
 
-void MIDI_CREATE_INSTANCE(HardwareSerial, Serial1, midiA);
+//void MIDI_CREATE_INSTANCE(SerialPort serialType, SerialClass serialNumberType, Midi name)
+//{
+//}
+
+
+
+Midi midiA;
+Midi midiB;
+Midi midiC;
+
+
+Midi::Midi()
+{
+}
+
+
+Midi::~Midi()
+{
+}
+
+
+void Midi::begin()
+{
+}
 
 
 #endif // _WINDOWS
+

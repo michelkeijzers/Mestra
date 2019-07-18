@@ -20,4 +20,41 @@ LiquidCrystal::~LiquidCrystal()
 }
 
 
+void LiquidCrystal::begin(int nrOfColumns, int nrOfRows)
+{
+
+}
+
+
+void LiquidCrystal::print(char ch)
+{
+
+}
+
+
+void LiquidCrystal::setCursor(int x, int y)
+{
+
+}
+
+
+void LiquidCrystal::autoscroll()
+{
+
+}
+
+
+void LiquidCrystal::noAutoscroll()
+{
+
+}
+
+
+void LiquidCrystal::clear()
+{
+
+}
+
+
+
 #endif // _WINDOWS

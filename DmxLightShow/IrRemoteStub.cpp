@@ -15,4 +15,10 @@ IRrecv::~IRrecv()
 }
 
 
+void IRrecv::decode(decode_results* results)
+{
+
+}
+
+
 #endif // _WINDOWS

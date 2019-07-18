@@ -1,12 +1,23 @@
+#pragma once
+
+#include "ClassNames.h"
+#include HEADER_FILE(SERIAL_CLASS)
 
 
-#define HardwareSerial 0
-#define SoftwareSerial 1
-#define midiA          0
-#define midiB          1
-#define midiC          2
-
-#define MIDI_CREATE_INSTANCE(Type, SerialPort, Name)
+#define MIDI_CREATE_INSTANCE(serialPort, serialType, name);
 
 
+class Midi
+{
+public:
+	Midi();
+	~Midi();
 
+	void begin();
+};
+
+
+
+extern Midi midiA;
+extern Midi midiB;
+extern Midi midiC;

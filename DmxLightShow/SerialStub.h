@@ -27,9 +27,18 @@ private:
 };
 
 
+class SerialPort
+{
+public:
+	SerialPort() {};
+	~SerialPort() {};
+};
+
 extern SerialClass Serial;
 extern SerialClass Serial1;
 extern SerialClass Serial2;
 extern SerialClass Serial3;
 
 
+extern SerialPort SoftwareSerial;
+extern SerialPort HardwareSerial;

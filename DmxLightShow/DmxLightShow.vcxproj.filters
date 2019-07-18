@@ -28,29 +28,35 @@
     <Filter Include="Header Files\Utilities">
       <UniqueIdentifier>{654a2ae5-2b6a-44c3-a20c-487b4bd80f8e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Commands">
-      <UniqueIdentifier>{2b003ea1-72fd-477e-a1ea-ad8e8761fec6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Commands">
-      <UniqueIdentifier>{2b1b1fb6-fcb8-4968-98a8-ec80d467644e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\LightSetup">
-      <UniqueIdentifier>{72e36e4c-fc9c-4c2e-97dd-b41f19d20cab}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\LightSetup">
-      <UniqueIdentifier>{487ef4dc-d7db-4d83-9140-b470232c395b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\LightSetup\FixtureTypes">
-      <UniqueIdentifier>{c57d3fba-1461-4171-b1e7-14f8e6d97683}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\LightSetup\FixtureTypes">
-      <UniqueIdentifier>{296269b4-1c3a-4f7e-9f09-4f4956005203}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\ArduinoStubs">
       <UniqueIdentifier>{1812ecb2-21f7-444a-8168-d5375186b9d8}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\ArduinoStubs">
       <UniqueIdentifier>{e81dd199-589c-4e45-95f9-d5674f714e80}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\DMX">
+      <UniqueIdentifier>{037e477b-22ee-49eb-b7e6-7a8907bd7050}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\DMX\LightSetup">
+      <UniqueIdentifier>{72e36e4c-fc9c-4c2e-97dd-b41f19d20cab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\DMX\LightSetup\FixtureTypes">
+      <UniqueIdentifier>{296269b4-1c3a-4f7e-9f09-4f4956005203}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\DMX\Commands">
+      <UniqueIdentifier>{2b1b1fb6-fcb8-4968-98a8-ec80d467644e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\DMX">
+      <UniqueIdentifier>{53f5b5a4-13c4-4c99-902b-59d4cc33928d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\DMX\LightSetup">
+      <UniqueIdentifier>{487ef4dc-d7db-4d83-9140-b470232c395b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\DMX\LightSetup\FixtureTypes">
+      <UniqueIdentifier>{c57d3fba-1461-4171-b1e7-14f8e6d97683}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\DMX\Commands">
+      <UniqueIdentifier>{2b003ea1-72fd-477e-a1ea-ad8e8761fec6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -61,22 +67,22 @@
       <Filter>Header Files\Utilities</Filter>
     </ClInclude>
     <ClInclude Include="Fixture.h">
-      <Filter>Header Files\LightSetup</Filter>
+      <Filter>Header Files\DMX\LightSetup</Filter>
     </ClInclude>
     <ClInclude Include="Irgbw.h">
-      <Filter>Header Files\LightSetup</Filter>
+      <Filter>Header Files\DMX\LightSetup</Filter>
     </ClInclude>
     <ClInclude Include="LightSetup.h">
-      <Filter>Header Files\LightSetup</Filter>
+      <Filter>Header Files\DMX\LightSetup</Filter>
     </ClInclude>
     <ClInclude Include="Strobo.h">
-      <Filter>Header Files\LightSetup</Filter>
+      <Filter>Header Files\DMX\LightSetup</Filter>
     </ClInclude>
     <ClInclude Include="ClassNames.h">
       <Filter>Header Files\Framework</Filter>
     </ClInclude>
     <ClInclude Include="PresetCommand.h">
-      <Filter>Header Files\Commands</Filter>
+      <Filter>Header Files\DMX\Commands</Filter>
     </ClInclude>
     <ClInclude Include="BitsUtils.h">
       <Filter>Header Files\Utilities</Filter>
@@ -106,43 +112,43 @@
       <Filter>Header Files\Win32</Filter>
     </ClInclude>
     <ClInclude Include="McuFixture.h">
-      <Filter>Header Files\LightSetup</Filter>
+      <Filter>Header Files\DMX\LightSetup</Filter>
     </ClInclude>
     <ClInclude Include="McuLightSetup.h">
-      <Filter>Header Files\LightSetup</Filter>
+      <Filter>Header Files\DMX\LightSetup</Filter>
     </ClInclude>
     <ClInclude Include="McuPar.h">
-      <Filter>Header Files\LightSetup</Filter>
+      <Filter>Header Files\DMX\LightSetup</Filter>
     </ClInclude>
     <ClInclude Include="ChinesePar.h">
-      <Filter>Header Files\LightSetup\FixtureTypes</Filter>
+      <Filter>Header Files\DMX\LightSetup\FixtureTypes</Filter>
     </ClInclude>
     <ClInclude Include="Par.h">
-      <Filter>Header Files\LightSetup\FixtureTypes</Filter>
+      <Filter>Header Files\DMX\LightSetup\FixtureTypes</Filter>
     </ClInclude>
     <ClInclude Include="ProgramExecuter.h">
-      <Filter>Header Files\LightSetup</Filter>
+      <Filter>Header Files\DMX\LightSetup</Filter>
     </ClInclude>
     <ClInclude Include="LedBarSegment.h">
-      <Filter>Header Files\LightSetup\FixtureTypes</Filter>
+      <Filter>Header Files\DMX\LightSetup\FixtureTypes</Filter>
     </ClInclude>
     <ClInclude Include="PlatformFixture.h">
-      <Filter>Header Files\LightSetup</Filter>
+      <Filter>Header Files\DMX\LightSetup</Filter>
     </ClInclude>
     <ClInclude Include="PlatformLightSetup.h">
-      <Filter>Header Files\LightSetup</Filter>
+      <Filter>Header Files\DMX\LightSetup</Filter>
     </ClInclude>
     <ClInclude Include="PlatformPar.h">
-      <Filter>Header Files\LightSetup</Filter>
+      <Filter>Header Files\DMX\LightSetup</Filter>
     </ClInclude>
     <ClInclude Include="AsciiCommandParser.h">
       <Filter>Header Files\Win32</Filter>
     </ClInclude>
     <ClInclude Include="Command.h">
-      <Filter>Header Files\Commands</Filter>
+      <Filter>Header Files\DMX\Commands</Filter>
     </ClInclude>
     <ClInclude Include="CommandParser.h">
-      <Filter>Header Files\Commands</Filter>
+      <Filter>Header Files\DMX\Commands</Filter>
     </ClInclude>
     <ClInclude Include="CommandBuffer.h">
       <Filter>Header Files\Win32</Filter>
@@ -166,10 +172,10 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ParGroups.h">
-      <Filter>Header Files\LightSetup</Filter>
+      <Filter>Header Files\DMX\LightSetup</Filter>
     </ClInclude>
     <ClInclude Include="PackedCommand.h">
-      <Filter>Header Files\Commands</Filter>
+      <Filter>Header Files\DMX\Commands</Filter>
     </ClInclude>
     <ClInclude Include="MidiStub.h">
       <Filter>Header Files\ArduinoStubs</Filter>
@@ -211,19 +217,19 @@
       <Filter>Source Files\Utilities</Filter>
     </ClCompile>
     <ClCompile Include="Fixture.cpp">
-      <Filter>Source Files\LightSetup</Filter>
+      <Filter>Source Files\DMX\LightSetup</Filter>
     </ClCompile>
     <ClCompile Include="Irgbw.cpp">
-      <Filter>Source Files\LightSetup</Filter>
+      <Filter>Source Files\DMX\LightSetup</Filter>
     </ClCompile>
     <ClCompile Include="LightSetup.cpp">
-      <Filter>Source Files\LightSetup</Filter>
+      <Filter>Source Files\DMX\LightSetup</Filter>
     </ClCompile>
     <ClCompile Include="Strobo.cpp">
-      <Filter>Source Files\LightSetup</Filter>
+      <Filter>Source Files\DMX\LightSetup</Filter>
     </ClCompile>
     <ClCompile Include="PresetCommand.cpp">
-      <Filter>Source Files\Commands</Filter>
+      <Filter>Source Files\DMX\Commands</Filter>
     </ClCompile>
     <ClCompile Include="BitsUtils.cpp">
       <Filter>Source Files\Utilities</Filter>
@@ -244,43 +250,43 @@
       <Filter>Source Files\WIN32</Filter>
     </ClCompile>
     <ClCompile Include="McuFixture.cpp">
-      <Filter>Source Files\LightSetup</Filter>
+      <Filter>Source Files\DMX\LightSetup</Filter>
     </ClCompile>
     <ClCompile Include="McuLightSetup.cpp">
-      <Filter>Source Files\LightSetup</Filter>
+      <Filter>Source Files\DMX\LightSetup</Filter>
     </ClCompile>
     <ClCompile Include="McuPar.cpp">
-      <Filter>Source Files\LightSetup</Filter>
+      <Filter>Source Files\DMX\LightSetup</Filter>
     </ClCompile>
     <ClCompile Include="ChinesePar.cpp">
-      <Filter>Source Files\LightSetup\FixtureTypes</Filter>
+      <Filter>Source Files\DMX\LightSetup\FixtureTypes</Filter>
     </ClCompile>
     <ClCompile Include="Par.cpp">
-      <Filter>Source Files\LightSetup\FixtureTypes</Filter>
+      <Filter>Source Files\DMX\LightSetup\FixtureTypes</Filter>
     </ClCompile>
     <ClCompile Include="ProgramExecuter.cpp">
-      <Filter>Source Files\LightSetup</Filter>
+      <Filter>Source Files\DMX\LightSetup</Filter>
     </ClCompile>
     <ClCompile Include="LedBarSegment.cpp">
-      <Filter>Source Files\LightSetup\FixtureTypes</Filter>
+      <Filter>Source Files\DMX\LightSetup\FixtureTypes</Filter>
     </ClCompile>
     <ClCompile Include="PlatformFixture.cpp">
-      <Filter>Source Files\LightSetup</Filter>
+      <Filter>Source Files\DMX\LightSetup</Filter>
     </ClCompile>
     <ClCompile Include="PlatformLightSetup.cpp">
-      <Filter>Source Files\LightSetup</Filter>
+      <Filter>Source Files\DMX\LightSetup</Filter>
     </ClCompile>
     <ClCompile Include="PlatformPar.cpp">
-      <Filter>Source Files\LightSetup</Filter>
+      <Filter>Source Files\DMX\LightSetup</Filter>
     </ClCompile>
     <ClCompile Include="AsciiCommandParser.cpp">
       <Filter>Source Files\WIN32</Filter>
     </ClCompile>
     <ClCompile Include="Command.cpp">
-      <Filter>Source Files\Commands</Filter>
+      <Filter>Source Files\DMX\Commands</Filter>
     </ClCompile>
     <ClCompile Include="CommandParser.cpp">
-      <Filter>Source Files\Commands</Filter>
+      <Filter>Source Files\DMX\Commands</Filter>
     </ClCompile>
     <ClCompile Include="AssertUtils.cpp">
       <Filter>Source Files\Utilities</Filter>
@@ -301,10 +307,10 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ParGroups.cpp">
-      <Filter>Source Files\LightSetup</Filter>
+      <Filter>Source Files\DMX\LightSetup</Filter>
     </ClCompile>
     <ClCompile Include="PackedCommand.cpp">
-      <Filter>Source Files\Commands</Filter>
+      <Filter>Source Files\DMX\Commands</Filter>
     </ClCompile>
     <ClCompile Include="CommandBuffer.cpp">
       <Filter>Source Files\WIN32</Filter>

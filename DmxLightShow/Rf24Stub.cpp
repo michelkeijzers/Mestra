@@ -17,4 +17,47 @@ RF24::~RF24()
 }
 
 
+
+
+void RF24::begin()
+{
+
+}
+
+
+void RF24::openWritingPipe(int pipe)
+{
+
+}
+
+
+void RF24::setPALevel(int level)
+{
+
+}
+
+
+void RF24::stopListening()
+{
+
+}
+
+
+void RF24::write(const char* text, int textLength)
+{
+
+}
+
+
+void RF24::openReadingPipe(int pipe, const uint8_t* address)
+{
+
+}
+
+
+void RF24::startListening()
+{
+
+}
+
 #endif // _WINDOWS

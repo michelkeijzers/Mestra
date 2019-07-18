@@ -9,6 +9,10 @@
 SerialClass Serial;
 
 
+SerialPort SoftwareSerial;
+SerialPort HardwareSerial;
+
+
 void SerialClass::begin(int baudrate)
 {
 	static_cast<int>(baudrate);

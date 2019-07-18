@@ -1,3 +1,9 @@
+TODO
+====
+2 bits: Last step number
+medium form color
+
+
 DEBT
 ====
 
@@ -60,57 +66,114 @@ la l a:irgb d ir p 20 t 1000
 la 
 
 
-Command bytes
-=============
+Packed Command bytes
+====================
 
-Byte   Bit Item                          
------- --- ---------------------------------
- 0     7~4 (unused)
-       3~0 Length
- 1     7~5 (unused)
-       4~0 Par Group
- 2     7~0 Flags1 see next table
- 3     7~0 Flags2 see next table
- 4..32     Additional Bytes
+Label                    Byte(s)  Bit(s) Parameter                Value Meaning of Value    Continuation				Comment              
+------------------------ -------- ------ ------------------------ ----- ------------------- ---------------------------	---------------------------------------------	
+Commands                   0       7~5   Length                    0-7													Length of bytes following byte 0
+                           0       4     Category                  0    Trigger             Category Triggers
+                                                                   1    Instruction         Category Instructions
+Category Triggers          0       3     Type                      0    DMX                 DMX Triggers
+                                                                   1    MIDI                MIDI Triggers
+        
+DMX Triggers                                                                                                            There is no DMX Input (thus no DMX triggers)
+MIDI Triggers              0       2~0   Main Type                 0    Time                ->Time Trigger
+                                                                   1    Note                ->MIDI Value Trigger        Value is note
+																   2    CC                  ->MIDI CC Trigger
+																   3    Aftertouch          ->MIDI Value Trigger        Value is aftertouch
+																   4    Program Change      ->MIDI Value Trigger        Value is CC for Program Change
+																   5-7  (reserved)
+Time Trigger               1             Time
+MIDI Value Trigger         1       7     Omni MIDI Channel              Off/On
+                                   6~3   MIDI Channel              0-15 MIDI Channel
+								   2     Range                     0    Single MIDI Value   ->Single MIDI value
+								                                   1    Range               ->Range MIDI values
+								   1     Note On/Off                    Note Off/Note On                                Only for Note MIDI Trigger
+                                   0     (Release) Velocity             No/Velocity Range   if 1: ->Range MIDI values	Only for Note MIDI Trigger															    
+MIDI CC Trigger            1       7     Omni MIDI Channel              Off/On
+                                   6~3   MIDI Channel              0-15 MIDI Channel
+								   2     Range                     0    Single MIDI Value   ->Single MIDI value         Store after CC Number (byte 2)
+								                                   1    Range               ->Range MIDI values         Store after CC Number (byte 2)
+								   1~0   (unused)
+						   2       7     (unused)
+						   2       6~0   CC Number 
 
-Byte Bit Flags              #Add.Bytes  
----- --- ------------------ ----------     
-  2   7  Preset Number Set      1           
-      6  Delay Time Set         2        
-      5  Strobe Time Set        2          
-      4  Step Number Set        2           
-      3  Step Number Short Set  1
-      2  Step Number Short      0: 0    1: Last
-     1~0 (unused)			    -      
 
-  3	  7  Hold Set
-	  6  Hold                   0: Off  1: On
-	  5  Once Set          
-	  4  Once                   0: Off  1: On
-      3  Default Color Set      1..11
-      2  Alternate Color Set    1..11
-	 1~0 (unused)
+Single Note	               var     7    (unused)                 
+                                   6~0  MIDI Note
+Note Range                 var     7    (unused)                 
+                                   6~0  Start MIDI Note
+						   var+1   7    (unused)                 
+                                   6~0  End MIDI Note
 
-Add.Bytes               Byte Bit(s) Name                               
------------------------ ---- -----  --------------------------------------------------------------------
-Color                     0    7    0: Short Form Color
-                                    1: Long Form Color
 
-Short Form Color          0    6    Intensity 0/255           
-                          0    5    Red       0/255
-                          0    4    Green     0/255
-                          0    3    Blue      0/255
-                          0    2    White Used        
-                          0    1    White     0/255
-                          0    0    (unused)
-                     
-Long Form Color           0    6    Intensity  0: 255                        , 1: Value in additional byte     
-                          0    5    Red        0: Default value (see bit 0.0), 1: Value in additional byte
-                          0    4    Green      0: Default value (see bit 0.0), 1: Value in additional byte
-                          0    3    Blue       0: Default value (see bit 0.0), 1: Value in additional byte
-                          0    2    White Used 
-                          0    1    White      0: Default value (see bit 0.0), 1: Value in additional byte
-                          0    0    Default Value 0: 0, 1:255
+
+Category Instructions      0       3     Type                      0    DMX                 DMX Instructions
+                                                                   1    MIDI                MIDI Instructions
+DMX Instructions           0       2~0   (unused)
+                           1       7~5   (unused)
+						   1       4~0   Par Group
+						   2       7     Preset Number Set              Not set/Set                                     if Set: ->Preset Number is present
+						   2       6     Delay Time Set                 Not set/Set                                     if Set: ->Delay Time is present
+						   2       5     Strobe Time Set                Not set/Set                                     if Set: ->Strobe Time is present
+						   2       4~3   Step Number               00   Not set/Set/0/Last                              if Set: ->Step Number is present
+						                                           10   0											    Step Number 0 is selected                
+																   11   Last                                            Last Step Number is selected                             
+                           2       1~0   (unused)
+						   3       7     Hold Set                       Not set/Set                                     if Set: Next bit is used
+						   3       6     Hold                           Disabled/Enabled
+						   3       5     Once Set                       Not set/Set                                     if Set: Next bit is used
+						   3       4     Once                           Disabled/Enabled 
+						   3       3     Default Color Set              Not set/Set                                     if Set: Default ->Color is present
+						   3       2     Alternate Color Set            Not set/Set                                     if Set: Alternate ->Color is present
+						   3       1~0   (unused)
+Preset Number            x+1             Preset Number
+Delay Time               x+2             Delay Time                     Time Table
+Strobe Time              x+3             Strobe Time                    Time Table
+Step Number              x+4,x+5         Step Number                    Step Number
+Color                    x+6       7~6   Color Form                00   Short Color Form    ->Short Color Form
+                                                                   01   Medium Color Form   ->Medium Color Form
+																   10   Single Color Form   ->Single Color Form
+																   11   Long Color Form     ->Long Color Form
+Short Form Color         x+6       5     Intensity                      0/255
+                         x+6       4     Red                            0/255
+                         x+6       3     Green                          0/255
+                         x+6       2     Blue                           0/255
+                         x+6       1     White Used                     No/Yes
+                         x+6       0     White                          0/255
+Medium Form Color        x+6       5~4   Intensity	                            0/   64/   128/        255
+                         x+6       3~1   Red     	                            0/32/64/96/128/160/196/255
+                         x+6       0     Green                                  0/32/64/96/128/160/196/255
+						 x+7       7~6   (Green continued)
+                         x+6       5~3   Blue                                   0/32/64/96/128/160/196/255
+                         x+6       2~0   White                          Not set/0/32/64/96/128/160/    255
+Single Form Color        x+6       5~4   Color                          Red/Green/Blue/White
+                                   3~0   Color Value                    value * 32, if 224->255 (max)
+Long Form Color          x+6       5     Default Color                  0/255								    	Intensity assumed 255
+                         x+6       4     Red Set                        Default, else:      -> Color Value	    	Color value in additional byte
+                         x+6       3     Green Set                      Default, else:      -> Color Value	    	Color value in additional byte
+                         x+6       2     Blue Set                       Default, else:      -> Color Value	    	Color value in additional byte
+                         x+6       1     White Used                     Off/On                                      if On: Set white color
+                         x+6       0     White Set                      Default, else:      -> Color Value		    Color value in additional byte
+Color Value				 x+7...          Value                          0-255
+
+
+MIDI Instructions          0       2~0   (unused)
+										   										   										   										   
+
+Time                       var     7~3   Time                     0-31  value / 32
+                           var     2~0   Exponent                 0     0-10 ms
+						                                          1     10-100 ms
+																  2     100-1000 ms
+																  3     1-10s
+																  4     10-100s
+																  5-7   (unused)
+
+
+
+
+
 
 Fixture/Par data
 ================
@@ -262,3 +325,184 @@ CommandParser::Parse()
 			     SetFixture
 
 	    
+
+
+NARCOTIC EXAMPLE
+================
+
+Part 1: Song structure
+----------------------
+Narcotic can be split in the following parts:
+
+- Intro
+- Verse
+- Chorus
+- Verse
+- Chorus
+- Bridge
+- Chorus
+- Chorus
+
+Part 2: Sub structure
+---------------------
+Some parts can be split further:
+
+- Intro
+  - Organ (2nd keyboard: right half notes, at end ribbon controller down)
+  - Synth riff (1st keyboard: ribbon controller up, right half notes)
+  - Low Synth (2nd keyboard: left half notes)
+- Verse
+  - No notes played
+  - Pad (1st keyboard, octave 1-3)
+  - Pad (1st keyboard, octave 3-4)
+- Chorus ()
+...
+
+For the remainder we will only take the intro into account.
+
+Part 3: Light Plan
+------------------
+Now the rough lighting will be added:
+
+- Entire song: CC MC1 83 on puts strobo on front pars on, CC MC1 80 off cancels strobo
+- Intro (CC MC1 84 on puts strobo on drum pars, CC MC1 84 off cancels strobo)
+  - Organ: Blue light on front outer pars, green on LED bar, at end green led bar fades
+  - Synth riff: For each note played, front outer pars go from purple to blue (rest stay blue)
+  - Bass: For each note played, all front pars go from purple to blue (rest stay blue)
+...
+
+Part 4: Triggers
+----------------
+Add triggers:
+
+- Song: All dark, triggers: CC MC1 83 on -> FA strobo on, CC MC1 83 off -> FA strobo off
+- Intro (FO Blue half on, Sequence triggers: CC MC1 84 on -> DA strobo on, CC MC1 84 0 -> DA strobo off
+  - Organ: (All pars dark), Note On MC2 C4-C8 -> FO trigger Purple->Blue, CC MC2 16 <64 -> LA Fade Blue 3000ms, Note On MC1 C4-C8 -> Goto next step
+  - Synth riff: Note on MC2 -> FO trigger, Note on MC1 -> Goto next step
+  - Bass: FA trigger Purple->Blue, MC1 note on -> FA trigger, MC1 no notes for 0.5 s -> goto next sequence
+
+Part 5: Precise commands
+------------------------
+Fill in precise commands and triggers:
+
+- Song: AA l I, triggers: CC MC1 83 127 -> FA s 1, CC MC1 83 0 -> FA s 0
+- Intro (FO l -d 127 0 0 64, Sequence triggers: CC MC1 84 127 -> DA s 1, CC MC1 84 0 -> DA s 0
+  - Organ: AA I 1, On MC2 C4-C8 -> F0 g d IRB a IB, CC MC2 16 0..63 -> LA o d irb a ib t 3000 p 42?, On MC1 C4-C8 -> nextstep
+  - Synth riff: On MC2 -> FO o, On MC1 -> nextstep
+  - Bass: FA g p 42? d irb a ib, On MC1 -> FA o, MC1 NoNotes? 2s -> nextseq
+
+Part 6: Make lists
+------------------
+
+Put in lists and remove duplicates.
+
+Song: C0 T0 C1 T2 C3, Sequences: 0, 1, ... // Narcotic
+
+Sequences:
+0: C3 T2 C4 T3 C5  // Intro
+  Step 0: C0 T4 C6 T5 C7 T6 C8
+  Step 1: T7 C9 T8 C8
+  Step 2: C10 T8 C11 T9 C12
+1: ...
+  
+Commands 
+ 0: AA l I				// All dark
+ 1: FA s 1				// Strobe 
+ 2: FA s 0				// Strobe off
+ 3: FO l -d 127 0 0 64	// Half blue
+ 4: DA s 1				// Drums strobe on
+ 5: DA s 0				// Drums strobe off
+ 6: F0 g d IRB a IB
+ 7: LA o d irb a ib t 3000 p 42?
+ 8: NextStep
+ 9: FO o				// Trigger 
+10: FA g p 42? d irb a ib
+11: FA o
+12: NextSeq
+
+Triggers
+ 0: CC MC1 83 127		// Pedal on
+ 1: CC MC1 83 0			// Pedal off
+ 2: CC MC1 84 127       // Pedal on
+ 3: CC MC1 84 0         // Pedal off
+ 4: On MC2 C4-C8		
+ 5: CC MC2 16 0..63
+ 6: On MC1 C4-C8
+ 7: On MC2
+ 8: On MC1
+ 9: MC1 NoNotes? 2s
+
+Part 7: Memory Table
+--------------------
+Item                 Offset    Content  Description
+Main                  00         100    Song Ref
+                      02         200    Packed commands Ref
+                      04         400    Packed triggers Ref
+                      06         600    Unpacked commands from songs Ref
+                      08         620    Unpacked commands from sequence Ref
+                      10         640    Unpacked commands from step Ref
+                      12         700    Unpacked triggers from songs Ref
+                      14         720    Unpacked triggers from sequence Ref
+                      16         740    Unpacked triggers from step Ref
+					  18-    			(virtual gap, meaning these bytes will be removed during cleanup)
+Song                 100                #Sequences
+					 101				(reserved)
+                     102                Sequence 0..14 Ref (2bytes)
+                     ...
+                     128                Sequence 14 Ref
+                     129                (Reserved)
+Sequence0            130                #Steps
+                     131                Step 0..#Steps
+                     134                #C/Ts Packed command/triggers
+                     135                C/T 0..#C/Ts indices 
+Sequence 1           143                ...
+...
+Sequence 2           ...
+...
+Packed Commands      200                #Packed Commands
+                     201                (reserved)
+                     202           0    Command 0 Ref (*4), offset from 222
+                     ...
+                     220                Command 9 Ref (*4)
+Command 0            222                Data of command 0
+Command 1            ...  
+Packed Triggers      400                As Packed Commands
+Unpacked Commands   1000                As Packed Commands (from song, sequence, step)
+Unpacked Triggers   1500                As Packed Commands (from song, sequence, step) 
+
+
+When going to next step:
+- Remove unpacked commands/triggers for that step
+- Add commands/triggers for new step
+- Run new step actions
+When going to next sequence
+- Remove unpacked commands/triggers for that sequence + step
+- Add commands/triggers for new sequence + step
+- Run new sequence actions
+- Run new step actions
+
+Memory & SD SPEED
+=================
+
+128 songs * 4 KB = 512 KB -> EEPROM not possible, SD is
+
+How long it would take to send 512 KB?
+
+524288 bytes * 10 bits/byte / 31,250 bits/sec = 167 s
+Assuming 1 KB average: 131072 * 10 / 31250 = 42 s
+
+one song: 4096 bytes * 10 bits/byte / 31,250 = 1.3 s
+average : 1024 bytes: < 1 s
+
+FLOW
+====
+
+  <----------------- PC ----------------->|<----- Arduino ------>
+  Command ----------> MIDI -------> UART --> UART -------->  SD 
+   Text   Converter   Sysex  MIDI   MIDI     MIDI  Command  Card
+   File    (MDE)      File   Send                  Parser
+              ^
+              |
+          Language 
+         Definition
+
