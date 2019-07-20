@@ -11,6 +11,7 @@
 #include "MestraTypes.h"
 #include "ProgramExecuter.h"
 #include HEADER_FILE(ARDUINO_CLASS)
+#include "Duration.h"
 
 
 ProgramExecuter::ProgramExecuter()
@@ -44,9 +45,10 @@ ProgramExecuter::~ProgramExecuter()
 
 		if (initialize)
 		{
-			if (par.GetStepDuration() > 0)
+			step_time_t duration = Duration::ToStepTime(par.GetStepDuration());
+			if (duration > 0)
 			{
-				par.SetStepTime(millis() + par.GetStepDuration());
+				par.SetStepTime(millis() + duration);
 			}
 
 			par.SetInitialize(false);
@@ -136,7 +138,7 @@ Parameter 1 and parameter 2 are active steps (default color), otherwise alternat
 		par.WriteIrgb(par.GetStepNumber() < PAR_MAX_PAR_INTENSITIES - 1 ? defaultColor : alternateColor);
 
 		par.SetStepDuration(step_duration_t(MathUtils::Max(1, par.GetStepDuration() / (2U * (PAR_MAX_PAR_INTENSITY - 1U)))));
-		par.SetStepTime(millis() + par.GetStepDuration());
+		par.SetStepTime(millis() + Duration::ToStepTime(par.GetStepDuration()));
 	}
 	else if (par.CheckIncreaseStep())
 	{
@@ -158,7 +160,7 @@ Parameter 1 and parameter 2 are active steps (default color), otherwise alternat
 			par.WriteIrgb(alternateColor);
 
 			par.SetStepDuration(step_duration_t(MathUtils::Max(1, par.GetStepDuration() / (PAR_MAX_PAR_INTENSITY - 1U))));
-			par.SetStepTime(millis() + par.GetStepDuration());
+			par.SetStepTime(millis() + Duration::ToStepTime(par.GetStepDuration()));
 		}
 		else if (par.CheckIncreaseStep())
 		{
@@ -184,7 +186,7 @@ Parameter 1 and parameter 2 are active steps (default color), otherwise alternat
 			: alternateColor);
 
 		par.SetStepDuration(step_duration_t(MathUtils::Max(1, par.GetStepDuration() / (2U * (par.GetParameter3() - 1U) * (PAR_MAX_PAR_INTENSITY - 1U)))));
-		par.SetStepTime(millis() + par.GetStepDuration());
+		par.SetStepTime(millis() + Duration::ToStepTime(par.GetStepDuration()));
 	}
 	else if (par.CheckIncreaseStep())
 	{
@@ -244,7 +246,7 @@ Parameter 1 and parameter 2 are active steps (default color), otherwise alternat
 		par.SetStepDuration(step_duration_t(MathUtils::Max(1, step_duration_t(par.GetStepDuration() / 
 		 (PROGRAM_EXECUTER_RAINBOW_COLORS * PAR_MAX_PAR_INTENSITY / abs(par.GetParameter1()))))));
 
-		par.SetStepTime(millis() + par.GetStepDuration());
+		par.SetStepTime(millis() + Duration::ToStepTime(par.GetStepDuration()));
 	}
 	else if (par.CheckIncreaseStep(step_t(par.GetParameter1())))
 	{

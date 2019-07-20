@@ -12,6 +12,7 @@
 
 #include "AsciiCommandParser.h"
 #include "ParGroups.h"
+#include "Duration.h"
 
 
 struct Chars2ParBits
@@ -348,7 +349,7 @@ void AsciiCommandParser::ParseStepNumber()
 		}
 		else
 		{
-			_command.SetStepNumber(preset_t(strtoul(&_userCommand[_currentIndex], nullptr, 0)));
+			_command.SetStepNumber(step_t(strtoul(&_userCommand[_currentIndex], nullptr, 0)));
 		}
 		
 		SkipUntilWhitespace();
@@ -363,7 +364,7 @@ void AsciiCommandParser::ParseStrobeTime()
 	SkipWhitespace();
 	if (!_parseError)
 	{
-		_command.SetStrobeTime(step_duration_t(strtoul(&_userCommand[_currentIndex], nullptr, 0)));
+		_command.SetStrobeTime(Duration::ToStepDuration(strtoul(&_userCommand[_currentIndex], nullptr, 0)));
 		_parseError |= _command.GetStrobeTime() == 0;
 		SkipUntilWhitespace();
 	}
@@ -375,7 +376,7 @@ void AsciiCommandParser::ParseDelayTime()
 	SkipWhitespace();
 	if (!_parseError)
 	{
-		_command.SetDelayTime(step_duration_t(strtoul(&_userCommand[_currentIndex], nullptr, 0)));
+		_command.SetDelayTime(Duration::ToStepDuration(strtoul(&_userCommand[_currentIndex], nullptr, 0)));
 		_parseError |= _command.GetDelayTime() == 0;
 		SkipUntilWhitespace();
 	}

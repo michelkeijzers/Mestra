@@ -13,6 +13,7 @@
 #include "Windows.h"
 #include "WinFixture.h"
 #include "WinPar.h"
+#include "Duration.h"
 
 
 WinLightSetup::WinLightSetup()
@@ -129,7 +130,7 @@ void WinLightSetup::PrintFixture(fixture_number_t fixtureNumber) const
 		par.GetOnce() ? ' ' : 'O', par.GetOnce() ? 'O' : 'f', par.GetOnce() ? 'N' : 'f',
 		par.GetForceUpdate() ? 'Y' : ' ', par.GetForceUpdate() ? 'e' : 'N', par.GetForceUpdate() ? 's' : 'o',
 		par.GetParameter1(), par.GetParameter2(), par.GetParameter3(),
-		par.GetStepNumber(), par.GetNrOfSteps(), par.GetStepDuration());
+		par.GetStepNumber(), par.GetNrOfSteps(), Duration::ToStepTime(par.GetStepDuration()));
 	OutputDebugString(message);
 
 #endif // OUTPUT_LIGHT_SETUP

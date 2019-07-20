@@ -168,7 +168,9 @@
     <ClInclude Include="AsciiCommandParser.h" />
     <ClInclude Include="Command.h" />
     <ClInclude Include="CommandParser.h" />
+    <ClInclude Include="Commands.h" />
     <ClInclude Include="DmxSimpleStub.h" />
+    <ClInclude Include="Duration.h" />
     <ClInclude Include="IrRemoteStub.h" />
     <ClInclude Include="LedBarSegment.h" />
     <ClInclude Include="LiquidCrystalStub.h" />
@@ -196,6 +198,7 @@
     <ClInclude Include="Rf24Stub.h" />
     <ClInclude Include="SdStub.h" />
     <ClInclude Include="SerialStub.h" />
+    <ClInclude Include="SpiMemoryStub.h" />
     <ClInclude Include="SpiRAMStub.h" />
     <ClInclude Include="SpiStub.h" />
     <ClInclude Include="StringUtils.h" />
@@ -214,7 +217,9 @@
     <ClCompile Include="AsciiCommandParser.cpp" />
     <ClCompile Include="Command.cpp" />
     <ClCompile Include="CommandParser.cpp" />
+    <ClCompile Include="Commands.cpp" />
     <ClCompile Include="DmxSimpleStub.cpp" />
+    <ClCompile Include="Duration.cpp" />
     <ClCompile Include="Fixture.cpp">
       <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">EnableAllWarnings</WarningLevel>
       <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">EnableAllWarnings</WarningLevel>
@@ -242,6 +247,7 @@
     <ClCompile Include="Rf24Stub.cpp" />
     <ClCompile Include="SdStub.cpp" />
     <ClCompile Include="SerialStub.cpp" />
+    <ClCompile Include="SpiMemoryStub.cpp" />
     <ClCompile Include="SpiRAMStub.cpp" />
     <ClCompile Include="SpiStub.cpp" />
     <ClCompile Include="StringUtils.cpp" />
@@ -263,9 +269,6 @@
     <None Include="..\Documentation\Mestra.eap" />
     <None Include="..\Documentation\Mestra.xlsx" />
     <None Include="DmxLightShow.ino" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="..\Tables.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

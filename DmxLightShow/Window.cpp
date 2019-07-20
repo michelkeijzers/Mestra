@@ -20,6 +20,7 @@
 #include "LightSetup.h"
 #include "MestraTypes.h"
 #include "WinLightsetup.h"
+#include "PackedCommand.h"
 
 using namespace std;
 
@@ -477,6 +478,10 @@ void InjectString(const char* commandString)
 
 	_commandBuffer.Process(_asciiCommandParser);
 	Command& command = _asciiCommandParser.GetCommand();
+	
+	PackedCommand packedCommand;
+	packedCommand.Pack(command);
+	packedCommand.Unpack(command);
 	CommandParser::Parse(command);
 	
 	// Print command.

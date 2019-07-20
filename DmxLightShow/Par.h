@@ -44,7 +44,7 @@ public:
 	void SetDefaultColorIrgb(Irgbw& color);
 	void SetDefaultColorIrgbw(Irgbw& color);
 
-  Irgbw& GetAlternateColor();
+    Irgbw& GetAlternateColor();
 
 	void SetAlternateColorIrgb(Irgbw& color);
 	void SetAlternateColorIrgbw(Irgbw& color);

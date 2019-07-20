@@ -14,15 +14,23 @@ Improvements
 		Color Short              I = bit  7, R = bit  6, G = bit  5, B = bit  4, W = bit  3, unused: bits 2~0)
 		Color Long/without white I = byte 1, R = byte 2, G = byte 3, B = byte 4)
 		Color Long/with white    I = byte 1, R = byte 2, G = byte 3, B = byte 4, W = byte 5)
+
+		Done: Using Short, SingleColor, Medium and LongColor Format.
+
    2. Using time table for delay/strobo time (see table 2).
       Instead of 2 bytes, using 1 byte.
 		  0 - 100     0-1000 ms in steps of  10 ms   0, 10  , 20  , 30  , ... 1000 ms
 		100 - 200     0-  10  s in steps of 100 ms   0,  0.1,  0.2,  0.3, ...   10  s
 		200 - 255     0-  55  s in steps of   1 s    0,  1  ,  2,    3  , ...   55  s
+
+		Done, by using first bits as value, remainder as multiplier.
+
    3. For fixture data, int read/write uses a pointer conversion which is smaller (needed for negative values).
       For positive types, additions with bit shifts are used, consider using pointers too.
-  
 
+
+  
+   
    
 
 

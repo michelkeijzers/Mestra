@@ -32,3 +32,52 @@ BitsUtils::~BitsUtils()
 {
 	return (value & ~(1 << bitNumber)) | (set ? 1 : 0) << bitNumber;
 }
+
+
+/*
+ * Assuming bits to set are all 0, otherwise use ChangeBit.
+ */
+/* static */ void BitsUtils::SetBitsFromZero(uint8_t* address, uint8_t startBit, uint8_t nrOfBits, uint32_t value)
+{
+	while (nrOfBits > 0)
+	{
+		nrOfBits--;
+		(*address) |= (value >> nrOfBits) << startBit;
+		value %= (1 << nrOfBits); // Remove left bit
+		
+		if (startBit == 0)
+		{
+			startBit = 7;
+			address++;
+		}
+		else
+		{
+			startBit--;
+		}
+	};
+}
+
+
+/* static */ uint32_t BitsUtils::GetBits(uint8_t* address, uint8_t startBit, uint32_t nrOfBits)
+{
+	uint32_t value = 0;
+	
+	while (nrOfBits > 0)
+	{
+		nrOfBits--;
+		value |= ((((*address) & (1 << startBit)) > 0) ? 1 : 0) << nrOfBits;
+
+		if (startBit == 0)
+		{
+			startBit = 7;
+			address++;
+		}
+		else
+		{
+			startBit--;
+		}
+	}
+
+	return value;
+}
+

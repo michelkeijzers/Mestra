@@ -7,6 +7,8 @@
 #include HEADER_FILE(ARDUINO_CLASS)
 #include "MathUtils.h"
 
+#include "Duration.h"
+
 
 Fixture::Fixture(fixture_number_t fixtureNumber)
 	: 
@@ -241,7 +243,7 @@ bool Fixture::CheckIncreaseStep(step_t stepsToIncrease /* = 1 */)
 	}
 	else
 	{
-		if (GetStepDuration() > 0 && currentMillis >= GetStepTime())
+		if (Duration::ToStepTime(GetStepDuration()) > 0 && currentMillis >= GetStepTime())
 		{
 			if (GetStepNumber() + stepsToIncrease < 0 ||
 			    GetStepNumber() + stepsToIncrease >= GetNrOfSteps())
@@ -268,7 +270,7 @@ bool Fixture::CheckIncreaseStep(step_t stepsToIncrease /* = 1 */)
 
 	if (isIncreased)
 	{
-		SetStepTime(currentMillis + GetStepDuration());
+		SetStepTime(currentMillis + Duration::ToStepTime(GetStepDuration()));
 	}
 
 	_platformFixture->PostProcessCheckIncreaseStep(isIncreased);

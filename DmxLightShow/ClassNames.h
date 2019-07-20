@@ -15,6 +15,7 @@
 #define SERIAL_CLASS			SerialStub
 #define MIDI_CLASS				MidiStub
 #define SPI_CLASS				SpiStub
+#define SPI_MEMORY_CLASS        SpiMemoryStub
 #define SD_CLASS				SdStub
 #define IR_REMOTE_CLASS			IrRemoteStub
 #define LIQUID_CRYSTAL_CLASS	LiquidCrystalStub
@@ -28,6 +29,7 @@
 #define SERIAL_CLASS			Arduino
 #define MIDI_CLASS				MIDI
 #define SPI_CLASS				SPI
+#define SPI_MEMORY_CLASS        SPIMemory
 #define SD_CLASS				SD
 #define IR_REMOTE_CLASS			IRremote
 #define LIQUID_CRYSTAL_CLASS	LiquidCrystal

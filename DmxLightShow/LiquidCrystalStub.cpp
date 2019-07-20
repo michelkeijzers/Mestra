@@ -22,19 +22,21 @@ LiquidCrystal::~LiquidCrystal()
 
 void LiquidCrystal::begin(int nrOfColumns, int nrOfRows)
 {
-
+	(void) nrOfColumns;
+	(void) nrOfRows;
 }
 
 
 void LiquidCrystal::print(char ch)
 {
-
+	(void) ch;
 }
 
 
 void LiquidCrystal::setCursor(int x, int y)
 {
-
+	(void) x;
+	(void) y;
 }
 
 

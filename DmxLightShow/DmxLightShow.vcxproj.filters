@@ -195,6 +195,15 @@
     <ClInclude Include="IrRemoteStub.h">
       <Filter>Header Files\ArduinoStubs</Filter>
     </ClInclude>
+    <ClInclude Include="SpiMemoryStub.h">
+      <Filter>Header Files\ArduinoStubs</Filter>
+    </ClInclude>
+    <ClInclude Include="Duration.h">
+      <Filter>Header Files\DMX\Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="Commands.h">
+      <Filter>Header Files\DMX\Commands</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DmxLightShow.rc">
@@ -333,6 +342,15 @@
     <ClCompile Include="IrRemoteStub.cpp">
       <Filter>Source Files\ArduinoStubs</Filter>
     </ClCompile>
+    <ClCompile Include="SpiMemoryStub.cpp">
+      <Filter>Source Files\ArduinoStubs</Filter>
+    </ClCompile>
+    <ClCompile Include="Duration.cpp">
+      <Filter>Source Files\DMX\Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="Commands.cpp">
+      <Filter>Source Files\DMX\Commands</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="DmxLightShow.ino">
@@ -341,8 +359,5 @@
     <None Include="..\Documentation.docx" />
     <None Include="..\Documentation\Mestra.eap" />
     <None Include="..\Documentation\Mestra.xlsx" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="..\Tables.txt" />
   </ItemGroup>
 </Project>

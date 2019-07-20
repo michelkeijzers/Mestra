@@ -5,8 +5,8 @@
 //             M E G A        
 //            Flash SRAM   SRAMnew
 // Maximum:  253952 8192
-// Current:   29426 2970       663
-//       %:      11   36         8
+// Current:   5020 2852       663
+//       %:      9   34         8
 //
 // Stack:
 //
@@ -32,9 +32,8 @@
 // MIDI
 #include HEADER_FILE(MIDI_CLASS)
 
-// SD
-#include HEADER_FILE(SPI_CLASS)
-#include HEADER_FILE(SD_CLASS)
+// SPIMEMORY
+#include HEADER_FILE(SPI_MEMORY_CLASS)
 
 // IR
 //#include <boarddefs.h>
@@ -54,7 +53,7 @@
 #include "SerialPrint.h"
 #include "McuLightSetup.h"
 #include "LightSetup.h"
-#include "Command.h"
+#include "Commands.h"
 #include "CommandParser.h"
 #include "ProgramExecuter.h"
 
@@ -76,8 +75,10 @@ const uint16_t DMX_MAX_CHANNELS = 140;
 MIDI_CREATE_INSTANCE(HardwareSerial, Serial2, midiB);
 MIDI_CREATE_INSTANCE(HardwareSerial, Serial3, midiC);
 
-// SD
-File dataFile;
+// SPIMemory
+uint8_t pageBuffer[256];
+SPIFlash flash;  
+
 
 // IR
 IRrecv irrecv(0);
@@ -89,11 +90,13 @@ LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
 
 // RF
 RF24 radio(7, 8); // CE, CSN
-const uint8_t address[6] = "00001";
+const uint8_t rfAddress[6] = "00001";
 
 // Application
 
-Command         _command;
+
+Commands        _commands;
+
 McuLightSetup   _mcuLightSetup;
 
 
@@ -123,44 +126,38 @@ ArduinoDmxLightShow::~ArduinoDmxLightShow()
 	midiB.begin();
 	midiC.begin();
 
-	// DMX.
-	DmxSimple.usePin(3);
+	// DMX
+	DmxSimple.usePin(DMX_SEND_PIN);
+	DmxSimple.maxChannel(DMX_MAX_CHANNELS);
 	DmxSimple.write(1, 10);
 
-	
-	if (!SD.begin(2))
-	{
-		dataFile = SD.open("datalog.txt", FILE_WRITE);
-
-		// if the file is available, write to it:
-		if (dataFile)
-		{
- 			dataFile.println(10);
-			dataFile.close();
-		}
-	}
-
+	// IR
 	irrecv.decode(&results);
 
+	// SPIMemory
+	flash.begin();
+	uint32_t spiAddress = 0;
+	flash.readByteArray(spiAddress, pageBuffer, SPI_PAGESIZE);
+	flash.writeByteArray(spiAddress, pageBuffer, SPI_PAGESIZE);
+
+	// LCD
 	lcd.begin(16, 2);
 	lcd.print('c');
 	lcd.setCursor(0, 0);
 	lcd.noAutoscroll();
 	lcd.clear();
 	
+	// Radio
 	radio.begin();
 	radio.openWritingPipe(1);
 	radio.setPALevel(RF24_PA_MIN);
 	radio.stopListening();
 	const char text[] = "Hello World";
 	radio.write(text, sizeof(text));
-	radio.openReadingPipe(0, address);
+	radio.openReadingPipe(0, rfAddress);
 	radio.startListening();
 
-	DmxSimple.usePin(DMX_SEND_PIN);
-	DmxSimple.maxChannel(DMX_MAX_CHANNELS);
-	DmxSimple.write(1, 10);
-
+	// Mestra
 	LightSetup.CreateFixtures();
 	LightSetup.SetPlatformLightSetup(&_mcuLightSetup);
 	LightSetup.GetPlatform()->SetProperties();
@@ -171,7 +168,8 @@ ArduinoDmxLightShow::~ArduinoDmxLightShow()
 /* static */ void ArduinoDmxLightShow::Loop()
 {
 	//TODO  IF DMX COMMAND RECEIVED
-	CommandParser::Parse(_command);
+
+	_commands.Unpack();
 
 	//TODO IF MIDI COMMAND RECEIVED
 
