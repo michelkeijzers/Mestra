@@ -13,8 +13,8 @@ Song:
 	'song' name=ID ':'
 	  'bank' bank=MIDI_INT 'program' program=MIDI_INT ';'
       rules=Rules
-      'order'      sequenceRefs+=[Sequence] (',' sequenceRefs+=[Sequence])* ';'
-      'sequences:' sequences   += Sequence+;
+      ('order'      sequenceRefs+=[Sequence] (',' sequenceRefs+=[Sequence])* ';'
+       'sequences:' sequences   += Sequence+)?;
 
 Rules: 
 	{Rules} rules+=Rule*;
@@ -24,7 +24,7 @@ Rules:
 //	        (commandRefs+=[Command])+ ';';
 	
 Rule:
-	'rule' ruleTriggers=RuleTriggers ':' ruleCommands=RuleCommands ';';
+	'rule' (ruleTriggers=RuleTriggers ':')? ruleCommands=RuleCommands ';';
 	
 RuleTriggers:
 	triggerRefs+=[Trigger] (',' triggerRefs+=[Trigger])*;
@@ -35,8 +35,8 @@ RuleCommands:
 Sequence:
 	'sequence' name=ID ':'
        rules=Rules
-      'order'  stepRefs+=[Step] (',' stepRefs+=[Step])* ';'
-      'steps:' steps   += Step+;
+      ('order'  stepRefs+=[Step] (',' stepRefs+=[Step])* ';'
+       'steps:' steps   += Step+)?;
 	
 Step:
 	'step' name=ID  ':'
