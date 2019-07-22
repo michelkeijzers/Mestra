@@ -434,34 +434,28 @@ Part 7: Memory Table
 --------------------
 Item                 Offset    Content  Description
 Main                  00         100    Song Ref
-                      02         200    Packed commands Ref
-                      04         400    Packed triggers Ref
-                      06         600    Unpacked commands from songs Ref
-                      08         620    Unpacked commands from sequence Ref
-                      10         640    Unpacked commands from step Ref
-                      12         700    Unpacked triggers from songs Ref
-                      14         720    Unpacked triggers from sequence Ref
-                      16         740    Unpacked triggers from step Ref
-					  18-    			(virtual gap, meaning these bytes will be removed during cleanup)
+                      02         200    Packed triggers Ref
+                      04         400    Packed commands Ref
+                      06         600    Unpacked triggers from song Ref
+                      08         620    Unpacked triggers from sequence Ref
+                      10         640    Unpacked triggers from step Ref
+                      12         700    Unpacked commands from song Ref
+                      14         720    Unpacked commands from sequence Ref
+                      16         740    Unpacked commands from step Ref
+					  18-	  			(virtual gap)
 Song                 100                #Sequences
-					 101				(reserved)
-                     102                Sequence 0..14 Ref (2bytes)
+                     101                Sequence 0..14 Ref (2bytes)
                      ...
-                     128                Sequence 14 Ref
-                     129                (Reserved)
+                     127                Sequence 14 Ref
+                     128-				(virtual gap)
 Sequence0            130                #Steps
                      131                Step 0..#Steps
-                     134                #C/Ts Packed command/triggers
-                     135                C/T 0..#C/Ts indices 
 Sequence 1           143                ...
 ...
 Sequence 2           ...
 ...
 Packed Commands      200                #Packed Commands
                      201                (reserved)
-                     202           0    Command 0 Ref (*4), offset from 222
-                     ...
-                     220                Command 9 Ref (*4)
 Command 0            222                Data of command 0
 Command 1            ...  
 Packed Triggers      400                As Packed Commands
@@ -504,3 +498,33 @@ FLOW
           Language 
          Definition
 
+
+
+
+
+
+
+
+		 grammar mestra.DmxLightShow with org.eclipse.xtext.common.Terminals
+
+generate dmxLightShow "http://www.DmxLightShow.mestra"
+
+
+Mestra:
+	'songs:' songs+=Song+ 'triggers:' triggers+=Trigger+ 'commands:' commands+=Command+;
+   
+Song:
+	'song' name=ID tcs+=TriggersAndCommands* 'sequences' sequenceRefs+=[Sequence]+ 'sequences:' sequences+=Sequence+;
+
+TriggersAndCommands:
+	('trigger' triggerRef=[Trigger]) | ('command' commandRef=[Command]);
+	
+Sequence:
+	'sequence' name=ID ';';
+	
+Trigger:
+	'trigger' name=ID ';';
+  
+Command:
+	'command' name=ID ';';
+	

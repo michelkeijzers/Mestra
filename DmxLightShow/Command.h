@@ -74,27 +74,29 @@ public:
 
 
 private:
+	bool			_delayTimeSet : 1;
+	bool			_strobeTimeSet : 1;
+	bool			_presetNumberSet : 1;
+	bool			_stepNumberSet : 1;
+	bool			_lastStepNumber : 1;
+
 	par_group_t		_parGroup;
-	bool			_delayTimeSet;
 	step_duration_t _delayTime;
-	bool			_strobeTimeSet;
 	step_duration_t _strobeTime;
-	bool			_presetNumberSet;
 	preset_t		_presetNumber;
 
-	bool			_stepNumberSet;
 	step_t			_stepNumber;
-	bool			_lastStepNumber;
-	bool			_holdSet;
-	bool			_hold;
-	bool			_onceSet;
-	bool			_once;
+	bool			_holdSet : 1;
+	bool			_hold : 1;
+	bool			_onceSet : 1;
+	bool			_once : 1;
 
-	bool			_defaultColorSet;
-	bool			_defaultColorWhiteUsed;
+	bool			_defaultColorSet : 1;
+	bool			_defaultColorWhiteUsed : 1;
+	bool			_alternateColorSet : 1;
+	bool			_alternateColorWhiteUsed : 1;
+
 	Irgbw			_defaultColor;
-	bool			_alternateColorSet;
-	bool			_alternateColorWhiteUsed;
 	Irgbw			_alternateColor;
 };
 

@@ -2,11 +2,11 @@
 // DmxLightShow.ino
 //
 //           
-//             M E G A        
-//            Flash SRAM   SRAMnew
+//             M E G A                 Cmd
+//            Flash SRAM   SRAMnew     Data
 // Maximum:  253952 8192
-// Current:   5020 2852       663
-//       %:      9   34         8
+// Current:  25016  5895       374    (3 KB)
+//       %:      9    71         8
 //
 // Stack:
 //
@@ -53,7 +53,7 @@
 #include "SerialPrint.h"
 #include "McuLightSetup.h"
 #include "LightSetup.h"
-#include "Commands.h"
+#include "Song.h"
 #include "CommandParser.h"
 #include "ProgramExecuter.h"
 
@@ -95,7 +95,7 @@ const uint8_t rfAddress[6] = "00001";
 // Application
 
 
-Commands        _commands;
+Song        _song;
 
 McuLightSetup   _mcuLightSetup;
 
@@ -162,6 +162,7 @@ ArduinoDmxLightShow::~ArduinoDmxLightShow()
 	LightSetup.SetPlatformLightSetup(&_mcuLightSetup);
 	LightSetup.GetPlatform()->SetProperties();
 	PrintFixtures();
+	_song.Clear();
 }
 
 
@@ -169,7 +170,7 @@ ArduinoDmxLightShow::~ArduinoDmxLightShow()
 {
 	//TODO  IF DMX COMMAND RECEIVED
 
-	_commands.Unpack();
+	_song.Unpack();
 
 	//TODO IF MIDI COMMAND RECEIVED
 

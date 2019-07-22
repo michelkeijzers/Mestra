@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="dmxLightShow" nsURI="http://www.DmxLightShow.mestra" nsPrefix="dmxLightShow">
+  <eClassifiers xsi:type="ecore:EClass" name="Mestra">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="songs" upperBound="-1"
+        eType="#//Song" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="triggers" upperBound="-1"
+        eType="#//Trigger" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="commands" upperBound="-1"
+        eType="#//Command" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Song">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="bank" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="program" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rules" eType="#//Rules"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sequenceRefs" unique="false"
+        upperBound="-1" eType="#//Sequence"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sequences" upperBound="-1"
+        eType="#//Sequence" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Rules">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rules" upperBound="-1"
+        eType="#//Rule" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Rule">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ruleTriggers" eType="#//RuleTriggers"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ruleCommands" eType="#//RuleCommands"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RuleTriggers">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="triggerRefs" unique="false"
+        upperBound="-1" eType="#//Trigger"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RuleCommands">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="commandsRefs" unique="false"
+        upperBound="-1" eType="#//Command"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Sequence">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rules" eType="#//Rules"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="stepRefs" unique="false"
+        upperBound="-1" eType="#//Step"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="steps" upperBound="-1"
+        eType="#//Step" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Step">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rules" eType="#//Rules"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Trigger">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Command">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+</ecore:EPackage>

@@ -338,3 +338,19 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
+/.metadata/
+/mestra.dmxlightshow/.launch
+/mestra.dmxlightshow/.settings
+/mestra.dmxlightshow/src-gen/mestra/dmxLightShow/impl
+/mestra.dmxlightshow/src-gen/mestra/dmxLightShow/util
+/mestra.dmxlightshow/src-gen/mestra
+/mestra.dmxlightshow/xtend-gen/mestra
+/mestra.dmxlightshow/plugin.xml
+/mestra.dmxlightshow/build.properties
+/mestra.dmxlightshow/.project
+/mestra.dmxlightshow/.classpath
+/mestra.dmxlightshow/.antlr-generator-3.2.0-patch.jar
+/mestra.dmxlightshow.ide
+/mestra.dmxlightshow.tests
+/mestra.dmxlightshow.ui
+/mestra.dmxlightshow.ui.tests

@@ -72,9 +72,13 @@ private:
 
 	fixture_number_t _fixtureNumber;
 
-	bool _initialize;
+	bool _initialize : 1;
 
-	bool _forceUpdate;
+	bool _forceUpdate: 1;
+
+	bool _hold : 1;
+
+	bool _once : 1;
 
 	dmx_channel_t _dmxOffsetChannel;
 
@@ -87,10 +91,6 @@ private:
 	step_duration_t _stepDuration;
 
 	step_t _stepNumber;
-
-	bool _hold;
-
-	bool _once;
 
 	parameter_t _parameter1;
 	parameter_t _parameter2;

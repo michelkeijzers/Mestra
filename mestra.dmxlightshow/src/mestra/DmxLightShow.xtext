@@ -1,0 +1,54 @@
+ 
+grammar mestra.DmxLightShow with org.eclipse.xtext.common.Terminals
+
+generate dmxLightShow "http://www.DmxLightShow.mestra"
+
+
+Mestra:
+	'songs:'    songs   +=Song+ 
+	'triggers:' triggers+=Trigger+ 
+	'commands:' commands+=Command+;
+   
+Song:
+	'song' name=ID ':'
+	  'bank' bank=MIDI_INT 'program' program=MIDI_INT ';'
+      rules=Rules
+      'order'      sequenceRefs+=[Sequence] (',' sequenceRefs+=[Sequence])* ';'
+      'sequences:' sequences   += Sequence+;
+
+Rules: 
+	{Rules} rules+=Rule*;
+
+//Rule:
+//	'rule' (((triggerRefs+=[Trigger])+ ) ':')?
+//	        (commandRefs+=[Command])+ ';';
+	
+Rule:
+	'rule' ruleTriggers=RuleTriggers ':' ruleCommands=RuleCommands ';';
+	
+RuleTriggers:
+	triggerRefs+=[Trigger] (',' triggerRefs+=[Trigger])*;
+	
+RuleCommands:
+	commandsRefs+=[Command] (',' commandsRefs+=[Command])*;
+
+Sequence:
+	'sequence' name=ID ':'
+       rules=Rules
+      'order'  stepRefs+=[Step] (',' stepRefs+=[Step])* ';'
+      'steps:' steps   += Step+;
+	
+Step:
+	'step' name=ID  ':'
+	   rules=Rules;
+
+Trigger:
+    name=ID ';';
+  
+Command:
+	name=ID ';';
+	
+terminal MIDI_INT: ('1' '2'      '0'..'7') |
+	               ('1' '0'..'1' '0'..'9') |
+	               (    '1'..'9' '0'..'9') |  
+	               (             '0'..'9');

@@ -201,7 +201,7 @@
     <ClInclude Include="Duration.h">
       <Filter>Header Files\DMX\Commands</Filter>
     </ClInclude>
-    <ClInclude Include="Commands.h">
+    <ClInclude Include="Song.h">
       <Filter>Header Files\DMX\Commands</Filter>
     </ClInclude>
   </ItemGroup>
@@ -348,7 +348,7 @@
     <ClCompile Include="Duration.cpp">
       <Filter>Source Files\DMX\Commands</Filter>
     </ClCompile>
-    <ClCompile Include="Commands.cpp">
+    <ClCompile Include="Song.cpp">
       <Filter>Source Files\DMX\Commands</Filter>
     </ClCompile>
   </ItemGroup>

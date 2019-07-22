@@ -13,6 +13,11 @@ BitsUtils::~BitsUtils()
 {
 }
 
+/* static */ uint16_t BitsUtils::GetUint16(uint8_t* data, uint16_t offset)
+{
+	return (data[offset] << 8) + data[offset + 1];
+}
+
 
 /* static */ uint8_t BitsUtils::GetNrOfHighBits(uint32_t value)
 {

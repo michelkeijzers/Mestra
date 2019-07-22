@@ -168,7 +168,7 @@
     <ClInclude Include="AsciiCommandParser.h" />
     <ClInclude Include="Command.h" />
     <ClInclude Include="CommandParser.h" />
-    <ClInclude Include="Commands.h" />
+    <ClInclude Include="Song.h" />
     <ClInclude Include="DmxSimpleStub.h" />
     <ClInclude Include="Duration.h" />
     <ClInclude Include="IrRemoteStub.h" />
@@ -217,7 +217,7 @@
     <ClCompile Include="AsciiCommandParser.cpp" />
     <ClCompile Include="Command.cpp" />
     <ClCompile Include="CommandParser.cpp" />
-    <ClCompile Include="Commands.cpp" />
+    <ClCompile Include="Song.cpp" />
     <ClCompile Include="DmxSimpleStub.cpp" />
     <ClCompile Include="Duration.cpp" />
     <ClCompile Include="Fixture.cpp">
