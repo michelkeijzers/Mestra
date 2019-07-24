@@ -19,6 +19,16 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference DmxLightShow.ecore#//Song/sequenceRefs"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DmxLightShow.ecore#//Song/sequences"/>
     </genClasses>
+    <genClasses ecoreClass="DmxLightShow.ecore#//Sequence">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DmxLightShow.ecore#//Sequence/name"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DmxLightShow.ecore#//Sequence/rules"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference DmxLightShow.ecore#//Sequence/stepRefs"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DmxLightShow.ecore#//Sequence/steps"/>
+    </genClasses>
+    <genClasses ecoreClass="DmxLightShow.ecore#//Step">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DmxLightShow.ecore#//Step/name"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DmxLightShow.ecore#//Step/rules"/>
+    </genClasses>
     <genClasses ecoreClass="DmxLightShow.ecore#//Rules">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DmxLightShow.ecore#//Rules/rules"/>
     </genClasses>
@@ -32,21 +42,125 @@
     <genClasses ecoreClass="DmxLightShow.ecore#//RuleCommands">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference DmxLightShow.ecore#//RuleCommands/commandsRefs"/>
     </genClasses>
-    <genClasses ecoreClass="DmxLightShow.ecore#//Sequence">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DmxLightShow.ecore#//Sequence/name"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DmxLightShow.ecore#//Sequence/rules"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference DmxLightShow.ecore#//Sequence/stepRefs"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DmxLightShow.ecore#//Sequence/steps"/>
+    <genClasses ecoreClass="DmxLightShow.ecore#//RuleTrigger">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DmxLightShow.ecore#//RuleTrigger/name"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DmxLightShow.ecore#//RuleTrigger/type"/>
     </genClasses>
-    <genClasses ecoreClass="DmxLightShow.ecore#//Step">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DmxLightShow.ecore#//Step/name"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DmxLightShow.ecore#//Step/rules"/>
+    <genClasses ecoreClass="DmxLightShow.ecore#//MidiRuleTrigger">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DmxLightShow.ecore#//MidiRuleTrigger/type"/>
     </genClasses>
-    <genClasses ecoreClass="DmxLightShow.ecore#//Trigger">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DmxLightShow.ecore#//Trigger/name"/>
+    <genClasses ecoreClass="DmxLightShow.ecore#//MidiTimeTrigger">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DmxLightShow.ecore#//MidiTimeTrigger/time"/>
+    </genClasses>
+    <genClasses ecoreClass="DmxLightShow.ecore#//MidiNoteTrigger">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DmxLightShow.ecore#//MidiNoteTrigger/onOff"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DmxLightShow.ecore#//MidiNoteTrigger/mc"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DmxLightShow.ecore#//MidiNoteTrigger/note"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DmxLightShow.ecore#//MidiNoteTrigger/velocity"/>
+    </genClasses>
+    <genClasses ecoreClass="DmxLightShow.ecore#//MidiCcTrigger">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DmxLightShow.ecore#//MidiCcTrigger/mc"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DmxLightShow.ecore#//MidiCcTrigger/ccNumber"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DmxLightShow.ecore#//MidiCcTrigger/value"/>
+    </genClasses>
+    <genClasses ecoreClass="DmxLightShow.ecore#//MidiAftertouchTrigger">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DmxLightShow.ecore#//MidiAftertouchTrigger/mc"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DmxLightShow.ecore#//MidiAftertouchTrigger/value"/>
+    </genClasses>
+    <genClasses ecoreClass="DmxLightShow.ecore#//MidiProgramChangeTrigger">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DmxLightShow.ecore#//MidiProgramChangeTrigger/mc"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DmxLightShow.ecore#//MidiProgramChangeTrigger/bank"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DmxLightShow.ecore#//MidiProgramChangeTrigger/program"/>
+    </genClasses>
+    <genClasses ecoreClass="DmxLightShow.ecore#//MidiChannel">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DmxLightShow.ecore#//MidiChannel/mc"/>
+    </genClasses>
+    <genClasses ecoreClass="DmxLightShow.ecore#//MidiValueOrRange">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DmxLightShow.ecore#//MidiValueOrRange/value"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DmxLightShow.ecore#//MidiValueOrRange/valueRange"/>
+    </genClasses>
+    <genClasses ecoreClass="DmxLightShow.ecore#//MidiValue">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DmxLightShow.ecore#//MidiValue/value"/>
+    </genClasses>
+    <genClasses ecoreClass="DmxLightShow.ecore#//MidiValueRange">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DmxLightShow.ecore#//MidiValueRange/start"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DmxLightShow.ecore#//MidiValueRange/end"/>
+    </genClasses>
+    <genClasses ecoreClass="DmxLightShow.ecore#//MidiNoteOrRange">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DmxLightShow.ecore#//MidiNoteOrRange/note"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DmxLightShow.ecore#//MidiNoteOrRange/noteRange"/>
+    </genClasses>
+    <genClasses ecoreClass="DmxLightShow.ecore#//MidiNote">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DmxLightShow.ecore#//MidiNote/start"/>
+    </genClasses>
+    <genClasses ecoreClass="DmxLightShow.ecore#//MidiNoteRange">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DmxLightShow.ecore#//MidiNoteRange/start"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DmxLightShow.ecore#//MidiNoteRange/end"/>
+    </genClasses>
+    <genClasses ecoreClass="DmxLightShow.ecore#//Time">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DmxLightShow.ecore#//Time/time"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DmxLightShow.ecore#//Time/type"/>
     </genClasses>
     <genClasses ecoreClass="DmxLightShow.ecore#//Command">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DmxLightShow.ecore#//Command/name"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DmxLightShow.ecore#//Command/type"/>
     </genClasses>
+    <genClasses ecoreClass="DmxLightShow.ecore#//DmxCommand">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DmxLightShow.ecore#//DmxCommand/parGroup"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DmxLightShow.ecore#//DmxCommand/dmxSubCommands"/>
+    </genClasses>
+    <genClasses ecoreClass="DmxLightShow.ecore#//ParGroup">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DmxLightShow.ecore#//ParGroup/parGroup"/>
+    </genClasses>
+    <genClasses ecoreClass="DmxLightShow.ecore#//DmxSubCommands">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DmxLightShow.ecore#//DmxSubCommands/mode"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DmxLightShow.ecore#//DmxSubCommands/preset"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DmxLightShow.ecore#//DmxSubCommands/delayTime"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DmxLightShow.ecore#//DmxSubCommands/strobeTime"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DmxLightShow.ecore#//DmxSubCommands/stepNumber"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DmxLightShow.ecore#//DmxSubCommands/hold"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DmxLightShow.ecore#//DmxSubCommands/once"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DmxLightShow.ecore#//DmxSubCommands/DefaultColor"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DmxLightShow.ecore#//DmxSubCommands/AlternateColor"/>
+    </genClasses>
+    <genClasses ecoreClass="DmxLightShow.ecore#//DmxModeSubCommand"/>
+    <genClasses ecoreClass="DmxLightShow.ecore#//DmxModeSubCommandData">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DmxLightShow.ecore#//DmxModeSubCommandData/type"/>
+    </genClasses>
+    <genClasses ecoreClass="DmxLightShow.ecore#//DmxPresetSubCommand"/>
+    <genClasses ecoreClass="DmxLightShow.ecore#//DmxPresetSubCommandData">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DmxLightShow.ecore#//DmxPresetSubCommandData/presetName"/>
+    </genClasses>
+    <genClasses ecoreClass="DmxLightShow.ecore#//DmxDelayTimeSubCommand">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DmxLightShow.ecore#//DmxDelayTimeSubCommand/time"/>
+    </genClasses>
+    <genClasses ecoreClass="DmxLightShow.ecore#//DmxStrobeTimeSubCommand">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DmxLightShow.ecore#//DmxStrobeTimeSubCommand/time"/>
+    </genClasses>
+    <genClasses ecoreClass="DmxLightShow.ecore#//DmxStepNumberSubCommand">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DmxLightShow.ecore#//DmxStepNumberSubCommand/last"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DmxLightShow.ecore#//DmxStepNumberSubCommand/value"/>
+    </genClasses>
+    <genClasses ecoreClass="DmxLightShow.ecore#//DmxHoldSubCommand">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DmxLightShow.ecore#//DmxHoldSubCommand/onOff"/>
+    </genClasses>
+    <genClasses ecoreClass="DmxLightShow.ecore#//DmxOnceSubCommand">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DmxLightShow.ecore#//DmxOnceSubCommand/onOff"/>
+    </genClasses>
+    <genClasses ecoreClass="DmxLightShow.ecore#//DmxDefaultColorSubCommand">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DmxLightShow.ecore#//DmxDefaultColorSubCommand/color"/>
+    </genClasses>
+    <genClasses ecoreClass="DmxLightShow.ecore#//DmxAlternateColorSubCommand">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference DmxLightShow.ecore#//DmxAlternateColorSubCommand/color"/>
+    </genClasses>
+    <genClasses ecoreClass="DmxLightShow.ecore#//DmxColor">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DmxLightShow.ecore#//DmxColor/intensity"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DmxLightShow.ecore#//DmxColor/red"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DmxLightShow.ecore#//DmxColor/green"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DmxLightShow.ecore#//DmxColor/blue"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute DmxLightShow.ecore#//DmxColor/white"/>
+    </genClasses>
+    <genClasses ecoreClass="DmxLightShow.ecore#//ShortDmxColor"/>
+    <genClasses ecoreClass="DmxLightShow.ecore#//LongDmxColor"/>
   </genPackages>
 </genmodel:GenModel>

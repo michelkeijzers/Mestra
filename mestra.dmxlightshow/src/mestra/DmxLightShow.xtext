@@ -1,36 +1,26 @@
- 
+
+
+	
+// Grammar 
 grammar mestra.DmxLightShow with org.eclipse.xtext.common.Terminals
 
-generate dmxLightShow "http://www.DmxLightShow.mestra"
+generate dmxLightShow 'http://www.DmxLightShow.mestra'
 
+// Main structure
 
 Mestra:
 	'songs:'    songs   +=Song+ 
-	'triggers:' triggers+=Trigger+ 
+	'triggers:' triggers+=RuleTrigger+ 
 	'commands:' commands+=Command+;
+
+// Song structure
    
 Song:
 	'song' name=ID ':'
-	  'bank' bank=MIDI_INT 'program' program=MIDI_INT ';'
+	  'bank' bank=MIDI_VALUE 'program' program=MIDI_VALUE ';'
       rules=Rules
       ('order'      sequenceRefs+=[Sequence] (',' sequenceRefs+=[Sequence])* ';'
        'sequences:' sequences   += Sequence+)?;
-
-Rules: 
-	{Rules} rules+=Rule*;
-
-//Rule:
-//	'rule' (((triggerRefs+=[Trigger])+ ) ':')?
-//	        (commandRefs+=[Command])+ ';';
-	
-Rule:
-	'rule' (ruleTriggers=RuleTriggers ':')? ruleCommands=RuleCommands ';';
-	
-RuleTriggers:
-	triggerRefs+=[Trigger] (',' triggerRefs+=[Trigger])*;
-	
-RuleCommands:
-	commandsRefs+=[Command] (',' commandsRefs+=[Command])*;
 
 Sequence:
 	'sequence' name=ID ':'
@@ -42,13 +32,222 @@ Step:
 	'step' name=ID  ':'
 	   rules=Rules;
 
-Trigger:
-    name=ID ';';
-  
-Command:
-	name=ID ';';
+// Rules
+
+Rules: 
+	{Rules} rules+=Rule*;
 	
-terminal MIDI_INT: ('1' '2'      '0'..'7') |
-	               ('1' '0'..'1' '0'..'9') |
-	               (    '1'..'9' '0'..'9') |  
-	               (             '0'..'9');
+Rule:
+	'rule' (ruleTriggers=RuleTriggers ':')? ruleCommands=RuleCommands;
+	
+RuleTriggers:
+	triggerRefs+=[RuleTrigger] (',' triggerRefs+=[RuleTrigger])*;
+	
+RuleCommands:
+	commandsRefs+=[Command] (',' commandsRefs+=[Command])*;
+
+// Rule Triggers
+
+RuleTrigger:
+    name=ID type=(/* DmxRuleTrigger | */ MidiRuleTrigger) ';';
+
+// DmxRuleTrigger: // Not supported
+
+MidiRuleTrigger:
+	type=(MidiTimeTrigger | MidiNoteTrigger | MidiCcTrigger | MidiAftertouchTrigger | MidiProgramChangeTrigger);
+	
+MidiTimeTrigger:
+	'Time' time=Time;
+	
+MidiNoteTrigger:
+	'Note' onOff=ON_OFF 'Channel' mc=MidiChannel 'Note' note=MidiNoteOrRange ('Velocity' velocity=MidiValueOrRange)?;
+	
+MidiCcTrigger:
+	'CC' 'Channel' mc=MidiChannel 'Number' ccNumber=(MIDI_VALUE) 'Value' value=MidiValueOrRange;
+	
+MidiAftertouchTrigger:
+	'Aftertouch' 'Channel' mc=MidiChannel 'Value' value=MidiValueOrRange;
+	
+MidiProgramChangeTrigger:
+	'PrgChg' 'Channel' mc=MidiChannel 'Bank' bank=MidiValue 'Program' program=MidiValue;
+	
+MidiChannel: 
+    mc= ('OMNI' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10' | '11' | '12' | '13' | '14' | '15' | '16');
+	
+MidiValueOrRange:
+	value=MidiValue | valueRange=MidiValueRange;
+	
+MidiValue:
+	value=MIDI_VALUE;
+	
+MidiValueRange:
+	start=MIDI_VALUE '-' end=MIDI_VALUE;
+
+MidiNoteOrRange:
+	note=MidiNote | noteRange=MidiNoteRange;
+
+MidiNote:
+	start=MIDI_NOTE;
+	
+MidiNoteRange: 
+	start=MIDI_NOTE '-' end=MIDI_NOTE;
+
+Time:
+    time=INT type=('ms' | 's' );
+
+// Commands
+
+Command:
+	name=ID type=(DmxCommand /* | MidiCommand */ ) ';';
+
+// MidiCommand: // Not supported
+
+DmxCommand:
+	parGroup=ParGroup dmxSubCommands=DmxSubCommands ';';
+
+ParGroup:
+	(parGroup=  'AllGroupsAll' | 
+				{ParGroup} 'AllGroupsCenter' |
+				{ParGroup} 'AllGroupsAllExceptEgoRisers' |
+				{ParGroup} 'AllGroupsLeft' |
+				{ParGroup} 'AllGroupsRight' |
+				{ParGroup} 'LedBarAll' |
+				{ParGroup} 'LedBarCenter' |
+				{ParGroup} 'LedBarLeft' |
+				{ParGroup} 'LedBarRight' |
+				{ParGroup} 'DrumsAll' |
+				{ParGroup} 'DrumsLeft' |
+				{ParGroup} 'DrumsRight' |
+				{ParGroup} 'EgoRisersAll' |
+				{ParGroup} 'EgoRisersLeft' |
+				{ParGroup} 'EgoRisersRight' |
+				{ParGroup} 'FrontAll' |
+				{ParGroup} 'FontCorners' |
+				{ParGroup} 'FrontMiddle' |
+				{ParGroup} 'FrontInner' |
+				{ParGroup} 'FrontOuter' |
+				{ParGroup} 'FrontLeft1Inside' |
+				{ParGroup} 'FrontLeft2' |
+				{ParGroup} 'FrontLeft3' |
+				{ParGroup} 'FrontLeft4Outside' |
+				{ParGroup} 'FrontLeftAll' |
+				{ParGroup} 'FrontLeftInner' |
+				{ParGroup} 'FrontLeftOuter' |
+				{ParGroup} 'BannerAll' |
+				{ParGroup} 'BannerLeft' |
+				{ParGroup} 'BannerRight' |
+				{ParGroup} 'FrontRight1Inside' |
+				{ParGroup} 'FrontRight2' |
+				{ParGroup} 'FrontRight3' |
+				{ParGroup} 'FrontRight4Outside' |
+				{ParGroup} 'FrontRightAll' |
+				{ParGroup} 'FrontRightInner' |
+				{ParGroup} 'FrontRightOuter');
+	
+DmxSubCommands:
+	{DmxSubCommands} 
+	(mode=DmxModeSubCommand)? 
+	(preset=DmxPresetSubCommand)?  
+	(delayTime=DmxDelayTimeSubCommand)? 
+	(strobeTime=DmxStrobeTimeSubCommand)? 
+	(stepNumber=DmxStepNumberSubCommand)? 
+	(hold=DmxHoldSubCommand)? 
+	(once=DmxOnceSubCommand)? 
+	(DefaultColor=DmxDefaultColorSubCommand)? 
+	(AlternateColor=DmxAlternateColorSubCommand)?;
+	
+DmxModeSubCommand:
+	'Mode' DmxModeSubCommandData;
+	
+DmxModeSubCommandData:
+	type=('trigger' | 'loop' | 'once' | 'restart');
+	
+DmxPresetSubCommand:
+	'Preset' DmxPresetSubCommandData;
+	
+DmxPresetSubCommandData:
+	presetName=                          'def2alt' |
+	           {DmxPresetSubCommandData} 'alt2def' |
+	           {DmxPresetSubCommandData} 'switch_def_alt' |
+	           {DmxPresetSubCommandData} 'def2act' |
+	           {DmxPresetSubCommandData} 'actual2def' |
+	           {DmxPresetSubCommandData} 'switch_def_actual' |
+	           {DmxPresetSubCommandData} 'alt2actual' |
+	           {DmxPresetSubCommandData} 'actual2alt' |
+	           {DmxPresetSubCommandData} 'switch_alt_actual' |
+	           {DmxPresetSubCommandData} 'solid' |           
+	           {DmxPresetSubCommandData} 'dual_colors_def_alt' |
+	           {DmxPresetSubCommandData} 'dual_colors_alt_def' |
+	           {DmxPresetSubCommandData} 'chase_left2right' |
+	           {DmxPresetSubCommandData} 'chase_right2left' |
+	           {DmxPresetSubCommandData} 'switch_left_right_left' |
+	           {DmxPresetSubCommandData} 'switch_right_left_right' |
+	           {DmxPresetSubCommandData} 'fade_alt2def' |
+	           {DmxPresetSubCommandData} 'fade_def2alt' |
+	           {DmxPresetSubCommandData} 'fade_def_alt_def' |
+	           {DmxPresetSubCommandData} 'fade_alt_def_alt' |
+	           {DmxPresetSubCommandData} 'fade_chase_left2right' |
+	           {DmxPresetSubCommandData} 'fade_chase_right2left' |
+               {DmxPresetSubCommandData} 'fade_chase_left_right_left' |
+	           {DmxPresetSubCommandData} 'fade_chase_right_left_right' |
+	           {DmxPresetSubCommandData} 'rainbow_no_fade_left2right' |
+	           {DmxPresetSubCommandData} 'rainbow_no_fade_right2left' |
+	           {DmxPresetSubCommandData} 'rainbow_fade_left2right' |
+	           {DmxPresetSubCommandData} 'rainbow_fade_right2left';
+	
+DmxDelayTimeSubCommand:
+	'DelayTime' time=Time;
+	
+DmxStrobeTimeSubCommand:
+	'StrobeTime' time=Time;
+
+DmxStepNumberSubCommand:
+	'StepNumber' (last='Last' | value=INT);
+
+DmxHoldSubCommand:
+	'Hold' onOff=ON_OFF;
+	
+DmxOnceSubCommand:
+	'Once' onOff=ON_OFF;
+	
+DmxDefaultColorSubCommand:
+	'DefaultColor' color=DmxColor;
+	
+DmxAlternateColorSubCommand:
+	'AlternateColor' color=DmxColor;
+
+DmxColor: 
+	ShortDmxColor | LongDmxColor;
+	
+ShortDmxColor:
+	{ShortDmxColor} (intensity='I')? (red='R')? (green='G')? (blue='B')? (white='W')?;
+	
+LongDmxColor:
+	intensity=DMX_VALUE red=DMX_VALUE green=DMX_VALUE blue=DMX_VALUE (white=DMX_VALUE)?;
+	 
+// Terminals
+
+terminal MIDI_VALUE: 
+	(             '0'..'9') |
+	(    '1'..'9' '0'..'9') |
+	('1' '0'..'1' '0'..'9') |
+    ('1' '2'      '0'..'7');
+
+terminal DMX_VALUE: 
+	(             '0'..'9') |
+	(    '1'..'9' '0'..'9') |  
+   	('1' '0'..'9' '0'..'9') |
+   	('2' '0'..'4' '0'..'9') |
+	('2' '5'      '0'..'5');
+
+// terminal MIDI_CHANNEL_NUMBER:
+///	'1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10' | '11' | '12' | '13' | '14' | '15' | '16';
+
+terminal MIDI_NOTE: 
+	('C' | 'D' | 'E' | 'F' | 'G' | 'A' | 'B') 
+	('b' | '#')? 
+	(('0'..'9') | ('1' '0'..'1'));
+
+terminal ON_OFF: 
+	'ON' | 'OFF';
+	

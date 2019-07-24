@@ -354,3 +354,6 @@ healthchecksdb
 /mestra.dmxlightshow.tests
 /mestra.dmxlightshow.ui
 /mestra.dmxlightshow.ui.tests
+/mestra.dmxlightshow/MestraGrammarTest/.settings
+/mestra.dmxlightshow/MestraGrammarTest/.project
+/mestra.dmxlightshow/MestraGrammarTest/.classpath

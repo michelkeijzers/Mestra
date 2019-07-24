@@ -12,7 +12,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		mestra.dmxlightshow\src\mestra\DmxLightShow.xtext = mestra.dmxlightshow\src\mestra\DmxLightShow.xtext
 		Improvements.txt = Improvements.txt
 		Tables.txt = Tables.txt
-		..\runtime-EclipseXtext\Test.mestradmx\src\Test.mestradmx = ..\runtime-EclipseXtext\Test.mestradmx\src\Test.mestradmx
 	EndProjectSection
 EndProject
 Global

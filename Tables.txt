@@ -1,6 +1,6 @@
 TODO
 ====
-
+Note Velocity -> Velocity Range + optional
 
 DEBT
 ====
@@ -20,9 +20,9 @@ Commands
 
 <ParGroup>:           2 characters
 
-<<Item>:             (<Command>          |
-                      <DelayTime>        |
+<<Item>:             (<Mode>             |
                       <PresetNumber>     |
+                      <DelayTime>        |
                       <StrobeTime>       |
                       <StepNumber>       |
                       <Hold>             |
@@ -30,21 +30,21 @@ Commands
                       <AlternativeColor> |
                       <DefaultColor>)*
 
-<Command>:           'c' <TriggerMode> | <Loop> | <Once> | <Restart>) 
-<DelayTime>:         't' <uint16>
-<StrobeSpeed>:       'b' <uint16> (overrides white)
-<PresetNumber>:      'p' <uint8>
-<StepNumber>:        's' <uint16> | 'l' //  L means last step number
-<Hold>:              'h' <bool>
-<Once>:              'o' <bool>
-<DefaultColor>:      'd' <Color>
-<AlternativeColor>:  'a' <Color>
+<Mode>:              'Mode(' <TriggerMode> | <Loop> | <Once> | <Restart>) ')'
+<Preset>:            'Preset' ("def2alt", "alt2def", "switch_def_alt", "def2act", ..., "solid", "dual_color_def_alt", ... see table "List of Presets"
+<DelayTime>:         'DelayTime(' <uint16> ')'
+<StrobeSpeed>:       'StrobeTime' <uint16> (overrides white)
+<StepNumber>:        'StepNumber' <uint16> | 'l' //  L means last step number
+<Hold>:              'Hold' <bool>
+<Once>:              'Once' <bool>
+<DefaultColor>:      'DefaultColor' <Color>
+<AlternativeColor>:  'AlternateColor' <Color>
 
 
-<TriggerMode>:       'g'    CurrentStep = Last (by StepNumber), Hold = True , Once = True
-<Loop>:              'l'    CurrentStep = 0                   , Hold = False, Once = False
-<Once>:              'o'    CurrentStep = 0                   , Hold = False, Once = True
-<Restart>:           'r'    CurrentStep = 0                   , Hold = False, Once unchanged
+<TriggerMode>:       'trigger'    CurrentStep = Last (by StepNumber), Hold = True , Once = True
+<Loop>:              'loop'    CurrentStep = 0                   , Hold = False, Once = False
+<Once>:              'once'    CurrentStep = 0                   , Hold = False, Once = True
+<Restart>:           'restart'    CurrentStep = 0                   , Hold = False, Once unchanged
 
 <Color>:             ( (('i')('r')('g')('b')('w'))*) | (<I>,<R>,<G>,<B>(,<W>)))
 <R>:                 <uint8>
@@ -72,7 +72,7 @@ Label                    Byte(s)  Bit(s) Parameter                Value Meaning 
 Commands                   0       7~5   Length                    0-7													Length of bytes following byte 0
                            0       4     Category                  0    Trigger             Category Triggers
                                                                    1    Instruction         Category Instructions
-Category Triggers          0       3     Type                      0    DMX                 DMX Triggers
+Category Triggers          0       3     Type                      0    DMX                 DMX Triggers				Will not be supported for long
                                                                    1    MIDI                MIDI Triggers
         
 DMX Triggers                                                                                                            There is no DMX Input (thus no DMX triggers)
@@ -96,7 +96,7 @@ MIDI CC Trigger            1       7     Omni MIDI Channel              Off/On
 								   1~0   (unused)
 						   2       7     (unused)
 						   2       6~0   CC Number 
-
+						   3/4			 CC Value				   0-127 CC value or range
 
 Single Note	               var     7    (unused)                 
                                    6~0  MIDI Note
@@ -209,37 +209,37 @@ Total                                               612
 List of presets
 ===============
 
-Preset              ID  Preset Program Description
-Group                   number
-------------------- --- ------ ------- ------------------------------------------
-Switch colors        0     10    n.a. Default color    -> Alternate color
-                     1     11    n.a. Alternate color  -> Default color
-                     2     12    n.a. Default color   <-> Alternate color
-                     3     13    n.a. Default color    -> Actual color
-                     4     14    n.a. Actual color     -> Default color
-                     5     15    n.a. Default color   <-> Actual color
-                     6     16    n.a. Alternate color  -> Actual color
-                     7     17    n.a. Actual color     -> Alternate color
-                     8     18    n.a. Alternate color <-> Actual color
-Solid color          9     20      0  Solod (Default) color
-Dual colors         10     30     10  Switch between default and alternate color
-                    11     31     10  Switch between alternate and default color
-Chase               12     40     10  Chase left -> right
-                    13     41     10  Chase right -> left
-                    14     42     10  Chase left -> right -> left
-                    15     43     10  Chase right -> left -> right
-Fade in/out         16     50     20  Fade default color->alternate color
-                    17     51     21  Fade alternate color->default color
-                    18     52     20  Fade def->alt->def
-                    19     53     20  Fade alt->def->alt
-Fade + Chase        20     60     30  Fade + Chase, left -> right
-                    21     61     30  Fade + Chase, right -> left
-                    22     62     30  Fade + Chase, left -> right -> left
-                    23     63     30  Fade + Chase, right -> left -> right
-Rainbow colors      24     70     40  No fade, left -> right, 
-                    25     71     40  No fade, right -> left
-                    26     72     40  Fade, left -> right
-                    27     73     40  Fade, right -> left
+Preset              ID  Preset Name                     Program Description
+Group                   number                     
+------------------- --- ------ ------------------------ ------- ----------------------------------
+Switch colors        0     10  def2alt                     n.a. Default color    -> Alternate color
+                     1     11  alt2def                     n.a. Alternate color  -> Default color
+                     2     12  switch_def_alt              n.a. Default color   <-> Alternate color
+                     3     13  def2act                     n.a. Default color    -> Actual color
+                     4     14  actual2def                  n.a. Actual color     -> Default color
+                     5     15  switch_def_actual           n.a. Default color   <-> Actual color
+                     6     16  alt2actual                  n.a. Alternate color  -> Actual color
+                     7     17  actual2alt                  n.a. Actual color     -> Alternate color
+                     8     18  switch_alt_actual           n.a. Alternate color <-> Actual color
+Solid color          9     20  solid                         0  Solid (Default) color
+Dual colors         10     30  dual_colors_def_alt          10  Switch between default and alternate color
+                    11     31  dual_colors_alt_def          10  Switch between alternate and default color
+Chase               12     40  chase_left2right             10  Chase left -> right
+                    13     41  chase_right2left             10  Chase right -> left
+                    14     42  switch_left_right_left       10  Chase left -> right -> left
+                    15     43  switch_right_left_right      10  Chase right -> left -> right
+Fade in/out         16     50  fade_alt2def                 20  Fade default color->alternate color
+                    17     51  fade_def2alt                 21  Fade alternate color->default color
+                    18     52  fade_def_alt_def             20  Fade def->alt->def
+                    19     53  fade_alt_def_alt             20  Fade alt->def->alt
+Fade + Chase        20     60  fade_chase_left2right        30  Fade + Chase, left -> right
+                    21     61  fade_chase_right2left        30  Fade + Chase, right -> left
+                    22     62  fade_chase_left_right_left   30  Fade + Chase, left -> right -> left
+                    23     63  fade_chase_right_left_right  30  Fade + Chase, right -> left -> right
+Rainbow colors      24     70  rainbow_no_fade_left2right   40  No fade, left -> right, 
+                    25     71  rainbow_no_fade_right2left   40  No fade, right -> left
+                    26     72  rainbow_fade_left2right      40  Fade, left -> right
+                    27     73  rainbow_fade_right2left      40  Fade, right -> left
 
 Program List
 ============
@@ -291,7 +291,7 @@ dx Fixture Group      Fixture Part                   Set
 51                    2                              0   0  0  0  0  0  0  0  0   0  0  1  0  0  0  0  0  
 52                    3                              0   0  0  0  0  0  0  0  0   0  1  0  0  0  0  0  0  
 53                    4 Outside                      0   0  0  0  0  0  0  0  0   1  0  0  0  0  0  0  0  
-54                    A All Left                     0   0  0  0  0  0  0  0  0   1  1  1  1  0  0  0  0  
+54                    A All                          0   0  0  0  0  0  0  0  0   1  1  1  1  0  0  0  0  
 55                    I Inner                        0   0  0  0  0  0  0  0  0   0  1  1  0  0  0  0  0  
 56                    O Outer                        0   0  0  0  0  0  0  0  0   1  0  0  1  0  0  0  0  
 60 N Banner           A All                          0   0  0  0  0  1  1  0  0   0  0  0  0  0  0  0  0  
@@ -505,26 +505,266 @@ FLOW
 
 
 
-		 grammar mestra.DmxLightShow with org.eclipse.xtext.common.Terminals
 
-generate dmxLightShow "http://www.DmxLightShow.mestra"
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+// Grammar 
+grammar mestra.DmxLightShow with org.eclipse.xtext.common.Terminals
+
+generate dmxLightShow 'http://www.DmxLightShow.mestra"
+
+// Main structure
 
 Mestra:
-	'songs:' songs+=Song+ 'triggers:' triggers+=Trigger+ 'commands:' commands+=Command+;
+	'songs:'    songs   +=Song+ 
+	'triggers:' triggers+=RuleTrigger+ 
+	'commands:' commands+=Command+;
+
+// Song structure
    
 Song:
-	'song' name=ID tcs+=TriggersAndCommands* 'sequences' sequenceRefs+=[Sequence]+ 'sequences:' sequences+=Sequence+;
+	'song' name=ID ':'
+	  'bank' bank=MIDI_VALUE 'program' program=MIDI_VALUE ';'
+      rules=Rules
+      ('order'      sequenceRefs+=[Sequence] (',' sequenceRefs+=[Sequence])* ';'
+       'sequences:' sequences   += Sequence+)?;
 
-TriggersAndCommands:
-	('trigger' triggerRef=[Trigger]) | ('command' commandRef=[Command]);
-	
 Sequence:
-	'sequence' name=ID ';';
+	'sequence' name=ID ':'
+       rules=Rules
+      ('order'  stepRefs+=[Step] (',' stepRefs+=[Step])* ';'
+       'steps:' steps   += Step+)?;
 	
-Trigger:
-	'trigger' name=ID ';';
-  
+Step:
+	'step' name=ID  ':'
+	   rules=Rules;
+
+// Rules
+
+Rules: 
+	{Rules} rules+=Rule*;
+	
+Rule:
+	'rule' (ruleTriggers=RuleTriggers ':')? ruleCommands=RuleCommands ';';
+	
+RuleTriggers:
+	triggerRefs+=[RuleTrigger] (',' triggerRefs+=[RuleTrigger])*;
+	
+RuleCommands:
+	commandsRefs+=[Command] (',' commandsRefs+=[Command])*;
+
+// Rule Triggers
+
+RuleTrigger:
+    name=ID type=(/* DmxRuleTrigger | */ MidiRuleTrigger) ';';
+
+// DmxRuleTrigger: // Not supported
+
+MidiRuleTrigger:
+	(MidiTimeTrigger | MidiNoteTrigger | MidiCcTrigger | MidiAftertouchTrigger | MidiProgramChangeTrigger) ';';
+	
+MidiTimeTrigger:
+	type='Time' time=Time;
+	
+MidiNoteTrigger:
+	type='Note' onOff=ON_OFF mc=MidiChannel noteRange=(MidiNote | MidiNoteRange) velocity=MIDI_VALUE;
+	
+MidiCcTrigger:
+	type='CC' mc=MidiChannel 'Number' ccNumber=(MIDI_VALUE) ('Value' value=MidiValue | 'ValueRange' valueRange=MidiValueRange);
+	
+MidiAftertouchTrigger:
+	type=('Aftertouch' | 'AFT') mc=MIDI_MC value=(MidiValue | MidiValueRange);
+	
+MidiProgramChangeTrigger:
+	type='PrgChg' mc=MidiChannel bank=MidiValue program=MidiValue;
+	
+MidiChannel: 
+ 	'MC' (omni='OMNI' |
+          mc=MIDI_CHANNEL);
+	
+MidiValue:
+	value=MIDI_VALUE;
+	
+MidiValueRange:
+	start=MIDI_VALUE '-' end=MIDI_VALUE;
+
+MidiNote: 
+	'Note' note=MIDI_NOTE;
+
+MidiNoteRange: 
+	'NoteRange' start=MIDI_NOTE '-' end=MIDI_NOTE;
+
+Time:
+    'Time' time=INT type=('ms' | 's' );
+
+// Commands
+
 Command:
-	'command' name=ID ';';
+	name=ID type=(DmxCommand /* | MidiCommand */ ) ';';
+
+// MidiCommand: // Not supported
+
+DmxCommand:
+	parGroup=ParGroup dmxSubCommands=DmxSubCommands ';';
+
+ParGroup:
+	(parGroup=  'AllGroupsAll' | 
+				"AllGroupsCenter" |
+				"AllGroupsAllExceptEgoRisers" |
+				"AllGroupsLeft" |
+				"AllGroupsRight" |
+				"LedBarAll" |
+				"LedBarCenter" |
+				"LedBarLeft" |
+				"LedBarRight" |
+				"DrumsAll" |
+				"DrumsLeft" |
+				"DrumsRight" |
+				"EgoRisersAll" |
+				"EgoRisersLeft" |
+				"EgoRisersRight" |
+				"FrontAll" |
+				"FontCorners" |
+				"FrontMiddle" |
+				"FrontInner" |
+				"FrontOuter" |
+				"FrontLeft1Inside" |
+				"FrontLeft2" |
+				"FrontLeft3" |
+				"FrontLeft4Outside" |
+				"FrontLeftAll" |
+				"FrontLeftInner" |
+				"FrontLeftOuter" |
+				"BannerAll" |
+				"BannerLeft" |
+				"BannerRight" |
+				"FrontRight1Inside" |
+				"FrontRight2" |
+				"FrontRight3" |
+				"FrontRight4Outside" |
+				"FrontRightAll" |
+				"FrontRightInner" |
+				"FrontRightOuter");
+	
+DmxSubCommands:
+	{DmxSubCommands} 
+	(mode=DmxModeSubCommand)? 
+	(preset=DmxPresetSubCommand)?  
+	(delayTime=DmxDelayTimeSubCommand)? 
+	(strobeTime=DmxStrobeTimeSubCommand)? 
+	(stepNumber=DmxStepNumberSubCommand)? 
+	(hold=DmxHoldSubCommand)? 
+	(once=DmxOnceSubCommand)? 
+	(DefaultColor=DmxDefaultColorSubCommand)? 
+	(AlternateColor=DmxAlternateColorSubCommand)?;
+	
+DmxModeSubCommand:
+	"Mode" DmxModeSubCommandData;
+	
+DmxModeSubCommandData:
+	type=("trigger" | "loop" | "once" | "restart");
+	
+DmxPresetSubCommand:
+	"Preset" DmxPresetSubCommandData;
+	
+DmxPresetSubCommandData:
+	presetName=                          "def2alt" |
+	           {DmxPresetSubCommandData} "alt2def" |
+	           {DmxPresetSubCommandData} "switch_def_alt" |
+	           {DmxPresetSubCommandData} "def2act" |
+	           {DmxPresetSubCommandData} "actual2def" |
+	           {DmxPresetSubCommandData} "switch_def_actual" |
+	           {DmxPresetSubCommandData} "alt2actual" |
+	           {DmxPresetSubCommandData} "actual2alt" |
+	           {DmxPresetSubCommandData} "switch_alt_actual" |
+	           {DmxPresetSubCommandData} "solid" |           
+	           {DmxPresetSubCommandData} "dual_colors_def_alt" |
+	           {DmxPresetSubCommandData} "dual_colors_alt_def" |
+	           {DmxPresetSubCommandData} "chase_left2right" |
+	           {DmxPresetSubCommandData} "chase_right2left" |
+	           {DmxPresetSubCommandData} "switch_left_right_left" |
+	           {DmxPresetSubCommandData} "switch_right_left_right" |
+	           {DmxPresetSubCommandData} "fade_alt2def" |
+	           {DmxPresetSubCommandData} "fade_def2alt" |
+	           {DmxPresetSubCommandData} "fade_def_alt_def" |
+	           {DmxPresetSubCommandData} "fade_alt_def_alt" |
+	           {DmxPresetSubCommandData} "fade_chase_left2right" |
+	           {DmxPresetSubCommandData} "fade_chase_right2left" |
+	           {DmxPresetSubCommandData} "fade_chase_left_right_left" |
+	           {DmxPresetSubCommandData} "fade_chase_right_left_right" |
+	           {DmxPresetSubCommandData} "rainbow_no_fade_left2right" |
+	           {DmxPresetSubCommandData} "rainbow_no_fade_right2left" |
+	           {DmxPresetSubCommandData} "rainbow_fade_left2right" |
+	           {DmxPresetSubCommandData} "rainbow_fade_right2left";
+	
+DmxDelayTimeSubCommand:
+	"DelayTime" time=Time;
+	
+DmxStrobeTimeSubCommand:
+	"StrobeTime" time=Time;
+
+DmxStepNumberSubCommand:
+	"StepNumber" (last="Last" | value=INT);
+
+DmxHoldSubCommand:
+	"Hold" onOff=ON_OFF;
+	
+DmxOnceSubCommand:
+	"Once" onOff=ON_OFF;
+	
+DmxDefaultColorSubCommand:
+	"DefaultColor" color=DmxColor;
+	
+DmxAlternateColorSubCommand:
+	"AlternateColor" color=DmxColor;
+
+DmxColor: 
+	ShortDmxColor | LongDmxColor;
+	
+ShortDmxColor:
+	{ShortDmxColor} (intensity='I')? (red='R')? (green='G')? (blue='B')? (white='W')?;
+	
+LongDmxColor:
+	intensity=DMX_VALUE red=DMX_VALUE green=DMX_VALUE blue=DMX_VALUE (white=DMX_VALUE)?;
+	 
+// Terminals
+
+terminal MIDI_VALUE: 
+	('1' '2'      '0'..'7') |
+    ('1' '0'..'1' '0'..'9') |
+    (    '1'..'9' '0'..'9') |  
+    (             '0'..'9');
+
+terminal DMX_VALUE: 
+	('2' '5'      '0'..'5') |
+   	('2' '0'..'4' '0'..'9') |
+   	('1' '0'..'9' '0'..'9') |
+	(    '1'..'9' '0'..'9') |  
+	(             '0'..'9');
+	               
+terminal MIDI_CHANNEL:
+	('1' '0'..'6') |
+    (    '0'..'9');
+
+terminal MIDI_NOTE: 
+	('C' | 'D' | 'E' | 'F' | 'G' | 'A' | 'B') 
+	('b' | '#') 
+	('0'..'9') | ('1' '0'..'1');
+
+terminal ON_OFF: 
+	("ON" | "OFF");
 	
