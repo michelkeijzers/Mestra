@@ -1,0 +1,278 @@
+// Grammar 
+grammar mestra.DmxLightShow with org.eclipse.xtext.common.Terminals
+
+generate dmxLightShow 'http://www.DmxLightShow.mestra'
+
+/*
+Mestra:
+		('M' MidiValue ';') |
+	    ('D' DmxValue  ';');
+
+MidiValue returns INT:
+	value=INT;
+
+DmxValue returns INT:
+	value=INT;
+*/
+
+// Main structure
+
+Mestra:
+	'songs:'    songs   +=Song+ 
+	'triggers:' triggers+=RuleTrigger+ 
+	'commands:' commands+=Command+;
+
+// Song structure
+   
+Song:
+	'song' name=ID ':'
+	  'bank' bank=MidiValue 'program' program=MidiValue ';'
+      rules=Rules
+      ('order'      sequenceRefs+=[Sequence] (',' sequenceRefs+=[Sequence])* ';'
+       'sequences:' sequences   += Sequence+)?;
+
+Sequence:
+	'sequence' name=ID ':'
+       rules=Rules
+      ('order'  stepRefs+=[Step] (',' stepRefs+=[Step])* ';'
+       'steps:' steps   += Step+)?;
+	
+Step:
+	'step' name=ID  ':'
+	   rules=Rules;
+
+// Rules
+
+Rules: 
+	{Rules} rules+=Rule*;
+	
+Rule:
+	'rule' (ruleTriggers=RuleTriggers ':')? ruleCommands=RuleCommands ';';
+	
+RuleTriggers:
+	triggerRefs+=[RuleTrigger] (',' triggerRefs+=[RuleTrigger])*;
+
+RuleCommands:
+	commandsRefs+=[Command] (',' commandsRefs+=[Command])*;
+
+// Rule Triggers
+
+RuleTrigger:
+//    name=ID type=( DmxRuleTrigger |  MidiRuleTrigger) ';';
+	  name=ID type=MidiRuleTrigger;
+
+// DmxRuleTrigger: // Not supported
+
+MidiRuleTrigger:
+	type=(MidiTimeTrigger | MidiNoteTrigger | MidiCcTrigger | MidiAftertouchTrigger | MidiProgramChangeTrigger);
+	
+MidiTimeTrigger:
+	'Time' time=Time;
+	
+MidiNoteTrigger:
+	'Note' onOff=ON_OFF 'Channel' mc=MidiChannel 'Note' note=MidiNoteOrRange ('Velocity' velocity=MidiValueOrRange)?;
+	
+MidiCcTrigger:
+	'CC' 'Channel' mc=MidiChannel 'Number' ccNumber=(MidiValue) 'Value' value=MidiValueOrRange;
+	
+MidiAftertouchTrigger:
+	'Aftertouch' 'Channel' mc=MidiChannel 'Value' value=MidiValueOrRange;
+	
+MidiProgramChangeTrigger:
+	'PrgChg' 'Channel' mc=MidiChannel 'Bank' bank=MidiValue 'Program' program=MidiValue;
+	
+MidiChannel: 
+    mc= ('OMNI' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10' | '11' | '12' | '13' | '14' | '15' | '16');
+	
+MidiValueOrRange:
+	value=MidiValue | valueRange=MidiValueRange;
+	
+MidiValueRange:
+	start=MidiValue '-' end=MidiValue;
+
+MidiNoteOrRange:
+	note=MidiNote | noteRange=MidiNoteRange;
+
+MidiNoteRange: 
+	start=MidiNote '-' end=MidiNote;
+
+MidiNote returns ecore::EString: 
+	('C' | 'D' | 'E' | 'F' | 'G' | 'A' | 'B') 
+	('b' | '#')? 
+	(DIGIT);
+
+Time:
+    time=DIGIT+ type=('ms' | 's' );
+
+// Commands
+
+Command:
+	name=ID type=(DmxCommand | MidiCommand ) ';';
+	name=ID type=DmxCommand ';';
+
+// MidiCommand: // Not supported
+
+DmxCommand:
+	parGroup=ParGroup dmxSubCommands=DmxSubCommands;
+
+ParGroup:
+	(parGroup=  'AllGroupsAll' | 
+				{ParGroup} 'AllGroupsCenter' |
+				{ParGroup} 'AllGroupsAllExceptEgoRisers' |
+				{ParGroup} 'AllGroupsLeft' |
+				{ParGroup} 'AllGroupsRight' |
+				{ParGroup} 'LedBarAll' |
+				{ParGroup} 'LedBarCenter' |
+				{ParGroup} 'LedBarLeft' |
+				{ParGroup} 'LedBarRight' |
+				{ParGroup} 'DrumsAll' |
+				{ParGroup} 'DrumsLeft' |
+				{ParGroup} 'DrumsRight' |
+				{ParGroup} 'EgoRisersAll' |
+				{ParGroup} 'EgoRisersLeft' |
+				{ParGroup} 'EgoRisersRight' |
+				{ParGroup} 'FrontAll' |
+				{ParGroup} 'FontCorners' |
+				{ParGroup} 'FrontMiddle' |
+				{ParGroup} 'FrontInner' |
+				{ParGroup} 'FrontOuter' |
+				{ParGroup} 'FrontLeft1Inside' |
+				{ParGroup} 'FrontLeft2' |
+				{ParGroup} 'FrontLeft3' |
+				{ParGroup} 'FrontLeft4Outside' |
+				{ParGroup} 'FrontLeftAll' |
+				{ParGroup} 'FrontLeftInner' |
+				{ParGroup} 'FrontLeftOuter' |
+				{ParGroup} 'BannerAll' |
+				{ParGroup} 'BannerLeft' |
+				{ParGroup} 'BannerRight' |
+				{ParGroup} 'FrontRight1Inside' |
+				{ParGroup} 'FrontRight2' |
+				{ParGroup} 'FrontRight3' |
+				{ParGroup} 'FrontRight4Outside' |
+				{ParGroup} 'FrontRightAll' |
+				{ParGroup} 'FrontRightInner' |
+				{ParGroup} 'FrontRightOuter');
+*/
+/*	
+DmxSubCommands:
+	{DmxSubCommands} 
+	(mode=DmxModeSubCommand)? 
+	(preset=DmxPresetSubCommand)?  
+	(delayTime=DmxDelayTimeSubCommand)? 
+	(strobeTime=DmxStrobeTimeSubCommand)? 
+	(stepNumber=DmxStepNumberSubCommand)? 
+	(hold=DmxHoldSubCommand)? 
+	(once=DmxOnceSubCommand)? 
+	(DefaultColor=DmxDefaultColorSubCommand)? 
+	(AlternateColor=DmxAlternateColorSubCommand)?;
+	
+DmxModeSubCommand:
+	'Mode' DmxModeSubCommandData;
+	
+DmxModeSubCommandData:
+	type=('trigger' | 'loop' | 'once' | 'restart');
+	
+DmxPresetSubCommand:
+	'Preset' DmxPresetSubCommandData;
+	
+DmxPresetSubCommandData:
+	presetName=                          'def2alt' |
+	           {DmxPresetSubCommandData} 'alt2def' |
+	           {DmxPresetSubCommandData} 'switch_def_alt' |
+	           {DmxPresetSubCommandData} 'def2act' |
+	           {DmxPresetSubCommandData} 'actual2def' |
+	           {DmxPresetSubCommandData} 'switch_def_actual' |
+	           {DmxPresetSubCommandData} 'alt2actual' |
+	           {DmxPresetSubCommandData} 'actual2alt' |
+	           {DmxPresetSubCommandData} 'switch_alt_actual' |
+	           {DmxPresetSubCommandData} 'solid' |           
+	           {DmxPresetSubCommandData} 'dual_colors_def_alt' |
+	           {DmxPresetSubCommandData} 'dual_colors_alt_def' |
+	           {DmxPresetSubCommandData} 'chase_left2right' |
+	           {DmxPresetSubCommandData} 'chase_right2left' |
+	           {DmxPresetSubCommandData} 'switch_left_right_left' |
+	           {DmxPresetSubCommandData} 'switch_right_left_right' |
+	           {DmxPresetSubCommandData} 'fade_alt2def' |
+	           {DmxPresetSubCommandData} 'fade_def2alt' |
+	           {DmxPresetSubCommandData} 'fade_def_alt_def' |
+	           {DmxPresetSubCommandData} 'fade_alt_def_alt' |
+	           {DmxPresetSubCommandData} 'fade_chase_left2right' |
+	           {DmxPresetSubCommandData} 'fade_chase_right2left' |
+               {DmxPresetSubCommandData} 'fade_chase_left_right_left' |
+	           {DmxPresetSubCommandData} 'fade_chase_right_left_right' |
+	           {DmxPresetSubCommandData} 'rainbow_no_fade_left2right' |
+	           {DmxPresetSubCommandData} 'rainbow_no_fade_right2left' |
+	           {DmxPresetSubCommandData} 'rainbow_fade_left2right' |
+	           {DmxPresetSubCommandData} 'rainbow_fade_right2left';
+	
+DmxDelayTimeSubCommand:
+	'DelayTime' time=Time;
+	
+DmxStrobeTimeSubCommand:
+	'StrobeTime' time=Time;
+
+DmxStepNumberSubCommand:
+	'StepNumber' (last='Last' | value=DmxValue);
+
+DmxHoldSubCommand:
+	'Hold' onOff=ON_OFF;
+	
+DmxOnceSubCommand:
+	'Once' onOff=ON_OFF;
+	
+DmxDefaultColorSubCommand:
+	'DefaultColor' color=DmxColor;
+	
+DmxAlternateColorSubCommand:
+	'AlternateColor' color=DmxColor;
+
+DmxColor: 
+	ShortDmxColor | LongDmxColor;
+*/
+/*	
+ShortDmxColor:
+	{ShortDmxColor} (intensity='I')? (red='R')? (green='G')? (blue='B')? (white='W')?;
+	
+LongDmxColor:
+	intensity=DmxValue red=DmxValue green=DmxValue blue=DmxValue (white=DmxValue)?; // TODO: 5x INT->DMX_VALUE
+	 
+// Terminals
+
+MidiValue returns ecore::EInt:
+	DIGIT+;
+//	(             Digit) |
+//	(    DIGIT_1_TO_9 DIGIT) |
+//	('1' DIGIT_0_TO_1 DIGIT) |
+ //   ('1' '2'      DIGIT_0_TO_7);
+
+
+DmxValue returns ecore::EInt:
+	             DIGIT+;
+	             
+//	(    DIGIT_1_TO_9 DIGIT) |  
+ //  	('1' Digit Digit) |
+  // 	('2' DIGIT_0_TO_4 Digit) |
+//	('2' '5'      DIGIT_0_TO_5);
+
+// DIGIT_1_TO_9:  '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9';
+ //DIGIT_0_TO_1: '0' | '1';
+ //DIGIT_0_TO_4: '0' | '1' | '2' | '3' | '4';
+ //DIGIT_0_TO_5: '0' | '1' | '2' | '3' | '4' | '5';
+ //DIGIT_0_TO_7: '0' | '1' | '2' | '3' | '4' | '6' | '7';
+
+
+// terminal MIDI_CHANNEL_NUMBER:
+///	'1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10' | '11' | '12' | '13' | '14' | '15' | '16';
+
+
+ON_OFF: 
+	'ON' | 'OFF';
+// From ecore:
+
+
+ terminal DIGIT returns  ecore::EInt: '0'..'9';
+*/
+
+//terminal ID: '^'?('a'..'z'|'A'..'Z'|'_') ('a'..'z'|'A'..'Z'|'_'|'0'..'9')*;
+

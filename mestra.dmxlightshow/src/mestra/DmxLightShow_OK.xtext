@@ -1,9 +1,7 @@
 // Grammar 
-
 grammar mestra.DmxLightShow with org.eclipse.xtext.common.Terminals
 
-import "http://www.eclipse.org/emf/2002/Ecore" as ecore
-generate dmxLightShow "http://www.example.org/domainmodel/Domainmodel"
+generate dmxLightShow 'http://www.DmxLightShow.mestra'
 
 // Main structure
 
@@ -23,7 +21,7 @@ Song:
 
 Sequence:
 	'sequence' name=ID ':'
-      rules=Rules
+       //rules=Rules
       ('order'  stepRefs+=[Step] (',' stepRefs+=[Step])* ';'
        'steps:' steps   += Step+)?;
 	
@@ -49,34 +47,31 @@ RuleCommands:
 
 RuleTrigger:
 //    name=ID type=( DmxRuleTrigger |  MidiRuleTrigger) ';';
-	  'trigger' name=ID type=MidiRuleTrigger ';';
+	  name=ID; //type=MidiRuleTrigger;
 
 
 // DmxRuleTrigger: // Not supported
 
 MidiRuleTrigger:
-	(('Time'       time       = Time) | 
-	 ('Note'       note       = MidiNoteTrigger) | 
-	 ('CC'         cc         = MidiCcTrigger) | 
-	 ('Aftertouch' aftertouch = MidiAftertouchTrigger) | 
-	 ('PrgChg'     prgchg     = MidiProgramChangeTrigger));
+	type=(MidiTimeTrigger | MidiNoteTrigger | MidiCcTrigger | MidiAftertouchTrigger | MidiProgramChangeTrigger);
+	
+MidiTimeTrigger:
+	'Time' time=Time;
 	
 MidiNoteTrigger:
-	onOff=ON_OFF 'Channel' mc=MidiChannel 'Note' note=MidiNoteOrRange ('Velocity' velocity=MidiValueOrRange)?;
+	'Note' onOff=ON_OFF 'Channel' mc=MidiChannel 'Note' /** note=MidiNoteOrRange */ ('Velocity' velocity=MidiValueOrRange)?;
 	
 MidiCcTrigger:
-	'Channel' mc=MidiChannel 'Number' ccNumber=(MidiValue) 'Value' value=MidiValueOrRange;
+	'CC' 'Channel' mc=MidiChannel 'Number' ccNumber=(MidiValue) 'Value' value=MidiValueOrRange;
 	
 MidiAftertouchTrigger:
-	'Channel' mc=MidiChannel 'Value' value=MidiValueOrRange;
+	'Aftertouch' 'Channel' mc=MidiChannel 'Value' value=MidiValueOrRange;
 	
 MidiProgramChangeTrigger:
-	'Channel' mc=MidiChannel 'Bank' bank=MidiValue 'Program' program=MidiValue;
+	'PrgChg' 'Channel' mc=MidiChannel 'Bank' bank=MidiValue 'Program' program=MidiValue;
 	
-MidiChannel:  // Keep 'MC' as prefix, otherwise it is considered an INT
-    mc= ('OMNI' | 
-         'MC1' | 'MC2'  | 'MC3'  | 'MC4'  | 'MC5'  | 'MC6'  | 'MC7'  | 'MC8' | 
-         'MC9' | 'MC10' | 'MC11' | 'MC12' | 'MC13' | 'MC14' | 'MC15' | 'MC16');
+MidiChannel: 
+    mc= ('OMNI' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10' | '11' | '12' | '13' | '14' | '15' | '16');
 	
 MidiValueOrRange:
 	value=MidiValue | valueRange=MidiValueRange;
@@ -85,29 +80,24 @@ MidiValueRange:
 	start=MidiValue '-' end=MidiValue;
 
 MidiNoteOrRange:
-	note=MIDI_NOTE | noteRange=MidiNoteRange;
+	note=MidiNote | noteRange=MidiNoteRange;
 
 MidiNoteRange: 
-	start=MIDI_NOTE '-' end=MIDI_NOTE;
+	start=MidiNote '-' end=MidiNote;
 
-terminal MIDI_NOTE:
+MidiNote:
 	('C' | 'D' | 'E' | 'F' | 'G' | 'A' | 'B') 
 	('b' | '#')? 
 	INT;
-	 
-MidiValue returns INT:
-	value=INT;
-	
-Time:
-	value=TimeValue ('s' | 'ms');
 
-TimeValue returns ecore::EInt:
-    INT;
+
+Time:
+    time=INT type=('ms' | 's' );
 	
 // Commands
 
 Command:
-	'command' name=ID type=DmxCommand ';';
+	name=ID type=DmxCommand ';';
 
 // MidiCommand: // Not supported
 
@@ -175,34 +165,34 @@ DmxPresetSubCommand:
 	'Preset' DmxPresetSubCommandData;
 	
 DmxPresetSubCommandData:
-	presetName=                          'DEF2ALT' |
-	           {DmxPresetSubCommandData} 'ALT2DEF' |
-	           {DmxPresetSubCommandData} 'SWITCH_DEF_ALT' |
-	           {DmxPresetSubCommandData} 'DEF2ACT' |
-	           {DmxPresetSubCommandData} 'ACTUAL2DEF' |
-	           {DmxPresetSubCommandData} 'SWITCH_DEF_ACTUAL' |
-	           {DmxPresetSubCommandData} 'ALT2ACTUAL' |
-	           {DmxPresetSubCommandData} 'ACTUAL2ALT' |
-	           {DmxPresetSubCommandData} 'SWITCH_ALT_ACTUAL' |
-	           {DmxPresetSubCommandData} 'SOLID' |           
-	           {DmxPresetSubCommandData} 'DUAL_COLORS_DEF_ALT' |
-	           {DmxPresetSubCommandData} 'DUAL_COLORS_ALT_DEF' |
-	           {DmxPresetSubCommandData} 'CHASE_LEFT2RIGHT' |
-	           {DmxPresetSubCommandData} 'CHASE_RIGHT2LEFT' |
-	           {DmxPresetSubCommandData} 'SWITCH_LEFT_RIGHT_LEFT' |
-	           {DmxPresetSubCommandData} 'SWITCH_RIGHT_LEFT_RIGHT' |
-	           {DmxPresetSubCommandData} 'FADE_ALT2DEF' |
-	           {DmxPresetSubCommandData} 'FADE_DEF2ALT' |
-	           {DmxPresetSubCommandData} 'FADE_DEF_ALT_DEF' |
-	           {DmxPresetSubCommandData} 'FADE_ALT_DEF_ALT' |
-	           {DmxPresetSubCommandData} 'FADE_CHASE_LEFT2RIGHT' |
-	           {DmxPresetSubCommandData} 'FADE_CHASE_RIGHT2LEFT' |
-               {DmxPresetSubCommandData} 'FADE_CHASE_LEFT_RIGHT_LEFT' |
-	           {DmxPresetSubCommandData} 'FADE_CHASE_RIGHT_LEFT_RIGHT' |
-	           {DmxPresetSubCommandData} 'RAINBOW_NO_FADE_LEFT2RIGHT' |
-	           {DmxPresetSubCommandData} 'RAINBOW_NO_FADE_RIGHT2LEFT' |
-	           {DmxPresetSubCommandData} 'RAINBOW_FADE_LEFT2RIGHT' |
-	           {DmxPresetSubCommandData} 'RAINBOW_FADE_RIGHT2LEFT';
+	presetName=                          'def2alt' |
+	           {DmxPresetSubCommandData} 'alt2def' |
+	           {DmxPresetSubCommandData} 'switch_def_alt' |
+	           {DmxPresetSubCommandData} 'def2act' |
+	           {DmxPresetSubCommandData} 'actual2def' |
+	           {DmxPresetSubCommandData} 'switch_def_actual' |
+	           {DmxPresetSubCommandData} 'alt2actual' |
+	           {DmxPresetSubCommandData} 'actual2alt' |
+	           {DmxPresetSubCommandData} 'switch_alt_actual' |
+	           {DmxPresetSubCommandData} 'solid' |           
+	           {DmxPresetSubCommandData} 'dual_colors_def_alt' |
+	           {DmxPresetSubCommandData} 'dual_colors_alt_def' |
+	           {DmxPresetSubCommandData} 'chase_left2right' |
+	           {DmxPresetSubCommandData} 'chase_right2left' |
+	           {DmxPresetSubCommandData} 'switch_left_right_left' |
+	           {DmxPresetSubCommandData} 'switch_right_left_right' |
+	           {DmxPresetSubCommandData} 'fade_alt2def' |
+	           {DmxPresetSubCommandData} 'fade_def2alt' |
+	           {DmxPresetSubCommandData} 'fade_def_alt_def' |
+	           {DmxPresetSubCommandData} 'fade_alt_def_alt' |
+	           {DmxPresetSubCommandData} 'fade_chase_left2right' |
+	           {DmxPresetSubCommandData} 'fade_chase_right2left' |
+               {DmxPresetSubCommandData} 'fade_chase_left_right_left' |
+	           {DmxPresetSubCommandData} 'fade_chase_right_left_right' |
+	           {DmxPresetSubCommandData} 'rainbow_no_fade_left2right' |
+	           {DmxPresetSubCommandData} 'rainbow_no_fade_right2left' |
+	           {DmxPresetSubCommandData} 'rainbow_fade_left2right' |
+	           {DmxPresetSubCommandData} 'rainbow_fade_right2left';
 	
 DmxDelayTimeSubCommand:
 	'DelayTime' time=Time;
@@ -211,7 +201,7 @@ DmxStrobeTimeSubCommand:
 	'StrobeTime' time=Time;
 
 DmxStepNumberSubCommand:
-	'StepNumber' (last='LAST' | value=DmxValue);
+	'StepNumber' (last='Last' | value=DmxValue);
 
 DmxHoldSubCommand:
 	'Hold' onOff=ON_OFF;
@@ -226,20 +216,50 @@ DmxAlternateColorSubCommand:
 	'AlternateColor' color=DmxColor;
 
 DmxColor: 
-	 ShortDmxColor | LongDmxColor;
+	ShortDmxColor | LongDmxColor;
 
 ShortDmxColor:
-	color=('OFF' |   'W' |   'B' |   'BW' |   'G' |   'GW' |   'GB' |   'GBW' | 
-	        'R'  |  'RW' |  'RB' |  'RBW' |  'RG' |  'RGW' |  'RGB' |  'RGBW' |
-	       'I'   |  'IW' |  'IB' |  'IBW' |  'IG' |  'IGW' |  'IGB' |  'IGBW' | 
-	       'IR'  | 'IRW' | 'IRB' | 'IRBW' | 'IRG' | 'IRGW' | 'IRGB' | 'IRGBW');
+	{ShortDmxColor} (intensity='I')? (red='R')? (green='G')? (blue='B')? (white='W')?;
 	
 LongDmxColor:
-	intensity=DmxValue red=DmxValue green=DmxValue blue=DmxValue (white=DmxValue)?;
+	intensity=DmxValue red=DmxValue green=DmxValue blue=DmxValue (white=DmxValue)?; // TODO: 5x INT->DMX_VALUE
+	 
+// Terminals
 
+
+	
+MidiValue returns INT:
+	value=INT;
+	
 DmxValue returns INT:
 	value=INT;
+	
+//	(             Digit) |
+//	(    DIGIT_1_TO_9 DIGIT) |
+//	('1' DIGIT_0_TO_1 DIGIT) |
+ //   ('1' '2'      DIGIT_0_TO_7);
+
+
+//	(    DIGIT_1_TO_9 DIGIT) |  
+ //  	('1' Digit Digit) |
+  // 	('2' DIGIT_0_TO_4 Digit) |
+//	('2' '5'      DIGIT_0_TO_5);
+
+// DIGIT_1_TO_9:  '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9';
+ //DIGIT_0_TO_1: '0' | '1';
+ //DIGIT_0_TO_4: '0' | '1' | '2' | '3' | '4';
+ //DIGIT_0_TO_5: '0' | '1' | '2' | '3' | '4' | '5';
+ //DIGIT_0_TO_7: '0' | '1' | '2' | '3' | '4' | '6' | '7';
+
+
+// terminal MIDI_CHANNEL_NUMBER:
+///	'1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10' | '11' | '12' | '13' | '14' | '15' | '16';
+
 
 ON_OFF: 
 	'ON' | 'OFF';
+// From ecore:
+
+
+//terminal ID: '^'?('a'..'z'|'A'..'Z'|'_') ('a'..'z'|'A'..'Z'|'_'|'0'..'9')*;
 

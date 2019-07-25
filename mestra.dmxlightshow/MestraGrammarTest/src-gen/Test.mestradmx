@@ -1,95 +1,123 @@
 
 songs:
 	song Blauw_TheScene:
-		bank 116  program 23;
-		rule Trigger1 : AllFrontBlue;
+		bank 116  program 234;
+		rule Trigger1 : Command1;
 		order Chorus; 
 		sequences:
 			sequence Chorus:
-				rule Trigger7 : AllBackBlue;
+				rule Trigger7 : Command2;
 				order Chorus;
 				steps:
 					step Chorus:
-						rule Trigger6 : Command5;
+						rule Trigger6 : Command2;
       
   
 	song nameOfSong:
     	bank 34 program 25;
-    	rule Trigger2 : AllFrontBlue;
-    	rule Trigger2 : Command2;
-    	rule Trigger3, Trigger4 : Command3;
-    	rule Trigger5 : Command4, Command5;
+    	rule Trigger2 : Command3;
+    	rule Trigger2 : Command3;
+    	rule Trigger3, Trigger4 : Command4;
+    	rule Trigger5 : Command5, Command6;
+    	rule Trigger5 : Command7, Command7;
+    	rule Trigger5 : Command8, Command9, Command8;
     	order Sequence1, Sequence1, Sequence1, Sequence2,
     	  	  Sequence3, Sequence4, Sequence2;
       
 		sequences:
 			sequence Sequence1:
-	      		rule Trigger10 : Command5;
+	      		rule Trigger10 : Command9;
 	      		order Step1, Step1;
 	      		steps:
 	        		step Step1:
 	          			rule Trigger6 : Command5;
-	          			rule Trigger7, Trigger8 : Command8, Command9;
+	          			rule Trigger7, Trigger10 : Command10, Command11;
 	          			
 	        		step Step2: 
-	          			rule Trigger6 : Command7;
+	          			rule Trigger6 : Command12;
 	          			
 	   		sequence Sequence3:
-	     		rule Trigger11 : Command7;
+	     		rule Trigger11 : Command13;
 	     		order Step1; 
 	     		steps:
 	       			step Step1:
-	         			rule Trigger10 : Command12;
-	          			rule Trigger7, Trigger7: Command8, Command9;
+	         			rule Trigger10 : Command14;
+	          			rule Trigger7, Trigger7: Command16, Command16;
 	
 	
 	   		sequence Sequence2:
-	     		rule Trigger11 : Command7;
+	     		rule Trigger11 : Command17;
 	     		order Step1;
 	     		steps:
 	       			step Step1:
-	         			rule Trigger10 : Command12;
-	          			rule Trigger7, Trigger7: Command8, Command9;
+	         			rule Trigger10 : Command18;
+	          			rule Trigger7, Trigger7: Command19, Command20;
 	          		step Step2:
-	          		    rule Trigger5: Command5;
+	          		    rule Trigger5: Command21;
 	          		step Step3:
 	          		step Step4:
 	          		
 			sequence Sequence3:
-	        	rule Command8;
+	        	rule Command22;
 	        
 	        sequence Sequence4:
  
 triggers:
-    Trigger1 Note ON Channel 3 Note Cb1-C#4 Velocity 30-50;
-    Trigger2 Note ON Channel 3 Note Cb1-C#4 Velocity 30-50;
-    Trigger3 Note ON Channel 3 Note Cb1-C#4 Velocity 30-50;
-    Trigger4 Note ON Channel 3 Note Cb1-C#4 Velocity 30-50;
-    Trigger5 Note ON Channel 3 Note Cb1-C#4 Velocity 30-50;
-    Trigger6 Note ON Channel 3 Note Cb1-C#4 Velocity 30-50;
-    Trigger7 Note ON Channel 3 Note Cb1-C#4 Velocity 30-50;
-    Trigger8 Note ON Channel 3 Note Cb1-C#4 Velocity 30-50;
-    Trigger9 Note ON Channel 3 Note Cb1-C#4 Velocity 30-50;
-    Trigger10 Note ON Channel 3 Note Cb1-C#4 Velocity 30-50;
-    Trigger11 Note ON Channel 3 Note Cb1-C#4 Velocity 30-50;
-    Trigger12 Note ON Channel 3 Note Cb1-C#4 Velocity 30-50;
-    Trigger13 Note ON Channel 3 Note Cb1-C#4 Velocity 30-50;
+	trigger Trigger1 Time 1 ms;
+	trigger Trigger2 Time 255 ms;
+	trigger Trigger3 Time 1 s;
+	trigger Trigger4 Time 127 s;
+    trigger Trigger5 Note ON Channel OMNI Note C0 Velocity 0;
+    trigger Trigger6 Note OFF Channel MC1 Note C#0-C#1 Velocity 16;
+    trigger Trigger7 Note ON  Channel MC3 Note Cb0 Velocity 17;
+    trigger Trigger8 Note OFF Channel MC16 Note A9-B9  Velocity 127;
+    trigger Trigger9  CC  Channel MC6 Number 1 Value 1;
+    trigger Trigger10 CC  Channel MC10 Number 127 Value 127;
+    trigger Trigger11 Aftertouch Channel MC7 Value 1;
+    trigger Trigger12 Aftertouch Channel MC15 Value 1-127;
+    trigger Trigger14 PrgChg Channel MC16 Bank 1 Program 1;
+    trigger Trigger15 PrgChg Channel MC12 Bank 127 Program 127;
   
 commands:
-	AllFrontBlue AllGroupsAll Mode loop DelayTime 2554 ms;;
-    AllBackBlue AllGroupsAll Mode loop DelayTime 2554 ms;;
-    Command1 AllGroupsAll Mode loop DelayTime 2554 ms;;
-    Command2 AllGroupsAll Mode loop DelayTime 2554 ms;;
-    Command3 AllGroupsAll Mode loop DelayTime 2554 ms;;
-    Command4 AllGroupsAll Mode loop DelayTime 2554 ms;;
-    Command5 AllGroupsAll Mode loop DelayTime 2554 ms;;
-    Command6 AllGroupsAll Mode loop DelayTime 2554 ms;;
-    Command7 AllGroupsAll Mode loop DelayTime 2554 ms;;
-    Command8 AllGroupsAll Mode loop DelayTime 2554 ms;;
-    Command9 AllGroupsAll Mode loop DelayTime 2554 ms;;
-    Command10 AllGroupsAll Mode loop DelayTime 2554 ms;;
-    Command11 AllGroupsAll Mode loop DelayTime 2554 ms;;
-	Command12 AllGroupsAll Mode loop DelayTime 2554 ms;;
- 	Command13 AllGroupsAll Mode loop DelayTime 2554 ms;;
- 	Command14 AllGroupsAll Mode loop DelayTime 2554 ms;;
-
+	command Command1  AllGroupsAll Mode trigger;
+	command Command2  AllGroupsAll Mode loop;
+	command Command3  AllGroupsAll Mode once;
+	command Command4  AllGroupsAll Mode restart;
+	command Command5  AllGroupsAll Preset DEF2ALT;
+	command Command6  AllGroupsAll Preset SOLID;
+	command Command7  AllGroupsAll Preset SWITCH_RIGHT_LEFT_RIGHT;
+	command Command8  AllGroupsAll Preset FADE_CHASE_LEFT2RIGHT;
+	command Command9  AllGroupsAll Preset RAINBOW_FADE_LEFT2RIGHT;
+    command Command10 AllGroupsAll DelayTime 1 ms;
+    command Command11 AllGroupsAll DelayTime 1 s;
+    command Command12 AllGroupsAll DelayTime 127 ms;
+    command Command13 AllGroupsAll DelayTime 127 s;
+    command Command14 AllGroupsAll StrobeTime 1 ms;
+    command Command15 AllGroupsAll StrobeTime 1 s;
+    command Command16 AllGroupsAll StrobeTime 127 ms;
+    command Command17 AllGroupsAll StrobeTime 127 s;
+    command Command18 AllGroupsAll StepNumber 1;
+    command Command19 AllGroupsAll StepNumber 10000;
+    command Command20 AllGroupsAll StepNumber LAST;
+    command Command21 AllGroupsAll Hold ON;
+    command Command22 AllGroupsAll Hold OFF;
+    command Command23 AllGroupsAll Once ON;
+    command Command24 AllGroupsAll Once OFF;
+    command Command25 AllGroupsAll DefaultColor OFF;
+    command Command26 AllGroupsAll DefaultColor IR;
+    command Command27 AllGroupsAll DefaultColor GB;
+    command Command28 AllGroupsAll DefaultColor IRGBW;
+    command Command29 AllGroupsAll DefaultColor 1 2 3 4;
+    command Command30 AllGroupsAll DefaultColor 1 2 3 4 5;
+    command Command31 AllGroupsAll DefaultColor 127 127 127 127;
+    command Command32 AllGroupsAll DefaultColor 127 127 127 127 127;
+    command Command33 AllGroupsAll AlternateColor OFF;
+    command Command34 AllGroupsAll AlternateColor IR;
+    command Command35 AllGroupsAll AlternateColor GB;
+    command Command36 AllGroupsAll AlternateColor IRGBW;
+    command Command37 AllGroupsAll AlternateColor 1 2 3 4;
+    command Command38 AllGroupsAll AlternateColor 1 2 3 4 5;
+    command Command39 AllGroupsAll AlternateColor 127 127 127 127;
+    command Command40 AllGroupsAll AlternateColor 127 127 127 127 127;
+    command Command41 AllGroupsAll Mode trigger Preset DEF2ALT DelayTime 1 ms StrobeTime 1 ms StepNumber LAST
+       Hold ON Once OFF DefaultColor IRGBW AlternateColor 20 30 40 50 60;

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="dmxLightShow" nsURI="http://www.DmxLightShow.mestra" nsPrefix="dmxLightShow">
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="dmxLightShow" nsURI="http://www.example.org/domainmodel/Domainmodel"
+    nsPrefix="dmxLightShow">
   <eClassifiers xsi:type="ecore:EClass" name="Mestra">
     <eStructuralFeatures xsi:type="ecore:EReference" name="songs" upperBound="-1"
         eType="#//Song" containment="true"/>
@@ -11,8 +12,9 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Song">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="bank" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="program" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="bank" eType="#//INT" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="program" eType="#//INT"
+        containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="rules" eType="#//Rules"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="sequenceRefs" unique="false"
@@ -58,11 +60,15 @@
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MidiRuleTrigger">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"
-        containment="true"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="MidiTimeTrigger">
     <eStructuralFeatures xsi:type="ecore:EReference" name="time" eType="#//Time" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="note" eType="#//MidiNoteTrigger"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cc" eType="#//MidiCcTrigger"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="aftertouch" eType="#//MidiAftertouchTrigger"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="prgchg" eType="#//MidiProgramChangeTrigger"
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MidiNoteTrigger">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="onOff" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -76,7 +82,8 @@
   <eClassifiers xsi:type="ecore:EClass" name="MidiCcTrigger">
     <eStructuralFeatures xsi:type="ecore:EReference" name="mc" eType="#//MidiChannel"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ccNumber" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ccNumber" eType="#//INT"
+        containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//MidiValueOrRange"
         containment="true"/>
   </eClassifiers>
@@ -89,43 +96,36 @@
   <eClassifiers xsi:type="ecore:EClass" name="MidiProgramChangeTrigger">
     <eStructuralFeatures xsi:type="ecore:EReference" name="mc" eType="#//MidiChannel"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="bank" eType="#//MidiValue"
-        containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="program" eType="#//MidiValue"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="bank" eType="#//INT" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="program" eType="#//INT"
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MidiChannel">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="mc" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MidiValueOrRange">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//MidiValue"
-        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//INT" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="valueRange" eType="#//MidiValueRange"
         containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="MidiValue">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MidiValueRange">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="start" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="end" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="start" eType="#//INT" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="end" eType="#//INT" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MidiNoteOrRange">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="note" eType="#//MidiNote"
-        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="note" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="noteRange" eType="#//MidiNoteRange"
         containment="true"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="MidiNote">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="start" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MidiNoteRange">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="start" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="end" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="INT">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Time">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="time" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Command">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -177,7 +177,7 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="DmxStepNumberSubCommand">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="last" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//INT" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="DmxHoldSubCommand">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="onOff" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -193,13 +193,16 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="color" eType="#//DmxColor"
         containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="DmxColor">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="intensity" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="red" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="green" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="blue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="white" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  <eClassifiers xsi:type="ecore:EClass" name="DmxColor"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ShortDmxColor" eSuperTypes="#//DmxColor">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="color" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ShortDmxColor" eSuperTypes="#//DmxColor"/>
-  <eClassifiers xsi:type="ecore:EClass" name="LongDmxColor" eSuperTypes="#//DmxColor"/>
+  <eClassifiers xsi:type="ecore:EClass" name="LongDmxColor" eSuperTypes="#//DmxColor">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="intensity" eType="#//INT"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="red" eType="#//INT" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="green" eType="#//INT" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="blue" eType="#//INT" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="white" eType="#//INT" containment="true"/>
+  </eClassifiers>
 </ecore:EPackage>

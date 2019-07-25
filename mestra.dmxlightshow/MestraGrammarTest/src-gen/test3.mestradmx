@@ -1,0 +1,95 @@
+
+songs:
+	song Blauw_TheScene:
+		bank 116  program 23;
+		rule Trigger1 : AllFrontBlue;
+		order Chorus; 
+		sequences:
+			sequence Chorus:
+				rule Trigger7 : AllBackBlue;
+				order Chorus;
+				steps:
+					step Chorus:
+						rule Trigger6 : Command5;
+      
+  
+	song nameOfSong:
+    	bank 34 program 25;
+    	rule Trigger2 : AllFrontBlue;
+    	rule Trigger2 : Command2;
+    	rule Trigger3, Trigger4 : Command3;
+    	rule Trigger5 : Command4, Command5;
+    	order Sequence1, Sequence1, Sequence1, Sequence2,
+    	  	  Sequence3, Sequence4, Sequence2;
+      
+		sequences:
+			sequence Sequence1:
+	      		rule Trigger10 : Command5;
+	      		order Step1, Step1;
+	      		steps:
+	        		step Step1:
+	          			rule Trigger6 : Command5;
+	          			rule Trigger7, Trigger8 : Command8, Command9;
+	          			
+	        		step Step2: 
+	          			rule Trigger6 : Command7;
+	          			
+	   		sequence Sequence3:
+	     		rule Trigger11 : Command7;
+	     		order Step1; 
+	     		steps:
+	       			step Step1:
+	         			rule Trigger10 : Command12;
+	          			rule Trigger7, Trigger7: Command8, Command9;
+	
+	
+	   		sequence Sequence2:
+	     		rule Trigger11 : Command7;
+	     		order Step1;
+	     		steps:
+	       			step Step1:
+	         			rule Trigger10 : Command12;
+	          			rule Trigger7, Trigger7: Command8, Command9;
+	          		step Step2:
+	          		    rule Trigger5: Command5;
+	          		step Step3:
+	          		step Step4:
+	          		
+			sequence Sequence3:
+	        	rule Command8;
+	        
+	        sequence Sequence4:
+ 
+triggers:
+    Trigger1 Note ON Channel 3 Note Cb1-C#4 Velocity 30-50;
+    Trigger2 Note ON Channel 3 Note Cb1-C#4 Velocity 30-50;
+    Trigger3 Note ON Channel 3 Note Cb1-C#4 Velocity 30-50;
+    Trigger4 Note ON Channel 3 Note Cb1-C#4 Velocity 30-50;
+    Trigger5 Note ON Channel 3 Note Cb1-C#4 Velocity 30-50;
+    Trigger6 Note ON Channel 3 Note Cb1-C#4 Velocity 30-50;
+    Trigger7 Note ON Channel 3 Note Cb1-C#4 Velocity 30-50;
+    Trigger8 Note ON Channel 3 Note Cb1-C#4 Velocity 30-50;
+    Trigger9 Note ON Channel 3 Note Cb1-C#4 Velocity 30-50;
+    Trigger10 Note ON Channel 3 Note Cb1-C#4 Velocity 30-50;
+    Trigger11 Note ON Channel 3 Note Cb1-C#4 Velocity 30-50;
+    Trigger12 Note ON Channel 3 Note Cb1-C#4 Velocity 30-50;
+    Trigger13 Note ON Channel 3 Note Cb1-C#4 Velocity 30-50;
+  
+commands:
+	AllFrontBlue AllGroupsAll Mode loop DelayTime 2554 ms;;
+    AllBackBlue AllGroupsAll Mode loop DelayTime 2554 ms;;
+    Command1 AllGroupsAll Mode loop DelayTime 2554 ms;;
+    Command2 AllGroupsAll Mode loop DelayTime 2554 ms;;
+    Command3 AllGroupsAll Mode loop DelayTime 2554 ms;;
+    Command4 AllGroupsAll Mode loop DelayTime 2554 ms;;
+    Command5 AllGroupsAll Mode loop DelayTime 2554 ms;;
+    Command6 AllGroupsAll Mode loop DelayTime 2554 ms;;
+    Command7 AllGroupsAll Mode loop D elayTime 2554 ms;;
+    Command8 AllGroupsAll Mode loop DelayTime 2554 ms;;
+    Command9 AllGroupsAll Mode loop DelayTime 2554 ms;;
+    Command10 AllGroupsAll Mode loop DelayTime 2554 ms;;
+    Command11 AllGroupsAll Mode loop DelayTime 2554 ms;;
+	Command12 AllGroupsAll Mode loop DelayTime 2554 ms;;
+ 	Command13 AllGroupsAll Mode loop DelayTime 2554 ms;;
+ 	Command14 AllGroupsAll Mode loop DelayTime 2554 ms;;
+

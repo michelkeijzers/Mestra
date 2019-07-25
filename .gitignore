@@ -279,9 +279,7 @@ node_modules/
 # Visual Studio LightSwitch build output
 **/*.HTMLClient/GeneratedArtifacts
 **/*.DesktopClient/GeneratedArtifacts
-**/*.DesktopClient/ModelManifest.xml
 **/*.Server/GeneratedArtifacts
-**/*.Server/ModelManifest.xml
 _Pvt_Extensions
 
 # Paket dependency manager
@@ -348,7 +346,6 @@ healthchecksdb
 /mestra.dmxlightshow/plugin.xml
 /mestra.dmxlightshow/build.properties
 /mestra.dmxlightshow/.project
-/mestra.dmxlightshow/.classpath
 /mestra.dmxlightshow/.antlr-generator-3.2.0-patch.jar
 /mestra.dmxlightshow.ide
 /mestra.dmxlightshow.tests
