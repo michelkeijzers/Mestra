@@ -5,6 +5,12 @@
   <eClassifiers xsi:type="ecore:EClass" name="Mestra">
     <eStructuralFeatures xsi:type="ecore:EReference" name="songs" upperBound="-1"
         eType="#//Song" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sequences" upperBound="-1"
+        eType="#//Sequence" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="steps" upperBound="-1"
+        eType="#//Step" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rules" upperBound="-1"
+        eType="#//Rule" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="triggers" upperBound="-1"
         eType="#//RuleTrigger" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="commands" upperBound="-1"
@@ -15,32 +21,29 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="bank" eType="#//INT" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="program" eType="#//INT"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="rules" eType="#//Rules"
-        containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="sequenceRefs" unique="false"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rules" upperBound="-1"
+        eType="#//Rules" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sequences" unique="false"
         upperBound="-1" eType="#//Sequence"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="sequences" upperBound="-1"
-        eType="#//Sequence" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Sequence">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="rules" eType="#//Rules"
-        containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="stepRefs" unique="false"
-        upperBound="-1" eType="#//Step"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="steps" upperBound="-1"
-        eType="#//Step" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rules" upperBound="-1"
+        eType="#//Rules" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="steps" unique="false" upperBound="-1"
+        eType="#//Step"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Step">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="rules" eType="#//Rules"
-        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rules" upperBound="-1"
+        eType="#//Rules" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Rules">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="rules" upperBound="-1"
-        eType="#//Rule" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rules" unique="false" upperBound="-1"
+        eType="#//Rule"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Rule">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="ruleTriggers" eType="#//RuleTriggers"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="ruleCommands" eType="#//RuleCommands"
@@ -71,7 +74,8 @@
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MidiNoteTrigger">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="onOff" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="onOff" eType="#//ON_OFF"
+        containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="mc" eType="#//MidiChannel"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="note" eType="#//MidiNoteOrRange"
@@ -126,6 +130,7 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Time">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="unit" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Command">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -156,9 +161,9 @@
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="once" eType="#//DmxOnceSubCommand"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="DefaultColor" eType="#//DmxDefaultColorSubCommand"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="defaultColor" eType="#//DmxDefaultColorSubCommand"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="AlternateColor" eType="#//DmxAlternateColorSubCommand"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="alternateColor" eType="#//DmxAlternateColorSubCommand"
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="DmxModeSubCommand"/>
@@ -177,13 +182,16 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="DmxStepNumberSubCommand">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="last" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//INT" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="stepNumber" eType="#//INT"
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="DmxHoldSubCommand">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="onOff" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="onOff" eType="#//ON_OFF"
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="DmxOnceSubCommand">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="onOff" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="onOff" eType="#//ON_OFF"
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="DmxDefaultColorSubCommand">
     <eStructuralFeatures xsi:type="ecore:EReference" name="color" eType="#//DmxColor"
@@ -193,16 +201,22 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="color" eType="#//DmxColor"
         containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="DmxColor"/>
-  <eClassifiers xsi:type="ecore:EClass" name="ShortDmxColor" eSuperTypes="#//DmxColor">
+  <eClassifiers xsi:type="ecore:EClass" name="DmxColor">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="form" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ShortDmxColor">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="color" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="LongDmxColor" eSuperTypes="#//DmxColor">
+  <eClassifiers xsi:type="ecore:EClass" name="LongDmxColor">
     <eStructuralFeatures xsi:type="ecore:EReference" name="intensity" eType="#//INT"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="red" eType="#//INT" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="green" eType="#//INT" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="blue" eType="#//INT" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="white" eType="#//INT" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ON_OFF">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="onOff" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
 </ecore:EPackage>

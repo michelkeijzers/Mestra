@@ -1,3 +1,32 @@
+// Instructions
+// - In this window, click RMF, Run As -> Generate Xtext Artifcats
+// - Run project as Java project
+// - In runtime application, create or select file xxx.mestradmx
+// - Save file to let grammar be verified.
+
+// Context graph:
+// Select .xtext file (not this file)
+// Select Window/Show View/Other .../Xtext/Xtext Syntax Graph
+
+// Running tests:
+// Select test file (mestra.dmxlightshow.tests/src/mestra.tests/DmxLightShowParingTest.xtend
+// Select Run As: JUnit Test
+
+// Creating model:
+// RMB model/generated/DmxLighttShow.ecore
+// http://www.cs.kun.nl/J.Hooman/DSL/Xtext_DSL_GettingStarted_Neon.pdf page 7
+// Cannot find Initialize
+
+// Show instance as ecore tree:
+// Right click instance, select open with/other, chose from internal editors: Sample Ecore Model Editor. 
+// Use Show Properties on items to see details.
+
+// Creating output (via src/mestra.generator/DmxLightShowGenerator.xtend:
+// In Runtime, select instance file, menu Projects/Clean All
+// Mestra.bin is generated
+
+
+
 // Grammar 
 
 grammar mestra.DmxLightShow with org.eclipse.xtext.common.Terminals
@@ -8,36 +37,41 @@ generate dmxLightShow "http://www.example.org/domainmodel/Domainmodel"
 // Main structure
 
 Mestra:
-	'songs:'    songs   +=Song+ 
-	'triggers:' triggers+=RuleTrigger+ 
-	'commands:' commands+=Command+;
+	/*songs   +=Song+ 
+	rules   +=Rule+
+	triggers+=RuleTrigger+ 
+	commands+=Command+;
+	* 
+	*/
+	
+	(songs+=Song | sequences+=Sequence | steps+=Step | rules+=Rule | triggers+=RuleTrigger | commands+=Command)*;
 
 // Song structure
    
 Song:
 	'song' name=ID ':'
-	  'bank' bank=MidiValue 'program' program=MidiValue ';'
-      rules=Rules
-      ('order'      sequenceRefs+=[Sequence] (',' sequenceRefs+=[Sequence])* ';'
-       'sequences:' sequences   += Sequence+)?;
+	  'bank' bank=MidiValue 'program' program=MidiValue 
+      ('rules'     rules+=Rules)?
+      ('sequences' sequences+=[Sequence] (',' sequences+=[Sequence])*)?;
+        // sequences   += Sequence+)?;
 
 Sequence:
 	'sequence' name=ID ':'
-      rules=Rules
-      ('order'  stepRefs+=[Step] (',' stepRefs+=[Step])* ';'
-       'steps:' steps   += Step+)?;
+      ('rules' rules+=Rules)?
+      ('steps' steps+=[Step] (',' steps+=[Step])*)?; 
+        //steps   += Step+)?;
 	
 Step:
-	'step' name=ID  ':'
-	  rules=Rules;
+	'step' name=ID  ':' 
+	('rules' rules+=Rules)?;
 
 // Rules
 
 Rules: 
-	{Rules} rules+=Rule*;
+	{Rules} (rules+= [Rule] (',' rules+=[Rule])*)?;
 	
 Rule:
-	'rule' (ruleTriggers=RuleTriggers ':')? ruleCommands=RuleCommands ';';
+	'rule' name=ID ':' (ruleTriggers=RuleTriggers '->')? ruleCommands=RuleCommands ;
 	
 RuleTriggers:
 	triggerRefs+=[RuleTrigger] (',' triggerRefs+=[RuleTrigger])*;
@@ -48,8 +82,8 @@ RuleCommands:
 // Rule Triggers
 
 RuleTrigger:
-//    name=ID type=( DmxRuleTrigger |  MidiRuleTrigger) ';';
-	  'trigger' name=ID type=MidiRuleTrigger ';';
+//    name=ID type=( DmxRuleTrigger |  MidiRuleTrigger) ;
+	  'trigger' name=ID ':' type=MidiRuleTrigger ;
 
 
 // DmxRuleTrigger: // Not supported
@@ -99,15 +133,12 @@ MidiValue returns INT:
 	value=INT;
 	
 Time:
-	value=TimeValue ('s' | 'ms');
-
-TimeValue returns ecore::EInt:
-    INT;
+	value=INT unit=('s' | 'ms');
 	
 // Commands
 
 Command:
-	'command' name=ID type=DmxCommand ';';
+	'command' name=ID ':' type=DmxCommand ;
 
 // MidiCommand: // Not supported
 
@@ -162,8 +193,8 @@ DmxSubCommands:
 	(stepNumber=DmxStepNumberSubCommand)? 
 	(hold=DmxHoldSubCommand)? 
 	(once=DmxOnceSubCommand)? 
-	(DefaultColor=DmxDefaultColorSubCommand)? 
-	(AlternateColor=DmxAlternateColorSubCommand)?;
+	(defaultColor=DmxDefaultColorSubCommand)? 
+	(alternateColor=DmxAlternateColorSubCommand)?;
 	
 DmxModeSubCommand:
 	'Mode' DmxModeSubCommandData;
@@ -211,7 +242,7 @@ DmxStrobeTimeSubCommand:
 	'StrobeTime' time=Time;
 
 DmxStepNumberSubCommand:
-	'StepNumber' (last='LAST' | value=DmxValue);
+	'StepNumber' (last='LAST' | stepNumber=DmxValue);
 
 DmxHoldSubCommand:
 	'Hold' onOff=ON_OFF;
@@ -226,14 +257,37 @@ DmxAlternateColorSubCommand:
 	'AlternateColor' color=DmxColor;
 
 DmxColor: 
-	 ShortDmxColor | LongDmxColor;
+	 form=(ShortDmxColor | LongDmxColor);
 
 ShortDmxColor:
-	color=('OFF' |   'W' |   'B' |   'BW' |   'G' |   'GW' |   'GB' |   'GBW' | 
-	        'R'  |  'RW' |  'RB' |  'RBW' |  'RG' |  'RGW' |  'RGB' |  'RGBW' |
-	       'I'   |  'IW' |  'IB' |  'IBW' |  'IG' |  'IGW' |  'IGB' |  'IGBW' | 
-	       'IR'  | 'IRW' | 'IRB' | 'IRBW' | 'IRG' | 'IRGW' | 'IRGB' | 'IRGBW');
-	
+	color=( 'OFF' |	'off' |	'w' | 'W' |	'b' | 'bw' | 'bW' | 'B' | 'Bw' | 'BW' |			
+			'g' | 'gw' | 'gW' | 'gb' | 'gbw' | 'gbW' | 'gB' | 'gBw' | 'gBW' |			
+			'G' | 'Gw' | 'GW' | 'Gb' | 'Gbw' | 'GbW' | 'GB' | 'GBw' | 'GBW' |			
+			'r' | 'rw' | 'rW' | 'rb' | 'rbw' | 'rbW' | 'rB' | 'rBw' | 'rBW' |			
+				  'rg' | 'rgw' | 'rgW' | 'rgb' | 'rgbw' | 'rgbW' | 'rgB' | 'rgBw' | 'rgBW' |			
+			      'rG' | 'rGw' | 'rGW' | 'rGb' | 'rGbw' | 'rGbW' | 'rGB' | 'rGBw' | 'rGBW' |			
+			'R' | 'Rw' | 'RW' |  'Rb' | 'Rbw' | 'RbW' | 'RB' | 'RBw' | 'RBW' |
+			      'Rg' | 'Rgw' | 'RgW' | 'Rgb' | 'Rgbw' | 'RgbW' | 'RgB' | 'RgBw' | 'RgBW' |			
+			      'RG' | 'RGw' | 'RGW' | 'RGb' | 'RGbw' | 'RGbW' | 'RGB' | 'RGBw' | 'RGBW' |			
+			'i' | 'iw' | 'iW' | 'ib' | 'ibw' | 'ibW' | 'iB' | 'iBw' | 'iBW' |
+			      'ig' | 'igw' | 'igW' | 'igb' | 'igbw' | 'igbW' | 'igB' | 'igBw' | 'igBW' |			
+			      'iG' | 'iGw' | 'iGW' | 'iGb' | 'iGbw' | 'iGbW' | 'iGB' | 'iGBw' | 'iGBW' |			
+			'ir' | 'irw' | 'irW' | 'irb' | 'irbw' | 'irbW' | 'irB' | 'irBw' | 'irBW' |			
+			       'irg' | 'irgw' | 'irgW' | 'irgb' | 'irgbw' | 'irgbW' | 'irgB' | 'irgBw' | 'irgBW' |			
+			       'irG' | 'irGw' | 'irGW' | 'irGb' | 'irGbw' | 'irGbW' | 'irGB' | 'irGBw' | 'irGBW' |			
+			'iR' | 'iRw' | 'iRW' | 'iRb' | 'iRbw' | 'iRbW' | 'iRB' | 'iRBw' | 'iRBW' |			
+			       'iRg' | 'iRgw' | 'iRgW' | 'iRgb' | 'iRgbw' | 'iRgbW' | 'iRgB' | 'iRgBw' | 'iRgBW' |			
+			       'iRG' | 'iRGw' | 'iRGW' | 'iRGb' | 'iRGbw' | 'iRGbW' | 'iRGB' | 'iRGBw' | 'iRGBW' |	
+		 	'I' | 'Iw' | 'IW' | 'Ib' | 'Ibw' | 'IbW' | 'IB' | 'IBw' | 'IBW' | 
+		 	      'Ig' | 'Igw' | 'IgW' | 'Igb' | 'Igbw' | 'IgbW' | 'IgB' | 'IgBw' | 'IgBW' |			
+			      'IG' | 'IGw' | 'IGW' | 'IGb' | 'IGbw' | 'IGbW' | 'IGB' | 'IGBw' | 'IGBW' |			
+			'Ir' | 'Irw' | 'IrW' | 'Irb' | 'Irbw' | 'IrbW' | 'IrB' | 'IrBw' | 'IrBW' | 
+			       'Irg' | 'Irgw' | 'IrgW' | 'Irgb' | 'Irgbw' | 'IrgbW' | 'IrgB' | 'IrgBw' | 'IrgBW' |			
+			       'IrG' | 'IrGw' | 'IrGW' | 'IrGb' | 'IrGbw' | 'IrGbW' | 'IrGB' | 'IrGBw' | 'IrGBW' |			
+			'IR' | 'IRw' | 'IRW' | 'IRb' | 'IRbw' | 'IRbW' | 'IRB' | 'IRBw' | 'IRBW' |
+			       'IRg' | 'IRgw' | 'IRgW' | 'IRgb' | 'IRgbw' | 'IRgbW' | 'IRgB' | 'IRgBw' | 'IRgBW' |			
+			       'IRG' | 'IRGw' | 'IRGW' | 'IRGb' | 'IRGbw' | 'IRGbW' | 'IRGB' | 'IRGBw' | 'IRGBW');
+
 LongDmxColor:
 	intensity=DmxValue red=DmxValue green=DmxValue blue=DmxValue (white=DmxValue)?;
 
@@ -241,5 +295,5 @@ DmxValue returns INT:
 	value=INT;
 
 ON_OFF: 
-	'ON' | 'OFF';
+	onOff=('ON' | 'OFF');
 

@@ -1,123 +1,147 @@
 
-songs:
-	song Blauw_TheScene:
-		bank 116  program 234;
-		rule Trigger1 : Command1;
-		order Chorus; 
-		sequences:
-			sequence Chorus:
-				rule Trigger7 : Command2;
-				order Chorus;
-				steps:
-					step Chorus:
-						rule Trigger6 : Command2;
-      
-  
-	song nameOfSong:
-    	bank 34 program 25;
-    	rule Trigger2 : Command3;
-    	rule Trigger2 : Command3;
-    	rule Trigger3, Trigger4 : Command4;
-    	rule Trigger5 : Command5, Command6;
-    	rule Trigger5 : Command7, Command7;
-    	rule Trigger5 : Command8, Command9, Command8;
-    	order Sequence1, Sequence1, Sequence1, Sequence2,
-    	  	  Sequence3, Sequence4, Sequence2;
-      
-		sequences:
-			sequence Sequence1:
-	      		rule Trigger10 : Command9;
-	      		order Step1, Step1;
-	      		steps:
-	        		step Step1:
-	          			rule Trigger6 : Command5;
-	          			rule Trigger7, Trigger10 : Command10, Command11;
-	          			
-	        		step Step2: 
-	          			rule Trigger6 : Command12;
-	          			
-	   		sequence Sequence3:
-	     		rule Trigger11 : Command13;
-	     		order Step1; 
-	     		steps:
-	       			step Step1:
-	         			rule Trigger10 : Command14;
-	          			rule Trigger7, Trigger7: Command16, Command16;
-	
-	
-	   		sequence Sequence2:
-	     		rule Trigger11 : Command17;
-	     		order Step1;
-	     		steps:
-	       			step Step1:
-	         			rule Trigger10 : Command18;
-	          			rule Trigger7, Trigger7: Command19, Command20;
-	          		step Step2:
-	          		    rule Trigger5: Command21;
-	          		step Step3:
-	          		step Step4:
-	          		
-			sequence Sequence3:
-	        	rule Command22;
-	        
-	        sequence Sequence4:
+/*
+ * BLAUW - THE SCENE
+ */
  
-triggers:
-	trigger Trigger1 Time 1 ms;
-	trigger Trigger2 Time 255 ms;
-	trigger Trigger3 Time 1 s;
-	trigger Trigger4 Time 127 s;
-    trigger Trigger5 Note ON Channel OMNI Note C0 Velocity 0;
-    trigger Trigger6 Note OFF Channel MC1 Note C#0-C#1 Velocity 16;
-    trigger Trigger7 Note ON  Channel MC3 Note Cb0 Velocity 17;
-    trigger Trigger8 Note OFF Channel MC16 Note A9-B9  Velocity 127;
-    trigger Trigger9  CC  Channel MC6 Number 1 Value 1;
-    trigger Trigger10 CC  Channel MC10 Number 127 Value 127;
-    trigger Trigger11 Aftertouch Channel MC7 Value 1;
-    trigger Trigger12 Aftertouch Channel MC15 Value 1-127;
-    trigger Trigger14 PrgChg Channel MC16 Bank 1 Program 1;
-    trigger Trigger15 PrgChg Channel MC12 Bank 127 Program 127;
+song Blauw_TheScene:
+	bank 117 program 234
+	rules AllHalfBlue
+	sequences Blauw_Chorus, Blauw_Verse, Blauw_Chorus, Blauw_Verse, Blauw_Chorus, 
+	          Blauw_Verse,  Blauw_Verse, Blauw_Outtro 
+ 
+sequence Blauw_Chorus: // And intro 
+	rules KronosLowOn_NextSeq
+	steps KronosHighOn_FrontBlue, KronosHighOff_FrontHalf 
+
+sequence Blauw_Verse: 
+	rules Acuna_NextSeq // TODO
+	steps KronosHighOn_FrontBlue, KronosHighOff_FrontHalf 
+
+sequence Blauw_Outtro:
+	steps KronosHighOn_FrontBlue 
+
+step KronosHighOn_FrontBlue  : rules KronosHighOff_FrontHalf, KronosHighOff_FrontHalf
+step KronosHighOff_FrontHalf : rules KronosHighOff_FrontHalf
+
+rule AllHalfBlue 			: AllHalfBlue
+rule KronosLowOn_NextSeq 	: KronosLowNoteOn->NextSeq
+rule Acuna_NextSeq			: KronosLowNoteOn->NextSeq
+rule KronosHighOff_FrontHalf: KronosLowNoteOn->NextSeq
+
+trigger KronosLowNoteOn :  Note ON Channel OMNI Note C0 Velocity 0
+
+command AllHalfBlue : AllGroupsAllExceptEgoRisers Preset SOLID DefaultColor 167 167 127 127
+command NextSeq     : AllGroupsAll // TODO
+
+/* 
+ * NARCOTIC - LIQUIDO
+ */ 
+ 
+song nameOfSong:
+   	bank 34 program 26
+   	rules Rule1
+   	sequences Sequence1, Sequence1, Sequence1, Sequence2,
+   	  	      Sequence3, Sequence2, Sequence2
+      
+sequence Sequence1:
+	rules Rule3, Rule4
+	steps Step1, Step2, Step3
+		 
+sequence Sequence2:
+	rules Rule3, Rule4
+	steps Step1, Step2, Step3
+
+sequence Sequence3:
+	rules Rule3
+	steps Step3, Step3
+
+step Step1 : rules Rule1 
+step Step2 : rules Rule1, Rule2, Rule3
+step Step3 : rules Rule4, Rule5, Rule6
+
+rule Rule0 : Command0
+rule Rule1 : Trigger1->Command1
+rule Rule2 : Trigger1->Command2
+
+trigger Trigger1 : Time 1 ms
+trigger Trigger2 : Time 255 ms
+trigger Trigger3 : Time 1 s
+
+command Command0 :  AllGroupsAll 		Mode trigger // TODO: Do nothing
+command Command1 :  AllGroupsAll 		Mode trigger
+command Command2 :  AllGroupsCenter 	Mode loop
+command Command3 :  AllGroupsAllExceptEgoRisers 	
+										Mode once
+
+song nameOfSong2:
+    bank 34 program 2
+    rules Rule1
+    
+/*
+ * Generic
+ */
+ 
+rule Rule3 : Trigger1, Trigger2->Command1
+rule Rule4 : Trigger2, Trigger3->Command2, Command3
+rule Rule5 : Trigger2->Command3
+rule Rule6 : Trigger2->Command3
+rule Rule7 : Trigger3, Trigger4->Command4
+rule Rule8 : Trigger5->Command5, Command6
+rule Rule9 : Trigger5->Command7, Command7
+rule Rule10: Trigger5->Command8, Command9, Command8
+rule Rule11: Trigger6->Command5
+rule Rule12: Trigger7, Trigger10->Command10, Command11
+
+trigger Trigger4 : Time 127 s
+trigger Trigger5 : Note ON Channel OMNI Note C0 Velocity 0
+trigger Trigger6 : Note OFF Channel MC1 Note C#0-C#1 Velocity 16
+trigger Trigger7 : Note ON  Channel MC3 Note Cb0 Velocity 17
+trigger Trigger8 : Note OFF Channel MC16 Note A9-B9  Velocity 127
+trigger Trigger9 :  CC  Channel MC6 Number 1 Value 1
+trigger Trigger10:  CC  Channel MC10 Number 127 Value 127
+trigger Trigger11:  Aftertouch Channel MC7 Value 1
+trigger Trigger12:  Aftertouch Channel MC15 Value 1-127
+trigger Trigger14:  PrgChg Channel MC16 Bank 1 Program 1
+trigger Trigger15:  PrgChg Channel MC12 Bank 127 Program 127
   
-commands:
-	command Command1  AllGroupsAll Mode trigger;
-	command Command2  AllGroupsAll Mode loop;
-	command Command3  AllGroupsAll Mode once;
-	command Command4  AllGroupsAll Mode restart;
-	command Command5  AllGroupsAll Preset DEF2ALT;
-	command Command6  AllGroupsAll Preset SOLID;
-	command Command7  AllGroupsAll Preset SWITCH_RIGHT_LEFT_RIGHT;
-	command Command8  AllGroupsAll Preset FADE_CHASE_LEFT2RIGHT;
-	command Command9  AllGroupsAll Preset RAINBOW_FADE_LEFT2RIGHT;
-    command Command10 AllGroupsAll DelayTime 1 ms;
-    command Command11 AllGroupsAll DelayTime 1 s;
-    command Command12 AllGroupsAll DelayTime 127 ms;
-    command Command13 AllGroupsAll DelayTime 127 s;
-    command Command14 AllGroupsAll StrobeTime 1 ms;
-    command Command15 AllGroupsAll StrobeTime 1 s;
-    command Command16 AllGroupsAll StrobeTime 127 ms;
-    command Command17 AllGroupsAll StrobeTime 127 s;
-    command Command18 AllGroupsAll StepNumber 1;
-    command Command19 AllGroupsAll StepNumber 10000;
-    command Command20 AllGroupsAll StepNumber LAST;
-    command Command21 AllGroupsAll Hold ON;
-    command Command22 AllGroupsAll Hold OFF;
-    command Command23 AllGroupsAll Once ON;
-    command Command24 AllGroupsAll Once OFF;
-    command Command25 AllGroupsAll DefaultColor OFF;
-    command Command26 AllGroupsAll DefaultColor IR;
-    command Command27 AllGroupsAll DefaultColor GB;
-    command Command28 AllGroupsAll DefaultColor IRGBW;
-    command Command29 AllGroupsAll DefaultColor 1 2 3 4;
-    command Command30 AllGroupsAll DefaultColor 1 2 3 4 5;
-    command Command31 AllGroupsAll DefaultColor 127 127 127 127;
-    command Command32 AllGroupsAll DefaultColor 127 127 127 127 127;
-    command Command33 AllGroupsAll AlternateColor OFF;
-    command Command34 AllGroupsAll AlternateColor IR;
-    command Command35 AllGroupsAll AlternateColor GB;
-    command Command36 AllGroupsAll AlternateColor IRGBW;
-    command Command37 AllGroupsAll AlternateColor 1 2 3 4;
-    command Command38 AllGroupsAll AlternateColor 1 2 3 4 5;
-    command Command39 AllGroupsAll AlternateColor 127 127 127 127;
-    command Command40 AllGroupsAll AlternateColor 127 127 127 127 127;
-    command Command41 AllGroupsAll Mode trigger Preset DEF2ALT DelayTime 1 ms StrobeTime 1 ms StepNumber LAST
-       Hold ON Once OFF DefaultColor IRGBW AlternateColor 20 30 40 50 60;
+command Command4 :  AllGroupsLeft 		Mode restart
+command Command5 :  AllGroupsRight 		Preset DEF2ALT
+command Command6 :  LedBarAll 			Preset SOLID
+command Command7 :  LedBarCenter 		Preset SWITCH_RIGHT_LEFT_RIGHT
+command Command8 :  LedBarLeft 			Preset FADE_CHASE_LEFT2RIGHT
+command Command9 :  LedBarRight 		Preset RAINBOW_FADE_LEFT2RIGHT
+command Command10:  DrumsAll 			DelayTime 13954 ms
+command Command11:  DrumsLeft 			DelayTime 1 s
+command Command12:  DrumsRight 			DelayTime 127 ms
+command Command13:  EgoRisersAll 		DelayTime 127 s
+command Command14:  EgoRisersLeft 		StrobeTime 1 ms
+command Command15:  EgoRisersRight 		StrobeTime 1 s
+command Command16:  FrontAll 			StrobeTime 127 ms
+command Command17:  FontCorners 		StrobeTime 127 s
+command Command18:  FrontMiddle 		StepNumber 1
+command Command19:  FrontInner 			StepNumber 100
+command Command20:  FrontOuter 			StepNumber LAST
+command Command21:  FrontLeft1Inside 	Hold ON
+command Command22:  FrontLeft2 			Hold OFF
+command Command23:  FrontLeft3 			Once ON
+command Command24:  FrontLeft4Outside 	Once OFF
+command Command25:  FrontLeftAll 		DefaultColor OFF
+command Command26:  FrontLeftInner 		DefaultColor IR
+command Command27:  FrontLeftOuter 		DefaultColor GB
+command Command28:  BannerAll 			DefaultColor IRGBW
+command Command29:  BannerLeft 			DefaultColor 1 2 3 4
+command Command30:  BannerRight 		DefaultColor 1 2 3 4 5
+command Command31:  FrontRight1Inside 	DefaultColor 167 127 127 147
+command Command32:  FrontRight2 		DefaultColor 127 127 127 127 127
+command Command33:  FrontRight3 		AlternateColor OFF
+command Command34:  FrontRight4Outside 	AlternateColor IR
+command Command35:  FrontRightAll 		AlternateColor GB
+command Command36:  FrontRightInner 	AlternateColor IRGBW
+command Command37:  FrontRightOuter 	AlternateColor 1 2 3 4
+command Command38:  AllGroupsAll 		AlternateColor 1 2 3 4 5
+command Command39:  AllGroupsAll 		AlternateColor 127 127 127 127
+command Command40:  AllGroupsAll 		AlternateColor 127 127 127 127 127
+command Command41:  AllGroupsAll 		Mode trigger Preset DEF2ALT DelayTime 1 ms StrobeTime 1 ms 
+					   					StepNumber LAST Hold ON Once OFF 
+										DefaultColor IRGBW AlternateColor 20 30 40 50 60
+

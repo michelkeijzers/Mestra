@@ -8,7 +8,7 @@ import org.eclipse.xtext.generator.AbstractGenerator
 import org.eclipse.xtext.generator.IFileSystemAccess2
 import org.eclipse.xtext.generator.IGeneratorContext
 import mestra.dmxLightShow.Mestra
-import mestra.dmxLightShow.Sequence
+
 
 /**
  * Generates code from your model files on save.
@@ -18,10 +18,9 @@ import mestra.dmxLightShow.Sequence
 class DmxLightShowGenerator extends AbstractGenerator {
 
 	override void doGenerate(Resource resource, IFileSystemAccess2 fsa, IGeneratorContext context) {
-		fsa.generateFile('greetings.txt', 'People to greet: ' + 
-			resource.allContents
-				.filter(Sequence)
-				.map[name]
-				.join(', '))
+		var mestra = resource.allContents.toIterable.filter(Mestra).toList.head;
+		
+		var songsGenerator = new SongsGenerator();
+		fsa.generateFile("mestra.mid", songsGenerator.toBinary(mestra));
 	}
 }

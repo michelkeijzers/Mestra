@@ -432,35 +432,46 @@ Triggers
 
 Part 7: Memory Table
 --------------------
-Item                 Offset    Content  Description
-Main                  00         100    Song Ref
+Item                 Offset    Content  Description									Comments
+Main (_mainData)      00         100    Song Ref
                       02         200    Packed triggers Ref
                       04         400    Packed commands Ref
-                      06         600    Unpacked triggers from song Ref
-                      08         620    Unpacked triggers from sequence Ref
-                      10         640    Unpacked triggers from step Ref
-                      12         700    Unpacked commands from song Ref
-                      14         720    Unpacked commands from sequence Ref
-                      16         740    Unpacked commands from step Ref
+                      06         600    Unpacked triggers from song Ref				Only used within MCU, not in MDE
+                      08         620    Unpacked triggers from sequence Ref			Only used within MCU, not in MDE
+                      10         640    Unpacked triggers from step Ref				Only used within MCU, not in MDE
+                      12         700    Unpacked commands from song Ref				Only used within MCU, not in MDE
+                      14         720    Unpacked commands from sequence Ref			Only used within MCU, not in MDE
+                      16         740    Unpacked commands from step Ref				Only used within MCU, not in MDE
 					  18-	  			(virtual gap)
-Song                 100                #Sequences
-                     101                Sequence 0..14 Ref (2bytes)
+Song (_songData)     100                Bank Number
+					 101				Program Number
+					 102				Rules: #Commands/Triggers
+					 103				Rules: Commands/Triggers Indices (2 bytes)
+					 ..
+                     113				Order: #Sequences
+					 114                Order: Sequences Refs (2bytes)
                      ...
-                     127                Sequence 14 Ref
-                     128-				(virtual gap)
-Sequence0            130                #Steps
-                     131                Step 0..#Steps
-Sequence 1           143                ...
+                     124-				(virtual gap)
+Sequence 0           200				Rules: #Commands/Triggers
+					 201				Rules: Commands/Triggers Indices (2 bytes)				
+					 230				Order: #Steps
+					 231				Order: Step Refs (1 byte, offset after step refs)
+				     ...
+					 235				(virtual gap)
+ Step 0              300				Rules: #Commands/Triggers
+					 301				Rules: Commands/Triggers Indices (2 bytes)				
+					 ...
+ ...
 ...
-Sequence 2           ...
-...
-Packed Commands      200                #Packed Commands
-                     201                (reserved)
-Command 0            222                Data of command 0
-Command 1            ...  
-Packed Triggers      400                As Packed Commands
-Unpacked Commands   1000                As Packed Commands (from song, sequence, step)
-Unpacked Triggers   1500                As Packed Commands (from song, sequence, step) 
+Packed Commands      400                #Packed Commands (2 bytes)
+                     402                Commands Ref (2 bytes)
+					 ...
+ Command 0           422                Data
+ ...                 ...				
+Packed Triggers     1000                As Packed Commands
+
+Unpacked Commands   2000                As Packed Commands (from song, sequence, step)
+Unpacked Triggers   3000                As Packed Commands (from song, sequence, step) 
 
 
 When going to next step:

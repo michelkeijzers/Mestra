@@ -3,6 +3,16 @@
  */
 package mestra.validation
 
+import mestra.dmxLightShow.DmxLightShowPackage
+import mestra.dmxLightShow.DmxSubCommands
+import mestra.dmxLightShow.LongDmxColor
+import mestra.dmxLightShow.Mestra
+import mestra.dmxLightShow.ShortDmxColor
+import mestra.dmxLightShow.impl.LongDmxColorImpl
+import org.eclipse.emf.ecore.EObject
+import org.eclipse.xtext.nodemodel.util.NodeModelUtils
+import org.eclipse.xtext.validation.Check
+import org.eclipse.emf.ecore.EReference
 
 /**
  * This class contains custom validation rules. 
@@ -11,15 +21,228 @@ package mestra.validation
  */
 class DmxLightShowValidator extends AbstractDmxLightShowValidator {
 	
-//	public static val INVALID_NAME = 'invalidName'
-//
-//	@Check
-//	def checkGreetingStartsWithCapital(Greeting greeting) {
-//		if (!Character.isUpperCase(greeting.name.charAt(0))) {
-//			warning('Name should start with a capital', 
-//					DmxLightShowPackage.Literals.GREETING__NAME,
-//					INVALID_NAME)
-//		}
-//	}
+	@Check
+	def checkUniqueSongNames(Mestra mestra) 
+	{
+		val names = newHashSet
+		for (item: mestra.songs)
+		{
+			if (!names.add(item.name))
+			{
+				error("duplicate song name", item, 
+				 DmxLightShowPackage.Literals.SONG__NAME)
+			}
+		}
+	}
+
+	@Check
+	def checkSequenceNames(Mestra mestra) 
+	{
+		val names = newHashSet
+		for (item: mestra.sequences)
+		{
+			if (!names.add(item.name))
+			{
+				error("duplicate sequence name", item, 
+				 DmxLightShowPackage.Literals.SEQUENCE__NAME)
+			}
+		}
+	}
+
+	@Check
+	def checkUniqueStepNames(Mestra mestra) 
+	{
+		val names = newHashSet
+		for (item: mestra.steps)
+		{
+			if (!names.add(item.name))
+			{
+				error("duplicate step name", item,
+				 DmxLightShowPackage.Literals.STEP__NAME)
+			}
+		}
+	}
 	
+	@Check
+	def checkUniqueRuleNames(Mestra mestra) 
+	{
+		val names = newHashSet
+		for (item: mestra.rules)
+		{
+			if (!names.add(item.name))
+			{
+				error("duplicate rule name", item, 
+				 DmxLightShowPackage.Literals.RULE__NAME)
+			}
+		}
+	}
+
+	@Check
+	def checkUniqueTriggerNames(Mestra mestra) 
+	{
+		val names = newHashSet
+		for (item: mestra.triggers)
+		{
+			if (!names.add(item.name))
+			{
+				error("duplicate rule trigger name", item, 
+				 DmxLightShowPackage.Literals.RULE_TRIGGER__NAME)
+			}
+		}
+	}
+
+	@Check
+	def checkUniqueCommandNames(Mestra mestra) 
+	{
+		val names = newHashSet
+		for (item: mestra.commands)
+		{
+			if (!names.add(item.name))
+			{
+				error("duplicate command name", item, 
+				 DmxLightShowPackage.Literals.COMMAND__NAME)
+			}
+		}
+	}
+
+
+	@Check
+	def checkUniqueBankAndPrograms(Mestra mestra) 
+	{
+		val bankAndPrograms = newHashSet
+		for (item: mestra.songs)
+		{
+			if (!bankAndPrograms.add(item.bank.value * 1000 + item.program.value))
+			{
+				error("duplicate bank/program number", item, 
+				 DmxLightShowPackage.Literals.SONG__PROGRAM)
+			}
+		}
+	}
+
+	@Check
+	def checkDefaultColorValues(Mestra mestra) 
+	{
+		for (command : mestra.commands)
+		{
+			val dmxSubCommands = command.type.dmxSubCommands;
+			checkDelayTime(dmxSubCommands)
+			checkStrobeTime(dmxSubCommands)
+			checkStepNumber(dmxSubCommands)
+			checkDefaultColor(dmxSubCommands);
+			checkAlternateColor(dmxSubCommands);
+		}
+	}
+	
+	
+	protected def void checkDelayTime(DmxSubCommands dmxSubCommands)
+	{
+		if (dmxSubCommands.eIsSet(DmxLightShowPackage.Literals.DMX_SUB_COMMANDS__DELAY_TIME))
+		{
+			if (dmxSubCommands.delayTime.time.value > 100000)
+			{
+				error("delay time out of range", dmxSubCommands, 
+				 DmxLightShowPackage.Literals.DMX_SUB_COMMANDS__DELAY_TIME)
+			}
+		}
+	}
+
+	protected def void checkStrobeTime(DmxSubCommands dmxSubCommands)
+	{
+		if (dmxSubCommands.eIsSet(DmxLightShowPackage.Literals.DMX_SUB_COMMANDS__STROBE_TIME))
+		{
+			if (dmxSubCommands.strobeTime.time.value > 100000)
+			{
+				error("strobe time out of range", dmxSubCommands, 
+				 DmxLightShowPackage.Literals.DMX_SUB_COMMANDS__STROBE_TIME)
+			}
+		}
+	}
+
+	protected def void checkStepNumber(DmxSubCommands dmxSubCommands)
+	{
+		if (dmxSubCommands.eIsSet(DmxLightShowPackage.Literals.DMX_SUB_COMMANDS__STEP_NUMBER))
+		{
+			if (dmxSubCommands.stepNumber.eIsSet(DmxLightShowPackage.Literals.DMX_STEP_NUMBER_SUB_COMMAND__STEP_NUMBER))
+			{
+				if (dmxSubCommands.stepNumber.stepNumber.value > 255)
+				{
+					error("step number out of range", dmxSubCommands, 
+					 DmxLightShowPackage.Literals.DMX_SUB_COMMANDS__STEP_NUMBER)
+				}
+			}
+		}
+	}
+	
+	protected def void checkDefaultColor(DmxSubCommands dmxSubCommands)
+	{
+		if (dmxSubCommands.eIsSet(DmxLightShowPackage.Literals.DMX_SUB_COMMANDS__DEFAULT_COLOR))
+		{
+			val colorItem = dmxSubCommands.defaultColor.color.form
+			checkLongDmxColor(colorItem, dmxSubCommands, DmxLightShowPackage.Literals.DMX_SUB_COMMANDS__DEFAULT_COLOR)
+		}
+	}
+
+
+	protected def void checkAlternateColor(DmxSubCommands dmxSubCommands)
+	{
+		if (dmxSubCommands.eIsSet(DmxLightShowPackage.Literals.DMX_SUB_COMMANDS__ALTERNATE_COLOR))
+		{
+			val colorItem = dmxSubCommands.alternateColor.color.form
+			checkLongDmxColor(colorItem, dmxSubCommands, DmxLightShowPackage.Literals.DMX_SUB_COMMANDS__ALTERNATE_COLOR)
+		}
+	}
+	
+	
+	protected def void checkLongDmxColor(EObject colorItem, DmxSubCommands dmxSubCommands, EReference colorLiteral)
+	 {
+		switch colorItem
+		{
+		ShortDmxColor: 
+			// DO nothing
+			if (colorItem.color == 'W')
+			{
+				warning("warning", dmxSubCommands, 
+					DmxLightShowPackage.Literals.SHORT_DMX_COLOR__COLOR)
+			}
+		LongDmxColor:
+			{
+				if (colorItem.intensity.value > 255)
+				{
+					error("intensity out of range", colorItem, 
+						 DmxLightShowPackage.Literals.LONG_DMX_COLOR__INTENSITY)
+				}
+				
+				if (colorItem.red.value > 255)
+				{
+					error("red out of range", colorItem, 
+						 DmxLightShowPackage.Literals.LONG_DMX_COLOR__RED)
+				}
+			
+				if (colorItem.green.value > 255)
+				{
+					error("green out of range", colorItem, 
+						 DmxLightShowPackage.Literals.LONG_DMX_COLOR__GREEN)
+				}
+			
+				if (colorItem.blue.value > 255)
+				{
+					error("blue out of range", colorItem, 
+						 DmxLightShowPackage.Literals.LONG_DMX_COLOR__BLUE)
+				}
+			
+				if (colorItem.eIsSet(DmxLightShowPackage.Literals.LONG_DMX_COLOR__WHITE))
+				{
+					if (colorItem.white.value > 255)
+					{
+						error("white out of range", colorItem, 
+							 DmxLightShowPackage.Literals.LONG_DMX_COLOR__WHITE)
+					}
+				}
+			}
+				
+		default:
+			error("not supported", colorItem, colorLiteral)
+		}
+	}
 }
