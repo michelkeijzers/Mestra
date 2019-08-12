@@ -265,18 +265,22 @@
     <Image Include="DmxLightShow.ico" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\Documents\KiCad DmxMidiInOutThru\DmxMidiInOutThruMegaShield.kicad_pcb" />
-    <None Include="..\..\..\Documents\KiCad DmxMidiInOutThru\DmxMidiInOutThruMegaShield.net" />
-    <None Include="..\..\..\Documents\KiCad DmxMidiInOutThru\DmxMidiInOutThruMegaShield.pro" />
-    <None Include="..\..\..\Documents\KiCad DmxMidiInOutThru\DmxMidiInOutThruMegaShield.sch" />
     <None Include="..\Documentation.docx" />
     <None Include="..\Documentation\Mestra.eap" />
     <None Include="..\Documentation\Mestra.xlsx" />
+    <None Include="..\KiCad\DmxMidiInOutThruMegaShield.kicad_pcb" />
+    <None Include="..\KiCad\DmxMidiInOutThruMegaShield.net" />
+    <None Include="..\KiCad\DmxMidiInOutThruMegaShield.pro" />
+    <None Include="..\KiCad\DmxMidiInOutThruMegaShield.sch" />
+    <None Include="..\KiCad\_autosave-DmxMidiInOutThruMegaShield.kicad_pcb" />
     <None Include="DmxLightShow.ino" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\Improvements.txt" />
     <Text Include="..\Tables.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="..\KiCad\DmxMidiInOutThruMegaShield-cache.lib" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

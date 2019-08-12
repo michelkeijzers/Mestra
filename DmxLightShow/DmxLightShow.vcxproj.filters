@@ -362,21 +362,29 @@
     <None Include="..\Documentation.docx" />
     <None Include="..\Documentation\Mestra.eap" />
     <None Include="..\Documentation\Mestra.xlsx" />
-    <None Include="..\..\..\Documents\KiCad DmxMidiInOutThru\DmxMidiInOutThruMegaShield.kicad_pcb">
+    <None Include="..\KiCad\_autosave-DmxMidiInOutThruMegaShield.kicad_pcb">
       <Filter>_KiCad</Filter>
     </None>
-    <None Include="..\..\..\Documents\KiCad DmxMidiInOutThru\DmxMidiInOutThruMegaShield.net">
+    <None Include="..\KiCad\DmxMidiInOutThruMegaShield.kicad_pcb">
       <Filter>_KiCad</Filter>
     </None>
-    <None Include="..\..\..\Documents\KiCad DmxMidiInOutThru\DmxMidiInOutThruMegaShield.pro">
+    <None Include="..\KiCad\DmxMidiInOutThruMegaShield.net">
       <Filter>_KiCad</Filter>
     </None>
-    <None Include="..\..\..\Documents\KiCad DmxMidiInOutThru\DmxMidiInOutThruMegaShield.sch">
+    <None Include="..\KiCad\DmxMidiInOutThruMegaShield.pro">
+      <Filter>_KiCad</Filter>
+    </None>
+    <None Include="..\KiCad\DmxMidiInOutThruMegaShield.sch">
       <Filter>_KiCad</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\Improvements.txt" />
     <Text Include="..\Tables.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="..\KiCad\DmxMidiInOutThruMegaShield-cache.lib">
+      <Filter>_KiCad</Filter>
+    </Library>
   </ItemGroup>
 </Project>
