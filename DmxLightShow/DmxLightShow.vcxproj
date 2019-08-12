@@ -265,10 +265,18 @@
     <Image Include="DmxLightShow.ico" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\..\Documents\KiCad DmxMidiInOutThru\DmxMidiInOutThruMegaShield.kicad_pcb" />
+    <None Include="..\..\..\Documents\KiCad DmxMidiInOutThru\DmxMidiInOutThruMegaShield.net" />
+    <None Include="..\..\..\Documents\KiCad DmxMidiInOutThru\DmxMidiInOutThruMegaShield.pro" />
+    <None Include="..\..\..\Documents\KiCad DmxMidiInOutThru\DmxMidiInOutThruMegaShield.sch" />
     <None Include="..\Documentation.docx" />
     <None Include="..\Documentation\Mestra.eap" />
     <None Include="..\Documentation\Mestra.xlsx" />
     <None Include="DmxLightShow.ino" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\Improvements.txt" />
+    <Text Include="..\Tables.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -58,6 +58,9 @@
     <Filter Include="Header Files\DMX\Commands">
       <UniqueIdentifier>{2b003ea1-72fd-477e-a1ea-ad8e8761fec6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="_KiCad">
+      <UniqueIdentifier>{877a500a-480e-4b1e-910b-1fb06cad08ea}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="StringUtils.h">
@@ -359,5 +362,21 @@
     <None Include="..\Documentation.docx" />
     <None Include="..\Documentation\Mestra.eap" />
     <None Include="..\Documentation\Mestra.xlsx" />
+    <None Include="..\..\..\Documents\KiCad DmxMidiInOutThru\DmxMidiInOutThruMegaShield.kicad_pcb">
+      <Filter>_KiCad</Filter>
+    </None>
+    <None Include="..\..\..\Documents\KiCad DmxMidiInOutThru\DmxMidiInOutThruMegaShield.net">
+      <Filter>_KiCad</Filter>
+    </None>
+    <None Include="..\..\..\Documents\KiCad DmxMidiInOutThru\DmxMidiInOutThruMegaShield.pro">
+      <Filter>_KiCad</Filter>
+    </None>
+    <None Include="..\..\..\Documents\KiCad DmxMidiInOutThru\DmxMidiInOutThruMegaShield.sch">
+      <Filter>_KiCad</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\Improvements.txt" />
+    <Text Include="..\Tables.txt" />
   </ItemGroup>
 </Project>
